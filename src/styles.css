@@ -45,14 +45,16 @@ select, input[type="text"], .field input {
   border-radius: 8px; padding: 8px 10px; font-size: 13px; font-family: inherit; width: 100%;
 }
 
-button {
+button, a.wallet {
+  display: inline-block;
+  text-decoration: none;
   background: var(--panel-2); color: var(--text); border: 1px solid var(--border);
   border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 500;
   cursor: pointer; font-family: inherit;
 }
-button:hover:not(:disabled) { border-color: #38414d; }
+button:hover:not(:disabled), a.wallet:hover { border-color: #38414d; text-decoration: none; }
 button:disabled { opacity: 0.45; cursor: not-allowed; }
-button.primary {
+button.primary, a.wallet.primary {
   background: linear-gradient(135deg, var(--accent), #10c8ff);
   color: #06231a; border: none; font-weight: 650;
 }
@@ -121,3 +123,75 @@ footer {
 
 .tag.warn { border-color: rgba(255, 200, 87, 0.4); color: #ffdd9e; background: rgba(255, 200, 87, 0.07); }
 .status { color: var(--muted); font-size: 12px; }
+
+/* Phones: the table becomes one card per account. A 7-column table cannot be
+   made legible at 380px, and horizontal scrolling hides the numbers that
+   matter. */
+@media (max-width: 720px) {
+  .page { padding: 16px 12px 48px; }
+  .intro h1 { font-size: 24px; }
+  .stats { gap: 18px 24px; }
+  .stat .value { font-size: 18px; }
+
+  .table-wrap { border: none; background: none; overflow: visible; }
+  table { min-width: 0; display: block; }
+  thead { display: none; }
+  tbody, tr, td { display: block; }
+
+  tbody tr {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px 12px 44px;
+    margin-bottom: 10px;
+  }
+
+  td { border: none; padding: 3px 0; white-space: normal; text-align: left; }
+  td.num { text-align: left; }
+
+  /* The checkbox anchors to the card's top-left gutter. */
+  td.check {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    padding: 0;
+    width: auto;
+  }
+
+  td[data-label]::before {
+    content: attr(data-label);
+    display: inline-block;
+    min-width: 92px;
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  td[data-label="Account"]::before { display: none; }
+  td[data-label="Account"] { font-size: 14px; margin-bottom: 4px; }
+  td[data-label="Account"] small { display: inline; margin-left: 6px; }
+
+  .actions { flex-direction: column; }
+  .field.grow { max-width: none; }
+}
+
+.network { flex: 1; min-width: 220px; max-width: 520px; }
+.network > summary { display: none; }
+.network-fields { display: flex; gap: 10px; align-items: flex-end; }
+
+@media (max-width: 720px) {
+  .network { flex: 1 0 100%; max-width: none; }
+  .network > summary {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    padding: 6px 0;
+  }
+  .network-fields { flex-wrap: wrap; padding-top: 8px; }
+  .network-fields .field { flex: 1 0 100%; }
+}

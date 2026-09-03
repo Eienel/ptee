@@ -64,7 +64,7 @@ export function AccountTable({ items, selected, onToggle, onToggleAll, cluster, 
                     aria-label={`Select ${item.address}`}
                   />
                 </td>
-                <td>
+                <td data-label="Account">
                   <a
                     href={explorerUrl(`address/${item.address}`, cluster)}
                     target="_blank"
@@ -78,19 +78,25 @@ export function AccountTable({ items, selected, onToggle, onToggleAll, cluster, 
                       : `decimals ${item.decimals}`}
                   </small>
                 </td>
-                <td>
+                <td data-label="Type">
                   <span className="tag">
                     {item.kind === 'token-account' ? 'Token account' : 'Mint'}
                   </span>
                   {isToken2022 && <span className="tag alt">Token-2022</span>}
                 </td>
-                <td className="num">{item.dataLength} B</td>
-                <td className="num">{formatSol(item.lamports)}</td>
-                <td className="num">{formatSol(item.rentExempt)}</td>
-                <td className={`num ${canReclaim ? 'gain' : ''}`}>
+                <td className="num" data-label="Size">
+                  {item.dataLength} B
+                </td>
+                <td className="num" data-label="Balance">
+                  {formatSol(item.lamports)}
+                </td>
+                <td className="num" data-label="Rent floor">
+                  {formatSol(item.rentExempt)}
+                </td>
+                <td className={`num ${canReclaim ? 'gain' : ''}`} data-label="Surplus">
                   {item.excess > 0 ? formatSol(item.excess) : '—'}
                 </td>
-                <td className="status">
+                <td className="status" data-label="Status">
                   {blocked ? <span className="tag warn">{blocked}</span> : 'Ready'}
                 </td>
               </tr>

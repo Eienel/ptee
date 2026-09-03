@@ -70,7 +70,13 @@ VITE_RPC_URL=https://your-endpoint/?api-key=...
 
 The build output is a static SPA in `dist/` — any static host works. Vercel, Netlify, and Cloudflare Pages all detect Vite with no config; set `VITE_RPC_URL` as a build environment variable in the dashboard. There is no server component and nothing to keep running.
 
-Supported wallets: any injected provider that exposes `connect` / `signTransaction` — Phantom, Solflare, and Backpack are detected by name.
+### Wallets and phones
+
+On desktop and inside a wallet's in-app browser, any injected provider that exposes `connect` / `signTransaction` works — Phantom, Solflare, and Backpack are detected by name.
+
+A mobile browser has no extension to inject a provider, so when none is found on a phone the header offers **"Open in Phantom" / "Open in Solflare"** [browse deeplinks](https://docs.phantom.com/phantom-deeplinks/other-methods/browse), which reopen the page inside the wallet's own browser where the normal connect flow works. The account table collapses to one card per account below 720px; `npm run smoke` asserts the page never scrolls sideways at 390px.
+
+Android users can also be served by Mobile Wallet Adapter (`@solana-mobile/wallet-adapter-mobile`), which is not wired up yet.
 
 ## How the withdrawal works
 

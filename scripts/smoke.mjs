@@ -54,11 +54,13 @@ const browser = await chromium.launch({
   args: ['--no-sandbox'],
 });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+page.setDefaultTimeout(15000);
+page.setDefaultNavigationTimeout(15000);
 const errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));
 page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
 
-await page.addInitScript(({ owner, accounts }) => {
+const initScript = ({ owner, accounts }) => {
   const pk = { toString: () => owner, toBase58: () => owner };
   window.phantom = { solana: {
     publicKey: pk,
@@ -85,7 +87,8 @@ await page.addInitScript(({ owner, accounts }) => {
     if (req.method === 'getProgramAccounts') return reply([]);
     return reply(null);
   };
-}, { owner, accounts });
+};
+await page.addInitScript(initScript, { owner, accounts });
 
 await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
 await page.click('text=Connect Phantom');
@@ -94,6 +97,41 @@ await page.waitForSelector('table tbody tr');
 console.log('ROWS:', await page.locator('table tbody tr').count());
 console.log('SUMMARY:', (await page.textContent('.summary')).replace(/\s+/g, ' '));
 await page.screenshot({ path: 'smoke.png', fullPage: true });
+
+// --- phone viewport: card layout, and the deeplink hand-off with no wallet ---
+const phone = await browser.newPage({
+  viewport: { width: 390, height: 844 },
+  isMobile: true,
+  hasTouch: true,
+  deviceScaleFactor: 2,
+});
+phone.setDefaultTimeout(15000);
+phone.setDefaultNavigationTimeout(15000);
+phone.on('pageerror', (e) => errors.push(String(e)));
+await phone.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
+const deeplinks = await phone.locator('a.wallet').evaluateAll((els) =>
+  els.map((e) => ({ text: e.textContent, href: e.getAttribute('href') })),
+);
+console.log('PHONE DEEPLINKS:', JSON.stringify(deeplinks, null, 0));
+console.log('PHONE EMPTY:', await phone.textContent('.empty'));
+await phone.screenshot({ path: 'smoke-phone-connect.png', fullPage: true });
+await phone.close();
+
+// same fixtures as desktop, but at phone width, to check the card layout
+const phone2 = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+phone2.setDefaultTimeout(15000);
+phone2.setDefaultNavigationTimeout(15000);
+phone2.on('pageerror', (e) => errors.push(String(e)));
+await phone2.addInitScript(initScript, { owner, accounts });
+await phone2.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
+await phone2.click('text=Connect Phantom');
+await phone2.click('text=Scan wallet');
+await phone2.waitForSelector('table tbody tr');
+const overflow = await phone2.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+console.log('PHONE HORIZONTAL OVERFLOW:', overflow, overflow === 0 ? '(none)' : '(PAGE SCROLLS SIDEWAYS)');
+await phone2.screenshot({ path: 'smoke-phone.png', fullPage: true });
+await phone2.close();
+
 console.log('ERRORS:', errors);
 await browser.close();
 server.kill();

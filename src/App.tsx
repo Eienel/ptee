@@ -8,6 +8,7 @@ import { explorerUrl } from './lib/format';
 import { IX_PER_TRANSACTION, reclaim, type ReclaimBatch } from './lib/reclaim';
 import { RentCache } from './lib/rent';
 import { scanMints, scanTokenAccounts, type ReclaimItem } from './lib/scan';
+import { isMobile } from './lib/mobile';
 import { detectWallets, type DetectedWallet } from './lib/wallet';
 
 export const CLUSTERS = {
@@ -270,9 +271,11 @@ export default function App() {
 
         {!pubkey && (
           <p className="empty">
-            {wallets.length === 0
-              ? 'No Solana wallet detected in this browser. Install Phantom, Solflare, or Backpack to continue.'
-              : 'Connect a wallet to scan for reclaimable rent.'}
+            {wallets.length > 0
+              ? 'Connect a wallet to scan for reclaimable rent.'
+              : isMobile()
+                ? 'Open this page in your wallet’s in-app browser to continue — use the buttons above.'
+                : 'No Solana wallet detected in this browser. Install Phantom, Solflare, or Backpack to continue.'}
           </p>
         )}
       </main>
