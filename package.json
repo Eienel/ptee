@@ -1,0 +1,28 @@
+{
+  "name": "ptee",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Solana rent reclaim dashboard - find and withdraw excess lamports from token accounts and mints",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0",
+    "buffer": "^6.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "playwright-core": "^1.62.1",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  }
+}
