@@ -4,3 +4,7 @@ dist
 *.local
 smoke.png
 tsconfig.tsbuildinfo
+tests/fixtures/*.so
+tests/.withdraw.mjs
+.env
+.env.local

@@ -1,4 +1,5 @@
-import type { ClusterName } from '../App';
+import { isWorthwhile, type ClusterName } from '../App';
+import type { FeeEstimate } from '../lib/fees';
 import { TOKEN_2022_PROGRAM_ID } from '../lib/constants';
 import { explorerUrl, formatSol, shortAddress } from '../lib/format';
 import type { ReclaimItem } from '../lib/scan';
@@ -9,11 +10,20 @@ interface Props {
   onToggle(address: string): void;
   onToggleAll(): void;
   cluster: ClusterName;
+  fee: FeeEstimate | null;
 }
 
-export function AccountTable({ items, selected, onToggle, onToggleAll, cluster }: Props) {
-  const reclaimable = items.filter((i) => i.excess > 0);
+export function AccountTable({ items, selected, onToggle, onToggleAll, cluster, fee }: Props) {
+  const reclaimable = fee ? items.filter((i) => isWorthwhile(i, fee)) : [];
   const allSelected = reclaimable.length > 0 && selected.size === reclaimable.length;
+
+  /** Why an over-funded account still cannot be reclaimed. */
+  function blockedReason(item: ReclaimItem): string | null {
+    if (!item.eligible) return item.reason ?? 'Not supported';
+    if (item.excess === 0) return 'Already at the rent floor';
+    if (fee && item.excess <= fee.perAccount) return 'Costs more in fees than it returns';
+    return null;
+  }
 
   return (
     <section className="table-wrap">
@@ -34,13 +44,15 @@ export function AccountTable({ items, selected, onToggle, onToggleAll, cluster }
             <th className="num">Size</th>
             <th className="num">Balance</th>
             <th className="num">Rent floor</th>
-            <th className="num">Reclaimable</th>
+            <th className="num">Surplus</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {items.map((item) => {
             const isToken2022 = item.programId === TOKEN_2022_PROGRAM_ID.toBase58();
-            const canReclaim = item.excess > 0;
+            const blocked = blockedReason(item);
+            const canReclaim = blocked === null;
             return (
               <tr key={item.address} className={canReclaim ? '' : 'muted'}>
                 <td className="check">
@@ -76,7 +88,10 @@ export function AccountTable({ items, selected, onToggle, onToggleAll, cluster }
                 <td className="num">{formatSol(item.lamports)}</td>
                 <td className="num">{formatSol(item.rentExempt)}</td>
                 <td className={`num ${canReclaim ? 'gain' : ''}`}>
-                  {canReclaim ? formatSol(item.excess) : '—'}
+                  {item.excess > 0 ? formatSol(item.excess) : '—'}
+                </td>
+                <td className="status">
+                  {blocked ? <span className="tag warn">{blocked}</span> : 'Ready'}
                 </td>
               </tr>
             );

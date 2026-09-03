@@ -9,9 +9,34 @@ A dashboard that shows a Solana wallet exactly how much excess SOL it can reclai
 - **Scans** every token account owned by the connected wallet, across both the Token Program and Token-2022.
 - **Scans** mints whose mint authority is the connected wallet (needs an RPC that allows `getProgramAccounts`).
 - **Computes the surplus** as `lamports - getMinimumBalanceForRentExemption(dataLength)`. Rent floors are read live from the cluster on every scan and cached per data size — nothing is hardcoded, so the numbers stay correct at every phase of the rollout.
-- **Reclaims** the selected accounts by batching `WithdrawExcessLamports` instructions (10 per transaction) into as few wallet signatures as possible, with the connected wallet as the destination.
+- **Reclaims** the selected accounts by batching `WithdrawExcessLamports` instructions (10 per transaction) into as few wallet signatures as possible, with the connected wallet as the destination. Batches carry a priority fee, are simulated after signing and before broadcast, are re-sent until they confirm, and are rebuilt against a fresh blockhash if one expires while the user is signing.
 
 Accounts already at the floor are listed but greyed out and cannot be selected.
+
+## Verified against the deployed program
+
+The reclaim path is not taken on trust. `tests/fixtures/token.so` is the **live Token Program binary dumped from mainnet**, and `npm run test:e2e` loads it into a local validator and performs real reclaims against it:
+
+```
+✓ token account: 1500000 lamports reclaimed, floor 2039280 kept, tokens intact
+✓ mint: 1500000 lamports reclaimed, floor 1461600 kept
+✓ wrapped SOL rejected on-chain: Simulation failed.
+```
+
+The instruction encoding was also confirmed against mainnet directly by simulation: discriminator `38` is parsed and executed by the program (269 compute units), while a control discriminator returns `Error: Invalid instruction`.
+
+## Fees, and not lying about them
+
+A reclaim costs a transaction fee, so a surplus smaller than that fee makes the user *poorer*. The dashboard prices each batch from `getRecentPrioritizationFees` and shows the gross surplus, the fee, and what actually lands in the wallet. Accounts whose surplus does not clear their share of the fee are labelled **"costs more in fees than it returns"** and cannot be selected.
+
+## Accounts that are excluded, and why
+
+| Case | Handling |
+| --- | --- |
+| **Wrapped SOL** | Excluded. A wSOL account keeps its balance *in* its lamports, so it looks over-funded, but the program returns `NativeNotSupported` — and one such account fails the whole batch it lands in. Detected via the `is_native` flag at offset 109, not the mint address. |
+| **Non-mint accounts matching the mint scan** | Excluded. The `memcmp` on the mint-authority field can match bytes inside other accounts, so results are length-checked (`82`, or a Token-2022 account-type byte of `1`). |
+| **Already at the floor** | Listed, greyed out. |
+| **Dust** | Listed, blocked on the fee math above. |
 
 ## Running it
 
@@ -20,9 +45,30 @@ npm install
 npm run dev      # http://localhost:5173
 npm run build    # production build into dist/
 npm run smoke    # headless connect -> scan -> table check against a stubbed RPC
+npm run test:e2e # real reclaims against the deployed program on a local validator
 ```
 
-The public RPC endpoints are rate-limited and disable `getProgramAccounts`. Paste your own endpoint into the RPC field in the header for a full scan (including mints); it is remembered in `localStorage`.
+`npm run test:e2e` needs the Agave CLI:
+
+```bash
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+```
+
+It dumps the program binary, starts a validator, runs the reclaims, and shuts the validator down.
+
+### RPC endpoint
+
+The public endpoints rate-limit hard and reject `getProgramAccounts`, so the mint scan cannot run against them. Set a dedicated endpoint in `.env` (see `.env.example`):
+
+```
+VITE_RPC_URL=https://your-endpoint/?api-key=...
+```
+
+**This is compiled into the client bundle and is public.** Restrict the key to your domain in your provider's dashboard, or front it with a method-whitelisting proxy. Users can also paste their own endpoint into the header field, which is remembered in `localStorage`.
+
+## Deploying
+
+The build output is a static SPA in `dist/` — any static host works. Vercel, Netlify, and Cloudflare Pages all detect Vite with no config; set `VITE_RPC_URL` as a build environment variable in the dashboard. There is no server component and nothing to keep running.
 
 Supported wallets: any injected provider that exposes `connect` / `signTransaction` — Phantom, Solflare, and Backpack are detected by name.
 
@@ -49,9 +95,12 @@ Cases this dashboard does not cover, because a browser wallet cannot sign for th
 ```
 src/lib/constants.ts   program ids, instruction discriminator, sizes
 src/lib/rent.ts        live rent-exempt lookups, cached per data length
+src/lib/fees.ts        priority fee + compute budget pricing, net-of-fee math
 src/lib/scan.ts        token account + mint discovery and surplus math
 src/lib/withdraw.ts    WithdrawExcessLamports instruction encoding
 src/lib/reclaim.ts     batching, signing, sending, per-transaction results
 src/lib/wallet.ts      injected wallet detection
 src/components/        header, summary stats, account table
+scripts/dump-program.mjs   pulls the deployed program binary from mainnet
+tests/e2e.mjs              real reclaims against it on a local validator
 ```

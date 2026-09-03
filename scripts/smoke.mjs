@@ -14,16 +14,27 @@ const owner = '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM';
 const mint = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 
 // One token account with 0.00089 SOL of surplus, one already at the floor.
-function tokenAccount(mintB58, amount) {
+const WSOL = 'So11111111111111111111111111111111111111112';
+
+function tokenAccount(mintB58, amount, { isNative = false } = {}) {
   const data = Buffer.alloc(165);
   new PublicKey(mintB58).toBuffer().copy(data, 0);
   new PublicKey(owner).toBuffer().copy(data, 32);
   data.writeBigUInt64LE(BigInt(amount), 64);
+  data.writeUInt8(1, 108);
+  if (isNative) data.writeUInt32LE(1, 109);
   return data.toString('base64');
 }
 const accounts = [
-  { pubkey: 'A1jrfooEUZTbFbGKPFXCWuBvf9Ss623VQ5DAtokenAA', lamports: 2039280 },
-  { pubkey: 'B2jrfooEUZTbFbGKPFXCWuBvf9Ss623VQ5DAtokenBB', lamports: 1148120 },
+  // over-funded at the old rate — the normal case
+  { pubkey: 'A1jrfooEUZTbFbGKPFXCWuBvf9Ss623VQ5DAtokenAA', lamports: 2039280, data: tokenAccount(mint, 1250000) },
+  { pubkey: 'C3jrfooEUZTbFbGKPFXCWuBvf9Ss623VQ5DAtokenCC', lamports: 2039280, data: tokenAccount(mint, 40000000) },
+  // wrapped SOL: looks over-funded, but the program rejects native accounts
+  { pubkey: 'W4jrfooEUZTbFbGKPFXCWuBvf9Ss623VQ5DAtokenWW', lamports: 501148120, data: tokenAccount(WSOL, 500000000, { isNative: true }) },
+  // surplus smaller than its share of the fee
+  { pubkey: 'D5jrfooEUZTbFbGKPFXCWuBvf9Ss623VQ5DAtokenDD', lamports: 1148300, data: tokenAccount(mint, 900) },
+  // already at the current floor
+  { pubkey: 'B2jrfooEUZTbFbGKPFXCWuBvf9Ss623VQ5DAtokenBB', lamports: 1148120, data: tokenAccount(mint, 7000) },
 ];
 
 const PORT = 4173;
@@ -47,7 +58,7 @@ const errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));
 page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
 
-await page.addInitScript(({ owner, accounts, data }) => {
+await page.addInitScript(({ owner, accounts }) => {
   const pk = { toString: () => owner, toBase58: () => owner };
   window.phantom = { solana: {
     publicKey: pk,
@@ -65,14 +76,16 @@ await page.addInitScript(({ owner, accounts, data }) => {
       const isClassic = req.params[1].programId.startsWith('Tokenkeg');
       return reply({ context: { slot: 1 }, value: isClassic ? accounts.map((a) => ({
         pubkey: a.pubkey,
-        account: { data: [data, 'base64'], executable: false, lamports: a.lamports, owner: req.params[1].programId, rentEpoch: 0, space: 165 },
+        account: { data: [a.data, 'base64'], executable: false, lamports: a.lamports, owner: req.params[1].programId, rentEpoch: 0, space: 165 },
       })) : [] });
     }
     if (req.method === 'getMinimumBalanceForRentExemption') return reply(1148120);
+    if (req.method === 'getRecentPrioritizationFees')
+      return reply([{ slot: 1, prioritizationFee: 12000 }, { slot: 2, prioritizationFee: 8000 }]);
     if (req.method === 'getProgramAccounts') return reply([]);
     return reply(null);
   };
-}, { owner, accounts, data: tokenAccount(mint, 1250000) });
+}, { owner, accounts });
 
 await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
 await page.click('text=Connect Phantom');
