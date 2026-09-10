@@ -1,0 +1,171 @@
+{
+  "rpc": "https://api.mainnet-beta.solana.com",
+  "fetchedAt": "2026-09-10T07:57:02.641Z",
+  "mints": [
+    {
+      "symbol": "NVDAx",
+      "mint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+      "owningProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "isToken2022": true,
+      "dataLength": 679,
+      "lamports": 617943468,
+      "extensions": [
+        "MetadataPointer",
+        "PermanentDelegate",
+        "DefaultAccountState",
+        "ScaledUiAmountConfig",
+        "PausableConfig",
+        "ConfidentialTransferMint",
+        "TransferHook",
+        "TokenMetadata"
+      ],
+      "extensionsRawTypes": [
+        18,
+        12,
+        6,
+        25,
+        26,
+        4,
+        14,
+        19
+      ],
+      "libExtensions": [
+        "MetadataPointer",
+        "PermanentDelegate",
+        "DefaultAccountState",
+        "ScaledUiAmountConfig",
+        "PausableConfig",
+        "ConfidentialTransferMint",
+        "TransferHook",
+        "TokenMetadata"
+      ],
+      "mintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+      "decimals": 8,
+      "freezeAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+      "pausableAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+      "permanentDelegate": "5aMNNLQJwAEeoemTEMkv5NVjqKwvvefRYCQ5Z67HFvEq",
+      "transferHookProgramId": null,
+      "transferHookAuthority": "5aMNNLQJwAEeoemTEMkv5NVjqKwvvefRYCQ5Z67HFvEq",
+      "paused": false,
+      "transferFee": null,
+      "crossCheck": {
+        "libDecimals": 8,
+        "libFreeze": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs",
+        "libMintAuthority": "7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj",
+        "libHookProgram": "11111111111111111111111111111111",
+        "libHookAuthority": "5aMNNLQJwAEeoemTEMkv5NVjqKwvvefRYCQ5Z67HFvEq",
+        "libDelegate": "5aMNNLQJwAEeoemTEMkv5NVjqKwvvefRYCQ5Z67HFvEq",
+        "libPausableAuthority": "JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs"
+      },
+      "rawBase64": "AQAAAGVqQkIv6okUBqQZ0dHeCPQqhHlBtaGulevOYZrDFyk0ch4vZjgdAAAIAQEAAAD/3+wbzSzTg5PITaoIyRzA041nf/jQq3tdAz8A9zLMMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARIAQABD+fHuLje4B+pFy3TmAJcivsAJKWAm5ORVi0NeJKXpxgfopQ4UD9pXkfRWapV/064/hz5qNGb/wT15EZ36mrUKDAAgAEP58e4uN7gH6kXLdOYAlyK+wAkpYCbk5FWLQ14kpenGBgABAAEZADgABm9ZIlHMR3R4JaWa0UIupDVz9SjaXe4q94ErMU+ZReM/9BuswgPwPwj6oWoAAAAAqf6J1fcG8D8aACEA/9/sG80s04OTyE2qCMkcwNONZ3/40Kt7XQM/APcyzDAABABBAEP58e4uN7gH6kXLdOYAlyK+wAkpYCbk5FWLQ14kpenGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgBAAEP58e4uN7gH6kXLdOYAlyK+wAkpYCbk5FWLQ14kpenGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATAKYAQ/nx7i43uAfqRct05gCXIr7ACSlgJuTkVYtDXiSl6cYH6KUOFA/aV5H0VmqVf9OuP4c+ajRm/8E9eRGd+pq1Cg0AAABOVklESUEgeFN0b2NrBQAAAE5WREF4RAAAAGh0dHBzOi8veHN0b2Nrcy1tZXRhZGF0YS5iYWNrZWQuZmkvdG9rZW5zL1NvbGFuYS9OVkRBeC9tZXRhZGF0YS5qc29uAAAAAA=="
+    },
+    {
+      "symbol": "AAPLon",
+      "mint": "123mYEnRLM2LLYsJW3K6oyYh8uP1fngj732iG638ondo",
+      "owningProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "isToken2022": true,
+      "dataLength": 648,
+      "lamports": 5400960,
+      "extensions": [
+        "ScaledUiAmountConfig",
+        "MetadataPointer",
+        "PausableConfig",
+        "DefaultAccountState",
+        "ConfidentialTransferMint",
+        "TransferHook",
+        "TokenMetadata"
+      ],
+      "extensionsRawTypes": [
+        25,
+        18,
+        26,
+        6,
+        4,
+        14,
+        19
+      ],
+      "libExtensions": [
+        "ScaledUiAmountConfig",
+        "MetadataPointer",
+        "PausableConfig",
+        "DefaultAccountState",
+        "ConfidentialTransferMint",
+        "TransferHook",
+        "TokenMetadata"
+      ],
+      "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+      "decimals": 9,
+      "freezeAuthority": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+      "pausableAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+      "permanentDelegate": null,
+      "transferHookProgramId": null,
+      "transferHookAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+      "paused": false,
+      "transferFee": null,
+      "crossCheck": {
+        "libDecimals": 9,
+        "libFreeze": "51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK",
+        "libMintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+        "libHookProgram": "11111111111111111111111111111111",
+        "libHookAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+        "libDelegate": null,
+        "libPausableAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD"
+      },
+      "rawBase64": "AQAAAIDN+V3tTSNwlENXrqyVggTjy5tukmIsnoBRuggfXn9mcuhGyFQAAAAJAQEAAAA7iU3CRLV7yVzMKBHpxpAv2aPlYPWrmnLpZakLVu4ErgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARkAOACAzfld7U0jcJRDV66slYIE48ubbpJiLJ6AUboIH15/ZqPZ5BHUDfA/7PaXagAAAACj2eQR1A3wPxIAQACAzfld7U0jcJRDV66slYIE48ubbpJiLJ6AUboIH15/ZgBEteK80GZScZ28KpDDsh9ZpgdMYY+/9YXnZL+HEelKGgAhAIDN+V3tTSNwlENXrqyVggTjy5tukmIsnoBRuggfXn9mAAYAAQABBABBAIDN+V3tTSNwlENXrqyVggTjy5tukmIsnoBRuggfXn9mAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgBAAIDN+V3tTSNwlENXrqyVggTjy5tukmIsnoBRuggfXn9mAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATAKsAgM35Xe1NI3CUQ1eurJWCBOPLm26SYiyegFG6CB9ef2YARLXivNBmUnGdvCqQw7IfWaYHTGGPv/WF52S/hxHpShYAAABBcHBsZSAoT25kbyBUb2tlbml6ZWQpBgAAAEFBUExvbj8AAABodHRwczovL2FwcC5vbmRvLmZpbmFuY2UvYXBpL3YyL2Fzc2V0cy9BQVBMb24vc29sX21ldGFkYXRhLmpzb24AAAAA"
+    },
+    {
+      "symbol": "ETNon",
+      "mint": "BpYiU1dBXU1fdB64jbR93wHEw3Y47QeRLZvUyLQondo",
+      "owningProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "isToken2022": true,
+      "dataLength": 646,
+      "lamports": 5387040,
+      "extensions": [
+        "ScaledUiAmountConfig",
+        "MetadataPointer",
+        "PausableConfig",
+        "DefaultAccountState",
+        "ConfidentialTransferMint",
+        "TransferHook",
+        "TokenMetadata"
+      ],
+      "extensionsRawTypes": [
+        25,
+        18,
+        26,
+        6,
+        4,
+        14,
+        19
+      ],
+      "libExtensions": [
+        "ScaledUiAmountConfig",
+        "MetadataPointer",
+        "PausableConfig",
+        "DefaultAccountState",
+        "ConfidentialTransferMint",
+        "TransferHook",
+        "TokenMetadata"
+      ],
+      "mintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+      "decimals": 9,
+      "freezeAuthority": "Chm9dcASBc9C54FGxcSRGv9qC998TueQqr5XzGZkEVCc",
+      "pausableAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+      "permanentDelegate": null,
+      "transferHookProgramId": null,
+      "transferHookAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+      "paused": false,
+      "transferFee": null,
+      "crossCheck": {
+        "libDecimals": 9,
+        "libFreeze": "Chm9dcASBc9C54FGxcSRGv9qC998TueQqr5XzGZkEVCc",
+        "libMintAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+        "libHookProgram": "11111111111111111111111111111111",
+        "libHookAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD",
+        "libDelegate": null,
+        "libPausableAuthority": "9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD"
+      },
+      "rawBase64": "AQAAAIDN+V3tTSNwlENXrqyVggTjy5tukmIsnoBRuggfXn9mbDt7GAMAAAAJAQEAAACt4bUwuD5Vr2NiuIr/smT8bDMHAhzmi1q9Norx+uhaiQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARkAOACAzfld7U0jcJRDV66slYIE48ubbpJiLJ6AUboIH15/ZkdTh0blD/A/7PaXagAAAABHU4dG5Q/wPxIAQACAzfld7U0jcJRDV66slYIE48ubbpJiLJ6AUboIH15/ZgLFkcbDu+HHnrtjZk2dYgMPlwDCYQcfmpDUJAXIOFyqGgAhAIDN+V3tTSNwlENXrqyVggTjy5tukmIsnoBRuggfXn9mAAYAAQABBABBAIDN+V3tTSNwlENXrqyVggTjy5tukmIsnoBRuggfXn9mAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgBAAIDN+V3tTSNwlENXrqyVggTjy5tukmIsnoBRuggfXn9mAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATAKkAgM35Xe1NI3CUQ1eurJWCBOPLm26SYiyegFG6CB9ef2YCxZHGw7vhx567Y2ZNnWIDD5cAwmEHH5qQ1CQFyDhcqhYAAABFYXRvbiAoT25kbyBUb2tlbml6ZWQpBQAAAEVUTm9uPgAAAGh0dHBzOi8vYXBwLm9uZG8uZmluYW5jZS9hcGkvdjIvYXNzZXRzL0VUTm9uL3NvbF9tZXRhZGF0YS5qc29uAAAAAA=="
+    }
+  ]
+}

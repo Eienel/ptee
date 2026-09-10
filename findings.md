@@ -12,7 +12,12 @@ All raw RPC responses and decoded intermediates are in `raw/`; the decode script
 
 The feature has a **large live surface**: **1,233 Token Badges** exist on mainnet. They are not a dormant capability — **61 badged mints are referenced as `quote_mint` by 225 pool configs**, and **38 of them carry 166 live virtual pools**, 115 of which have traded.
 
-The badged set is essentially the tokenized-equity universe: Backed Finance **xStocks** (`NVDAx`, `TSLAx`, `SPYx`, …) and **Ondo** Global Markets (`AAPLon`, `JPMon`, …), plus a handful of other issuers.
+The badged set is essentially the tokenized-equity universe: two large families of mints
+distinguished by ticker convention — `…x` (`NVDAx`, `TSLAx`, `SPYx`, …) and `…on`
+(`AAPLon`, `JPMon`, …) — plus a handful of others. Those families are **commonly associated
+with Backed Finance (xStocks) and Ondo Global Markets respectively, but this document does
+not establish that**; see *Limits* below. Everything asserted here rests on the key
+clustering, which is on-chain fact, not on the corporate identity, which is not.
 
 The material risk is **not** transfer fees, which the program still checks at runtime. It is that **the badge suspends all extension checking**, and near-universally these mints ship with a **live freeze authority (1,232/1,233)**, a **live pausable authority (1,230/1,233)** and, for 791 of them, a **live permanent delegate**. Every one of those levers sits with the token issuer, not the pool launcher.
 
@@ -80,15 +85,20 @@ All 1,233 are owned by Token-2022. Extension prevalence:
 
 ### Who holds the levers
 
-Authorities cluster tightly into two issuers:
+Authorities cluster tightly into three key groups. Note that freeze and pause are the
+**same** key only in the first group; in both `…ondo` groups they are two different keys,
+and the pause authority is the mint authority itself.
 
-| Mints | Mint authority | Freeze / pause authority | Permanent delegate | Example symbols |
-|---|---|---|---|---|
-| 740 | `7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj` | `JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs` | `5aMNNLQJwAEeoemTEMkv5NVjqKwvvefRYCQ5Z67HFvEq` | DHRx, FSLRx, JNJx (xStocks) |
-| 383 | `9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD` | `51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK` | *none* | NEEon, JPMon, XOMon (Ondo) |
-| 59 | `9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD` | `Chm9dcASBc9C54FGxcSRGv9qC998TueQqr5XzGZkEVCc` | *none* | ETNon, FCXon, GEVon (Ondo) |
+| Mints | Mint authority | Freeze authority | Pause authority | Permanent delegate | Example symbols |
+|---|---|---|---|---|---|
+| 740 | `7pt9tkctJPK7PPNQJ77GKg8ZffSF6QxoMiCFYHxrtaCj` | `JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs` | `JDq14BWvqCRFNu1krb12bcRpbGtJZ1FLEakMw6FdxJNs` (same key) | `5aMNNLQJwAEeoemTEMkv5NVjqKwvvefRYCQ5Z67HFvEq` | DHRx, FSLRx, JNJx |
+| 384 | `9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD` | `51QVCuHfL1FeNjd8BDeffCKhCcAYoULnVB3yjNhShiuK` | `9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD` (= mint authority) | *none* | NEEon, JPMon, XOMon |
+| 59 | `9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD` | `Chm9dcASBc9C54FGxcSRGv9qC998TueQqr5XzGZkEVCc` | `9foMHsSDq7nMg4WPusSz9eY7tyxyukqborA8GyU5cUxD` (= mint authority) | *none* | ETNon, FCXon, GEVon |
 
-A single key (`JDq14BW…xJNs`) can freeze **or** pause the quote asset of every xStocks-quoted pool — 24 of the 38 mints that have live pools.
+A single key (`JDq14BW…xJNs`) is **both** the freeze authority **and** the pause authority
+for 24 of the 38 mints that have live pools — the same 24 mints on both counts, not two
+overlapping sets. Recounted directly from the mint accounts: 24 freeze, 24 pause, 24 either,
+24 both. Across all 1,233 badged mints that key holds both levers on 740.
 
 ## 3. Usage: configs and live pools
 
@@ -166,24 +176,62 @@ The brief asks for mints where a launch could be halted by a party outside the l
 
 - **38 of 38** mints with live pools have a **live pausable authority**.
 - **37 of 38** have a **live freeze authority** (only `CADG` does not).
-- **34 of 38** have a **live permanent delegate**. The four without are the Ondo mints: `AAPLon`, `APOon`, `MUon`, `USOon`.
+- **34 of 38** have a **live permanent delegate**. The four without are the `…on`-suffixed mints: `AAPLon`, `APOon`, `MUon`, `USOon`.
 
 Specific items worth separate attention:
 
 1. **`CADG`** (`CADGKVBTfVqcTaTAFko4P6Vd5ZMMr7tXYs5Sn1GyLoyu`) — the only badged mint with `TransferFeeConfig`. The fee is 0/0 today, but `transferFeeConfigAuthority` is **live** (`DjEttUjqtTFS2kVsZtyac1FZCjKTekJ2tHSFua97sbXC`). That authority can schedule a non-zero fee at any epoch, which would then halt `process_swap`, every trading-fee claim, both surplus withdrawals and migration on its pool — the one runtime check the badge does not exempt. Its single pool (`84fN5AmKjdQGoiDX1EgaLrZDUsbC9k4MAVvFEiLTkuPV`) has `has_swap = 0` and zero reserve, so nothing is currently exposed. It also carries `MintCloseAuthority` and a permanent delegate (`H5BFAKChmjddYr7GpV2AE7cg4nGWcg2CoVVpecaLFXqc`).
 2. **`GLXY`** (`2HehXG149TXuVptQhbiWAWDjbbuCsXSAtLTB5wc2aajK`) — the only mint with `DefaultAccountState = Frozen`. Any new token account for it is created frozen, which would affect vault creation. Not currently referenced by any config or pool.
 3. **`ScaledUiAmountConfig` on 1,231 mints** — the DBC curve math operates on raw amounts, so a multiplier change does not alter program accounting, but it does change every displayed balance. Flagged as a disclosure issue rather than a solvency one.
-4. **Transfer hooks are inert.** The extension is present on 1,231 mints, but every `programId` is the zero address. There is no unrevoked hook program in the badged set today. This is the one risk from the brief's list that the data rules out.
+4. **Transfer hooks are inert today, but not revoked.** The extension is present on 1,231 mints and every `programId` is the zero address, so no hook code runs. However the hook **authority is live on all 1,231** — none has been revoked — so a hook program can be installed at any time by that authority, after a pool is already live. The brief asked whether the authority is revoked: it is not. What the data rules out is an *active* hook today, not the capability to add one.
 
 ## 5. Conclusions
 
 1. **Does the feature have live surface?** Yes, emphatically — 1,233 badges, not zero. It shipped alongside a real rollout, not ahead of one.
-2. **What risk does each badged mint carry?** Uniformly high in terms of *capability*: freeze, pause and (usually) permanent-delegate authority all remain with the issuer. The badge's design intent — trusting operator review instead of extension checks — means the on-chain program offers no protection here. The saving grace is that the levers are held by regulated issuers (Backed, Ondo) with two keys covering ~99% of the set, which concentrates counterparty risk rather than eliminating it.
+2. **What risk does each badged mint carry?** Uniformly high in terms of *capability*: freeze, pause and (usually) permanent-delegate authority all remain with the issuer. The badge's design intent — trusting operator review instead of extension checks — means the on-chain program offers no protection here. The levers are concentrated: three key groups cover ~96% of the badged set (740 + 384 + 59
+of 1,233). That concentrates counterparty risk into a few keys rather than eliminating it.
+Whether the holders of those keys are trustworthy or regulated is **outside what on-chain
+data can show** — this analysis makes no claim either way.
 3. **Is anyone using them?** Yes, but at small scale. 166 pools, 115 traded, 6 migrated. Reserves are in the tens of units per mint when summed across all of that mint's pools (NVDAx 41.03 across 39 pools, TSLAx 28.54 across 13, SPYx 22.95 across 18) — these are aggregates, not single-pool balances, and are not comparable to the per-config migration thresholds. Apart from the 6 already-migrated pools, no pool exceeds 16% of its own threshold. The economic exposure today is modest; the structural exposure is that a single issuer key can freeze or pause the quote side of every one of those pools.
+
+### Verification spot-check
+
+Three mints were re-fetched individually with `getAccountInfo` after the batch scan and
+decoded straight from the account bytes — walking the Token-2022 TLV region by hand — then
+cross-checked a second time against `@solana/spl-token`'s `unpackMint`. Raw responses and
+decodes are in `raw/spotcheck-mints.json`.
+
+| Field | NVDAx | AAPLon | ETNon | vs batch decode |
+|---|---|---|---|---|
+| Owning program | Token-2022 | Token-2022 | Token-2022 | match |
+| Extensions | 8 exts | 7 exts | 7 exts | match (exact list and order) |
+| Freeze authority | `JDq14BW…xJNs` | `51QVCuHf…hiuK` | `Chm9dcAS…EVCc` | match |
+| Pause authority | `JDq14BW…xJNs` | `9foMHsSD…cUxD` | `9foMHsSD…cUxD` | match |
+| Permanent delegate | `5aMNNLQJ…HFvEq` | null | null | match |
+| Transfer hook programId | zero address | zero address | zero address | match |
+| Transfer hook authority | `5aMNNLQJ…HFvEq` | `9foMHsSD…cUxD` | `9foMHsSD…cUxD` | match |
+| Mint authority | `7pt9tkct…rtaCj` | `9foMHsSD…cUxD` | `9foMHsSD…cUxD` | match |
+| Decimals | 8 | 9 | 9 | match |
+| Currently paused | false | false | false | — |
+
+Every field matched the original batch decode. The spot-check did correct two things in this
+document that the batch decode had flattened rather than got wrong: the freeze/pause column
+split above, and the cluster count of 384.
+
+One decoding note for anyone reproducing this: `PausableConfig` is **33 bytes**
+(`authority: OptionalNonZeroPubkey` + `paused: bool`), not 32. Reading it as a bare pubkey
+fails. `OptionalNonZeroPubkey` encodes *None* as 32 zero bytes, which `@solana/spl-token`
+surfaces as `11111111111111111111111111111111` — the same value, rendered differently.
 
 ### Limits of this analysis
 
 - Reserves are reported in each quote mint's own UI units. No USD valuation was attempted — that would need a price source, which is outside what was fetched.
-- Issuer identities (Backed / Ondo) are **inferred** from ticker conventions (`…x`, `…on`) and shared authority keys. The on-chain data proves the key clustering; it does not prove the corporate identity behind those keys.
+- **Issuer identities are inference, not evidence.** The names *Backed Finance* / *xStocks*
+  and *Ondo* appear in this document only as the common association of the `…x` and `…on`
+  ticker conventions and their shared authority keys. Nothing here verifies them. The
+  on-chain data proves that keys cluster; it does not prove which company holds a key, nor
+  anything about that company's regulatory status. Do not cite this document as a source for
+  who controls these mints. Verifying that requires the issuers' own published contract
+  addresses, which was not attempted.
 - Badge *history* was not reconstructed. This is the live set as of epoch 1032; `EvtCreateTokenBadge` / `EvtCloseTokenBadge` history was not queried, since `getProgramAccounts` gave the current state directly.
 - The two largest `getProgramAccounts` dumps (128 MB of configs, 422 MB of pools) were too large to retain in `raw/`. The exact commands that produced them are recorded above and in `analysis/`, and the derived outputs (`config-quotemint-histogram.json`, `pools-*.json`) are retained.
