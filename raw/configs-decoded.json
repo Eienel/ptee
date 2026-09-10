@@ -1,0 +1,1108 @@
+[
+  {
+    "config": "CjoW7rPewtXPWBfTtdscpZb3CTVVMucZNhF1pR8jFsPy",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1152316397",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "83um5izps74yLE6KZM5H5UoaPvHV5UxyAsTmTAKAAXmx",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3952955208",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "B6t8aFF4CkaNhJZuGui3YDoshZbQtH46DvZ9KAmbYGo5",
+    "quoteMint": "AMC1qwR9KhiyrQBRPrxnfo4JfMeMZqEBvt5tgTytNNoc",
+    "migrationQuoteThreshold": "3580065101",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "7xkkJ52eCDcU8RyGYNDD3CKWRBkKdxLMAhVmSJXHzKFB",
+    "quoteMint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+    "migrationQuoteThreshold": "7000000",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "b8mdUbXxuPm62e7zWbhaoY9qoxs6eNhPQGoKqEvhDqq",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1152917592",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "7gfcqg7s5tgHwmrRF7ZR7gf9wLScD2b5LwHVM2SUSuGX",
+    "quoteMint": "Fz9edBpaURPPzpKVRR1A8PENYDEgHqwx5D5th28ondo",
+    "migrationQuoteThreshold": "58830445190",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "24wow8EvvpcmS7J1Xrx8uakx8uiVu4QUS9p5ipUXLycn",
+    "quoteMint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+    "migrationQuoteThreshold": "2778557989",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "7q9iwYcuzXvjKfWRwQhS96b4KK5p15AyEVui5wQhw22v",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1161667354",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CetDHs9Q1w9eMkKnWbHqJGWgeRmJ5jZHGQ5wfSpVBcB7",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1362027452",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9XvbbxhPDSfmJ9D7rGkaGJh98kMinFu2jSQVac9M8NZV",
+    "quoteMint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+    "migrationQuoteThreshold": "4096444388",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "JBiUoLiBKussqoVQE2uif3x7E1kVJe9KJbEj7PchzAJG",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3956669560",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GtXtHtCeWJ3WuWtaE9ZqvwCw9GwdCCfgNfmwFdVjHvto",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3937961849",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "4TCeatnQKgYNYYo4XLtrTCUcxjQzt8yRTjfUAEmmTqGG",
+    "quoteMint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+    "migrationQuoteThreshold": "2244275974",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "DFtiMGfQCJQwEQyEMWviUuDY5RgJkrHWVNyDftr9sd2R",
+    "quoteMint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+    "migrationQuoteThreshold": "1360801575",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "A8eUpgJa2RmxoDPDneCBUKegBhrczxbzyxCLMwALDcty",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1152226307",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "7Ce3GvXrCJKs96fkBTAswtDUVdqs2ezztmiCGpsFUpB3",
+    "quoteMint": "HooDYv5RewLRiMLnEVq3VJqdqxhuE6c5eYvqejMC3e9A",
+    "migrationQuoteThreshold": "77487431",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "BeycfBToUF1Y38fn2gN7GB382TLeDbk6NWargtHxQbMA",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3195051504",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "D2pgSAjdWKLBAZRSkzAMHXCvy8RSfpjcJoULCrhXTicg",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3952955208",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "AC6txN5tj3xoHorn37849W4we4ct7u9UFaqfq86UB9Ta",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "500000000",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "3rn643W7xUhJ78qKNKgn4Ejv5hKPwg5sSmCLyEXwN6zA",
+    "quoteMint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+    "migrationQuoteThreshold": "58194122",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "8aGULtvDzrvgTiABLb22b1JVZppLzTMVSKHPByjKgbqQ",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3951542050",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "DxTjSiMnXRot6uz2tRS58LZ2H3nFM8Pwo6cmmdH6dafz",
+    "quoteMint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+    "migrationQuoteThreshold": "4267194660",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GuiZNUuvTXpxCFCWHYKq2QN2jdUMRX9CtLmR31C2FzUJ",
+    "quoteMint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+    "migrationQuoteThreshold": "34482724",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "2c5X26tgnSHKCjLGByDMzUTdSMFXoQmtfzVLaaUg5J1W",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "879757218",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "3VykDf7ABmP4fHqMUkyoPpMDiSQMi4v5bmcaeN8YMJNE",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1152166256",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "2xyQbU41d3TPyfWoYRVNJ2DjCocnHpSstYU6VjD7eBrJ",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3955607604",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "EMAhgC6KNLH8CvQWR3t6ACr2xY3XAztw2Z8CChyYMwKZ",
+    "quoteMint": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8",
+    "migrationQuoteThreshold": "4886009400",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "69LpZYsshB1BD5XKHpELRhuDnN63uuY6U8qNaSqbtezF",
+    "quoteMint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+    "migrationQuoteThreshold": "993719691",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CsziHjZWEcD5ntp6FvRdxWNstt2hm6aaUy4u2XxtU4h2",
+    "quoteMint": "rpydAzWdCy85HEmoQkH5PVxYtDYQWjmLxgHHadxondo",
+    "migrationQuoteThreshold": "66916238742",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "ET4Xr48phb1pEMBojHj3QCKmbnSNovmN5TEmbghxiJgn",
+    "quoteMint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+    "migrationQuoteThreshold": "2648543565",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CPRGtjTYYWuJfS1eEQCZF2jJVHNSKSZqHDG9oq5ytkay",
+    "quoteMint": "NBiSF3UaVUFtRzHwAfxyHsBCAZWGEKnMpewAE4oh7BG",
+    "migrationQuoteThreshold": "43211180",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "2uHfsBX7VverotrZnVY6BzGx8PUVqZfS7s7WDpGPt9Ck",
+    "quoteMint": "iNTCy1qTsUEZQe3DSocLz1ZXXai34Gdw8THQh5rxFaF",
+    "migrationQuoteThreshold": "84088634",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "gx73qqxr9f9if6j9En8fu7vKTkQYyY6sYUxz1fmeu1D",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3950482845",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "4ir1R8MQTxAeKTVJDTZCzpAFnTjv878iHuxsn2NRTYGz",
+    "quoteMint": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+    "migrationQuoteThreshold": "10340136576",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "A3TmEVeLJeNoKSnDHpVmUeWUcutVde4PewQZ5B1Rxbm9",
+    "quoteMint": "Xs2yquAgsHByNzx68WJC55WHjHBvG9JsMB7CWjTLyPy",
+    "migrationQuoteThreshold": "146776721080",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "2ZqevqjW1N2jMSCCBHo4bjeFuaJ1EWZQBcgAYyaBrSZq",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "863733101",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "HshEWbmZ49h92XzWN2U3eGnxEXDD9U7CVAfQ1m1LZ7RJ",
+    "quoteMint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+    "migrationQuoteThreshold": "2752758263",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "8TLCtpDb1oMj4rZczs9dL5zPR3Q8CDWtkZw7XV87BbCz",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3956138511",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "B46qGRrBVAeVTJLkZZpwdUA6ahudAxSEesQpokk289Sa",
+    "quoteMint": "123mYEnRLM2LLYsJW3K6oyYh8uP1fngj732iG638ondo",
+    "migrationQuoteThreshold": "4000000000",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "5joitefoBnDGYquMQVvzRjbwY3W61EbELVxqTLNYNraq",
+    "quoteMint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+    "migrationQuoteThreshold": "2667579957",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "5euZXGn9tRZGVs1GPdHeBNVVtB6XJJgmdpmYMD2QfWwX",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "1951195146",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "3Sdie23iXybJWicxaq8xzRunjwMxSo52CT4XpXajvo93",
+    "quoteMint": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8",
+    "migrationQuoteThreshold": "6008605048",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "EXsFKKxzBoQqcsTpQEN7jFw7fepHpjPgAQrkfKQ7LgG4",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "10000000000",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "8HeoKV4ti6Pmc7bfd9vsRJvtvG3wtoNrDaC7Xak1wCtn",
+    "quoteMint": "Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc",
+    "migrationQuoteThreshold": "34822217789",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Eg8LMJs7MP8cdCd7Q3HdHzVPP2DmdJLv8tzkFeyDVDww",
+    "quoteMint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+    "migrationQuoteThreshold": "2102219288",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "79PvD5e5JgKxyF8N8UTsE2jRLUFvYvFDF8SL2Kvfzigj",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1153654377",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "AJMJ1y3U9re425wHLg55HAc2XGfadwsRqLM9YtgdBwzS",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "931697272",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "BoR4KJWb6kJFGuhgVeU1ufZJVMFhs5N7HX6MY1t9UVG1",
+    "quoteMint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+    "migrationQuoteThreshold": "8500000000",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CHQc1brTYbRvT51kVDLirhLkC14wY8adLp1SGJaamFj",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3940733946",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "ocYbecXo9zcie4WDWiQV3HYrFnpd4mn58z3T9YVUzRo",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3954015739",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GKmHRSYfokTp19xYvTuPiNbE7GJBdX8vqp3nyNbY9Zun",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3957148169",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CpAXMubc8KW4cgaako8brtoMvrrYWN2eZY4qcwaZ8wsp",
+    "quoteMint": "123mYEnRLM2LLYsJW3K6oyYh8uP1fngj732iG638ondo",
+    "migrationQuoteThreshold": "23388530264",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "59V2f8qRLUAksxfDcpVSBqHmjx6i5piV9UjffXVVZqCR",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3950659339",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CC32GmD7JHjfs2Q4dM3cHDsK97jR7MsHuWzz6nBsJxiK",
+    "quoteMint": "NKEda5nHhNGgjrE9nDdMvaEmkmJ96qqxzBVZEcKmjSg",
+    "migrationQuoteThreshold": "191548864",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9sD4Ji5E4yuJrbzJCxrDZV3ek2mfAUrARzAPCZtLBfj4",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "2845960389",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9qQg6dXBLBbwSsbDzvLk6D9FCWdehXVmBt12GYFLhh56",
+    "quoteMint": "CADGKVBTfVqcTaTAFko4P6Vd5ZMMr7tXYs5Sn1GyLoyu",
+    "migrationQuoteThreshold": "87883341",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9rvdDEXRDbM8x4R3SuAMSTn12bLbgsmXsobTqCNu4gjh",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "2625171531",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CEMAzJ4BaKHMyQLwyWtn4z6p7DHHRHviXjASf6BUxubN",
+    "quoteMint": "MUxEsUKSMACyw5fZf68wxf5FLnZVhtU9CwH8uNNGay1",
+    "migrationQuoteThreshold": "8656304",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Bx8c44sRDpqEe1K9Mwm1DKdzTu21iDE8rqCFHqoBewSa",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "500000000",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "97gmRSrTTkb4n4MYMGKJ3DZ3gLCeLCnFkPDYkpa5W1So",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "1948725144",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "wyuGo1o6cNoqHzFcoFvgxT7nFm4KpJoUqzRGCcrAySY",
+    "quoteMint": "14VXAhoa1R74vi1ZuiQyGLJrnDMfoFBPJSCpGVz3ondo",
+    "migrationQuoteThreshold": "298115301104",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "HG26b19t691XrdZSw653Q52rwtBt7189arqqTeHkzdpE",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "4309671801",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "5NrDM41aWoP8dQ6Mbio74f5kiemrC7sneR9zP7V1E7jM",
+    "quoteMint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+    "migrationQuoteThreshold": "5721267873",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "HzE9NEAnfaFnh4iRuDnugX4NuKWQ3mk6rb8JaTrAmWqQ",
+    "quoteMint": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8",
+    "migrationQuoteThreshold": "6051711470",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "5Lzj75PCa3qHMu5Av6NiacWM7F1d5u3NgK6nyxHuBpYF",
+    "quoteMint": "14VXAhoa1R74vi1ZuiQyGLJrnDMfoFBPJSCpGVz3ondo",
+    "migrationQuoteThreshold": "298115301104",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Gx39DyTKrDW8cMNY8p81iUs9Y49cNhb1GkBQZhL9Nr3j",
+    "quoteMint": "MUxEsUKSMACyw5fZf68wxf5FLnZVhtU9CwH8uNNGay1",
+    "migrationQuoteThreshold": "8656304",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Htcx1GRM6zjzS3ykGtSW5grc5n4oo6brBQuvbQgdsCVJ",
+    "quoteMint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+    "migrationQuoteThreshold": "2752758263",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "BCCaqViNNjf3VyHQVoVuyRs6q4UYw6cyGNusktKKSrdS",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3940693868",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "DRY9HbEJk1A8rQ7cbU9R44xpY4iX9Qxqjs4cGuYgFz1S",
+    "quoteMint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+    "migrationQuoteThreshold": "2752758263",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CyD7NLkFuJnMazjYGhq8mDXsdhvNDctb4cgeyh6hDYZE",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "500000000",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "3BoxyDah4xE1ZzZ1fvgUMrFCtVPeBnX1Rd8Nuge1XDgC",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3953838945",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "79tNSaotTzDQjrLTsoSdL9E36x2RdQh2VmdZ74f1yFR7",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "1944904738",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "C7LPRU9HZLv85jjbYqqTNBJ7UDwaQ1D9Tk1ewEGfw6no",
+    "quoteMint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+    "migrationQuoteThreshold": "58175023",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "A2ZYgtAAtvQfkVkRNKCriCtRD4oLCrXWrv6QWTbm9vF",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "2622635410",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "5atHsmodyQFHB7qLwHmeXeViQfowqpyTk7yDCDMnABf4",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "1949469744",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "89R2svuvTPAkvAWjDMmhEYEA3tqpgcEF1y9ys2HJX3Ti",
+    "quoteMint": "Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc",
+    "migrationQuoteThreshold": "44615342081",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GsF9KtASH7MD68G1nBmCdNhhdKy7yoqY4ziDZcQbBoSx",
+    "quoteMint": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8",
+    "migrationQuoteThreshold": "6051711470",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "HaYc5437jXdS1KDNULn5z1UQsWeya32vCXL9XS3kE5p4",
+    "quoteMint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+    "migrationQuoteThreshold": "1780947555",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "83s9WXGFz3EMmD3vBpWykFU7PukWsDvgnYALjqQp4aHt",
+    "quoteMint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+    "migrationQuoteThreshold": "2669512694",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "FitDUH8ZMVs2eNnf2LK59wwj2L2eCmKPAqZmWcdE2W2N",
+    "quoteMint": "XsApJFV9MAktqnAc6jqzsHVujxkGm9xcSUffaBoYLKC",
+    "migrationQuoteThreshold": "8500000000",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "DFe77cX21QPz2BXb2hHjDQWjAAU12zteMLxcC6P1W98T",
+    "quoteMint": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8",
+    "migrationQuoteThreshold": "6541369537",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "G45QbtFbRVDTzts1mRbVVNknSPGuxvkd1E2V3pTLVip4",
+    "quoteMint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+    "migrationQuoteThreshold": "5153411069",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9pSr6bVHHpeSnJdpbCM8xFFQyjJqURMX9aaEuf5A4NSQ",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "500000000",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "7ZmrAPiddBgSjn5gUUzCDsFF3pA5P1eWNicsuZDELEpY",
+    "quoteMint": "XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ",
+    "migrationQuoteThreshold": "9882388020",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "2FdMj2PMk6sdTYVj6JcNtZXmsxcWc47k2Lk4LjsPk5Si",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3191767792",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "AXN4gwrMFzWuPmVVbrSPrmSb1cUHGx4BGztbrr9ddaPA",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3953060310",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "BDsGPbHfjBgrCoSJqjMa7sL2FFnXkWrDZ4a9PxgZjB64",
+    "quoteMint": "MUxEsUKSMACyw5fZf68wxf5FLnZVhtU9CwH8uNNGay1",
+    "migrationQuoteThreshold": "6992312",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "DbPdos89SG9kyFgjc7y6PhaWc4YdjvEn17XbTCpmUhZi",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "2412445486",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "BG5CKxKYAp8HbigU6MNkRBuUn1EHgUk8XADBGebdBAHK",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "4305996475",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9n2AitnSWuxDPTF8Lw8t7RiiCMaNaU33MpTdBeiu2AQm",
+    "quoteMint": "Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re",
+    "migrationQuoteThreshold": "162153029",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "FV6fLJeqDxinJegmwXteo2JTf5KYFsjsRsm5iZaeuTCP",
+    "quoteMint": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8",
+    "migrationQuoteThreshold": "4337772089",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "E4oXAfLwG7K4LJMSAepcddoSri5JJqjRJJ5b5f13iBk5",
+    "quoteMint": "MUxEsUKSMACyw5fZf68wxf5FLnZVhtU9CwH8uNNGay1",
+    "migrationQuoteThreshold": "8604502",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "59Rq4khC1mf5GLw4rAXPJnNmq8QByh7ADCTjMezeLjBB",
+    "quoteMint": "TTWofwAge91oFhZs7kpQdyrVRkmevgM88xijGvQFbKo",
+    "migrationQuoteThreshold": "41150466",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "J75aKtGuQav4DGj7rUDsP8Cxr72tEv9c7UEDvJ2vPBLr",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "4299446552",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "FyT3PVXmHiR9fj3nYmo7fJnsECVnaXA5oJuKjrkbAUd2",
+    "quoteMint": "BoTx8y9ynfdxf5ZjWtCoBVkff52qKA82ysaLU8ZM6d8T",
+    "migrationQuoteThreshold": "6311749322303",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Hf7BmRE3XntJWHQCLB9PiX1hGcc38W4wWM1n8oz8vjvY",
+    "quoteMint": "Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg",
+    "migrationQuoteThreshold": "3512656232",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "7ooqpj3LsfGnizJ2fCmYkc1YUZtkGmZshHWLqyd7xAii",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3933712303",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9m3wz4jW2fRGRjf23z4iX78jtJn1cQypEn38yLyLkNj5",
+    "quoteMint": "iNTCy1qTsUEZQe3DSocLz1ZXXai34Gdw8THQh5rxFaF",
+    "migrationQuoteThreshold": "67602282",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "8hy9Q9wnWQJ62YdDXEFy9Gi6X6vd6wHvXP2gDyxZv3qR",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3957287971",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Nh9vpjmb8wKWfernvrTV1ShdZ6bbKRV6rwXKQLPn7y9",
+    "quoteMint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+    "migrationQuoteThreshold": "1515785253",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GRH2gCjeUJRZh5Kg3TQJq1sFpoi9f2zYvBuvNpukZGSV",
+    "quoteMint": "123mYEnRLM2LLYsJW3K6oyYh8uP1fngj732iG638ondo",
+    "migrationQuoteThreshold": "4000000000",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "ixuzU5KJEo9c6YzaMjaFGpkW28gjanaXCmoaFfkhe5U",
+    "quoteMint": "XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN",
+    "migrationQuoteThreshold": "2667016769",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "BMmQfaDV8A4b2qMjrQB9TQbnG7z5AuzxbwNnPwjZqC9G",
+    "quoteMint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+    "migrationQuoteThreshold": "7000000",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "3PzKSpsHxfDwoy5r5GLwaGBNgRW4H1XjrNQAzg85WAUW",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "8500000000",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GSB1DEvTTWgQm3oYDRpx29MqmmT7KF382ZMA1BAH8CDk",
+    "quoteMint": "XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2",
+    "migrationQuoteThreshold": "3499495115",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "EqxpbddXj4wPujE7GhvamdrMSdVbbB42wPsCxLEQndRC",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3196910505",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "AjKFweZUeC16pGzg9oewDoHUUtu7RKNE3kSBwJWeMNS3",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "2413794830",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "7jnADToahsrBNYWsTwCBPJg8xv1NT9tjBokQpXRtkAcw",
+    "quoteMint": "XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4",
+    "migrationQuoteThreshold": "4251358205",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "5udtDknJKW2nbFr5krB4nrCDavehvqnURGMzCqxRrJSG",
+    "quoteMint": "Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re",
+    "migrationQuoteThreshold": "200743262",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9kNiExsJQLnweRVM3KKKRdUETFh9sJaRHmbCoHzCAG2x",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3957117474",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "8ykx5vDwhMhg7VE47dQynnNyWSah8DNdsfnJQ7Uk16hd",
+    "quoteMint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+    "migrationQuoteThreshold": "1783569817",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "BaZEAnqPVKHDpwzMBRCrdf9Zh6LUihVUbwQwNxNfWCG",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "10000000000",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "HBDHEFVYPgvSBnZN9YSVk5m1W98xSZrGxFLeSESqMgHX",
+    "quoteMint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+    "migrationQuoteThreshold": "1783749707",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Fev1yMizNtsJoQQcKr9cHkVcJuYCLrpkMpQWXrSD2SgR",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "2410468579",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "69HNt4CQh6j3HRJaq5oKzoHWH1vZq4hGTd46cB8Bsxkq",
+    "quoteMint": "Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re",
+    "migrationQuoteThreshold": "1653333333",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CKiBHdVMck6BuppgMYVfijEn8KMeJ4dNrEttH8PYKHAh",
+    "quoteMint": "XsXcJ6GZ9kVnjqGsjBnktRcuwMBmvKWh8S93RefZ1rF",
+    "migrationQuoteThreshold": "1710361221",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Gr24JZ7mKypc9mcmPNzCWufX7onqLwTHLmAjBchdfPKC",
+    "quoteMint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+    "migrationQuoteThreshold": "1230416986",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "7c6ArQJbRaniQrwCBBYCrm6k71yseSczC3ERdJYKj3wL",
+    "quoteMint": "Xsnuv4omNoHozR6EEW5mXkw8Nrny5rB3jVfLqi6gKMH",
+    "migrationQuoteThreshold": "806083886",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "7XC8nyhaFQLm8ZMJGq3L3biob5qwY19xBETJHfvit8mr",
+    "quoteMint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+    "migrationQuoteThreshold": "6659702225",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GsjVg2MphExPatdRuGkGGG5ADb3NLD51FH7emLgqCoUm",
+    "quoteMint": "XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ",
+    "migrationQuoteThreshold": "9880179665",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "3izxJNZASk59Eq5Zssq6x9epXo2XLSQNckz3QEksNJuL",
+    "quoteMint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+    "migrationQuoteThreshold": "1441254467",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "BNGQrM8rEKKGAexH9PKs7cadfKDrGZ8QpUEgCeBqBpcK",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "4293875579",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "71jok8QrKR4Dn3BygP3dsVRUdxZqysU17x71XFkQ5RNX",
+    "quoteMint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+    "migrationQuoteThreshold": "6614377141",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "AuPEkQYgTg6N34mhHWU6zb1MproNNKtM99hsLvQHx7jS",
+    "quoteMint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+    "migrationQuoteThreshold": "2778034243",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "EkDKLbdKtwpwsGWkRTD9rNoMZxKPfTG3QWQRNSpZ4dfS",
+    "quoteMint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+    "migrationQuoteThreshold": "1782455311",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GLAmqUvtjnE3p5vEniGV2nUgrnKnSpsBPtkxYJ9kCs5F",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "4298869574",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "3sN1xyUAcURS5xWZEqBvzpBhiCqygMKPW2rJT7ghfkKa",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3950129902",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "7PoB5LqBV3Eyu1DQuZksSJ5wKUbdqyNAXoUjyKc39X19",
+    "quoteMint": "Xs6B6zawENwAbWVi7w92rjazLuAr5Az59qgWKcNb45x",
+    "migrationQuoteThreshold": "1410605792",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GSwgRWoaiy7oZGGkyxTacetYYkaMDaKptPgk7Ht4ywQk",
+    "quoteMint": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
+    "migrationQuoteThreshold": "2409996947",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "7zovvoHqni2gJX5YzKowRzA5QwLdvEAUUNDAnRTZ8Xx8",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3951895245",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "aHWRsqqKgtoZjeZF6RX6SeZk1vKBiWmj9QrVqMHzGdy",
+    "quoteMint": "XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX",
+    "migrationQuoteThreshold": "1442360393",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "8bgUtbnD4pG7saTS6QFb4HnKfTAMMh38e3e4oxYUqCoQ",
+    "quoteMint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+    "migrationQuoteThreshold": "800000000",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9NCA6ALXzsddtiTfKRZdDycfakqEn6RPgvos6uyUnUVE",
+    "quoteMint": "XsuxRGDzbLjnJ72v74b7p9VY6N66uYgTCyfwwRjVCJA",
+    "migrationQuoteThreshold": "2996039236",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "AiwZh8dhGEeVoGg8aSk9pGmQ3dEdcnBJmpMdmTBmSK3z",
+    "quoteMint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+    "migrationQuoteThreshold": "1478503197",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "3YH771EMxTK7KAjb71p6fhXRRxTHeRfyodZ4M8PSSLUs",
+    "quoteMint": "Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu",
+    "migrationQuoteThreshold": "3712170312",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "CZttUyFzz8U7Jqd4J15nWPR9R8SWfZeTmwNFn38gm39t",
+    "quoteMint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+    "migrationQuoteThreshold": "6633292669",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "DzESRPLiajJ4vGWpHKHRvKBC3eJKBvXZMAHjNxP2qHeQ",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1152301381",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "3AifgatnhcwKtMVmBRtwDoemu6K3EUwXDuPuLfScoFzs",
+    "quoteMint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+    "migrationQuoteThreshold": "1230399866",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "kwFGjWXRpXosuhcJfghkoKqrENHeWTkTdNyGhkKUCaf",
+    "quoteMint": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8",
+    "migrationQuoteThreshold": "6050883262",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "3GSU9hfFrityNerLgwBTuEqLVKSL7yJXYTk8yPCGDR3E",
+    "quoteMint": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+    "migrationQuoteThreshold": "10390445382",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "H1fF3QwDY4NE4dioTcCqYLXg7pqmSJTtbtD9zwBYm8cL",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "931697272",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "A9XSt5EatUmZ8fhnihgJf6Vcpg5h5zCJxVtsmXK2QpH9",
+    "quoteMint": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp",
+    "migrationQuoteThreshold": "2249418928",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "8Koctc8NRis5XKeuNkS8cwRvJ9DhnrSvHVhJyYJPVmnH",
+    "quoteMint": "Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re",
+    "migrationQuoteThreshold": "218798262",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Ae1LTSenEZSdqKhCc9YvT3n1xjG2dq8oVeDQzKZeTLFd",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3958440754",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "kaufwhHNdrG8Tt48mY5MEc1Y4Gx6UEnMvz2SZumaUYY",
+    "quoteMint": "MUxEsUKSMACyw5fZf68wxf5FLnZVhtU9CwH8uNNGay1",
+    "migrationQuoteThreshold": "1000000",
+    "migrationOption": 1,
+    "tokenType": 1
+  },
+  {
+    "config": "6Pqk8hRzu25coQvNFtpJLqinLExeoxtFLgios65XbH63",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "930920140",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "DuS9ugrhH9CFrBkWH1rVuXajrdyiNKhS65TMRhbpKurN",
+    "quoteMint": "Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ",
+    "migrationQuoteThreshold": "1230793753",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "GvKBxq2GQxVvXFVKyjqfZZufz4XM9iwP1vLy89SqtF1f",
+    "quoteMint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+    "migrationQuoteThreshold": "6617842239",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "Gy3SGbHsoTQkhC2abZf6QToizarrNawidn897DQSjJQV",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1152511638",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "G6J3zb4vpWbwsJbLzwP75b8x8GF6gfq7oWyhm6XU8XiR",
+    "quoteMint": "XsuxRGDzbLjnJ72v74b7p9VY6N66uYgTCyfwwRjVCJA",
+    "migrationQuoteThreshold": "2996039236",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "6BALNd2DyUBZS7kBbCvT4SsAqKe4ikfKJLZfE4mBeBvz",
+    "quoteMint": "XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ",
+    "migrationQuoteThreshold": "6615861739",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "3UhR4YLf5wyjt7MeFweaCXJmEkLns7SsRT8WxWdQDZrm",
+    "quoteMint": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8",
+    "migrationQuoteThreshold": "6034404331",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "A5HB3yoz87gBgqTs3eZYmJXYR9NhzdkRkhdMtNJ11sTM",
+    "quoteMint": "NKEda5nHhNGgjrE9nDdMvaEmkmJ96qqxzBVZEcKmjSg",
+    "migrationQuoteThreshold": "177157287",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "5Aqwk7RniJBn2byvTYSLwFDWmYzYjL512jSj354ka8hM",
+    "quoteMint": "XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ",
+    "migrationQuoteThreshold": "7983522010",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "3QVpXXXPYqZnsRt5dNQ1RrmTpRWjf1EhhZue3huMwbyz",
+    "quoteMint": "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
+    "migrationQuoteThreshold": "1157220873",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "9g8pbt2aCjWBL9BcivcQigPDHXfrnJSYeXwVFwrZ1wEp",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3951365476",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "HDPi2AJ9RqAtRRovwxkDmhbjgSqdxwn5y3FSVK89Mp5E",
+    "quoteMint": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
+    "migrationQuoteThreshold": "3956846608",
+    "migrationOption": 1,
+    "tokenType": 0
+  },
+  {
+    "config": "6YyjBAfAQ1Yo44ufRkzu165BqAyXy6jes8PbxmCzezbi",
+    "quoteMint": "BoTx8y9ynfdxf5ZjWtCoBVkff52qKA82ysaLU8ZM6d8T",
+    "migrationQuoteThreshold": "6183748811571",
+    "migrationOption": 1,
+    "tokenType": 0
+  }
+]
