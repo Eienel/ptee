@@ -99,48 +99,66 @@ A single key (`JDq14BW…xJNs`) can freeze **or** pause the quote asset of every
 
 ### Pools by badged quote mint
 
-Reserve and threshold are in the quote mint's own UI units (its own share/token, not USD).
+Reserve and threshold are in the quote mint's own UI units (its own share/token, not USD),
+converted with each mint's own `decimals` read from its mint account (8, 6 and 9 all occur
+across these quote mints — no decimal count is assumed).
 
-| Symbol | Quote mint | Pools | Quote reserve | Migration threshold | Freeze auth | Perm. delegate | Pause auth |
-|---|---|---|---|---|---|---|---|
-| NVDAx | `Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh` | 39 | 41.0320 | 39.53 | **LIVE** | **LIVE** | **LIVE** |
-| SPYx | `XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W` | 18 | 22.9495 | 11.52 | **LIVE** | **LIVE** | **LIVE** |
-| TSLAx | `XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB` | 13 | 28.5446 | 19.51 | **LIVE** | **LIVE** | **LIVE** |
-| SPCXx | `Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8` | 8 | 10.2239 | 48.86 | **LIVE** | **LIVE** | **LIVE** |
-| AAPLx | `XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp` | 7 | 0.1529 | 27.79 | **LIVE** | **LIVE** | **LIVE** |
-| MCDx | `XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2` | 6 | 0.0000 | 40.96 | **LIVE** | **LIVE** | **LIVE** |
-| MSTRx | `XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ` | 6 | 2.8952 | 85.00 | **LIVE** | **LIVE** | **LIVE** |
-| MSFTx | `XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX` | 6 | 0.3556 | 17.81 | **LIVE** | **LIVE** | **LIVE** |
-| SPCX | `SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb` | 5 | 9.3914 | 7.00 | **LIVE** | **LIVE** | **LIVE** |
-| MU | `MUxEsUKSMACyw5fZf68wxf5FLnZVhtU9CwH8uNNGay1` | 5 | 1.0000 | 8.66 | **LIVE** | **LIVE** | **LIVE** |
-| METAx | `Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu` | 4 | 0.2354 | 13.61 | **LIVE** | **LIVE** | **LIVE** |
-| PLTRx | `XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4` | 4 | 1.7227 | 42.67 | **LIVE** | **LIVE** | **LIVE** |
-| QQQx | `Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ` | 4 | 0.3056 | 9.94 | **LIVE** | **LIVE** | **LIVE** |
-| GLDx | `Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re` | 4 | 0.2908 | 1.62 | **LIVE** | **LIVE** | **LIVE** |
-| AAPLon | `123mYEnRLM2LLYsJW3K6oyYh8uP1fngj732iG638ondo` | 3 | 0.0141 | 4.00 | **LIVE** | none | **LIVE** |
-| GOOGLx | `XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN` | 3 | 0.0000 | 26.68 | **LIVE** | **LIVE** | **LIVE** |
-| KOx | `XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ` | 3 | 0.0000 | 98.82 | **LIVE** | **LIVE** | **LIVE** |
-| INTC | `iNTCy1qTsUEZQe3DSocLz1ZXXai34Gdw8THQh5rxFaF` | 2 | 0.0000 | 84.09 | **LIVE** | **LIVE** | **LIVE** |
-| CRCLx | `XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1` | 2 | 0.0530 | 103.40 | **LIVE** | **LIVE** | **LIVE** |
-| GMEx | `Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc` | 2 | 0.0000 | 348.22 | **LIVE** | **LIVE** | **LIVE** |
-| NKE | `NKEda5nHhNGgjrE9nDdMvaEmkmJ96qqxzBVZEcKmjSg` | 2 | 0.2669 | 191.55 | **LIVE** | **LIVE** | **LIVE** |
-| APOon | `14VXAhoa1R74vi1ZuiQyGLJrnDMfoFBPJSCpGVz3ondo` | 2 | 0.0000 | 298.12 | **LIVE** | none | **LIVE** |
-| BOT | `BoTx8y9ynfdxf5ZjWtCoBVkff52qKA82ysaLU8ZM6d8T` | 2 | 0.0000 | 6311749.32 | **LIVE** | **LIVE** | **LIVE** |
-| MRVLx | `XsuxRGDzbLjnJ72v74b7p9VY6N66uYgTCyfwwRjVCJA` | 2 | 0.2264 | 29.96 | **LIVE** | **LIVE** | **LIVE** |
-| AMC | `AMC1qwR9KhiyrQBRPrxnfo4JfMeMZqEBvt5tgTytNNoc` | 1 | 0.0000 | 3580.07 | **LIVE** | **LIVE** | **LIVE** |
-| MUon | `Fz9edBpaURPPzpKVRR1A8PENYDEgHqwx5D5th28ondo` | 1 | 0.0000 | 58.83 | **LIVE** | none | **LIVE** |
-| HOOD | `HooDYv5RewLRiMLnEVq3VJqdqxhuE6c5eYvqejMC3e9A` | 1 | 0.0000 | 77.49 | **LIVE** | **LIVE** | **LIVE** |
-| USOon | `rpydAzWdCy85HEmoQkH5PVxYtDYQWjmLxgHHadxondo` | 1 | 0.0000 | 66.92 | **LIVE** | none | **LIVE** |
-| NBIS | `NBiSF3UaVUFtRzHwAfxyHsBCAZWGEKnMpewAE4oh7BG` | 1 | 0.0000 | 43.21 | **LIVE** | **LIVE** | **LIVE** |
-| DFDVx | `Xs2yquAgsHByNzx68WJC55WHjHBvG9JsMB7CWjTLyPy` | 1 | 53.2042 | 1467.77 | **LIVE** | **LIVE** | **LIVE** |
-| CADG | `CADGKVBTfVqcTaTAFko4P6Vd5ZMMr7tXYs5Sn1GyLoyu` | 1 | 0.0000 | 87.88 | none | **LIVE** | none |
-| MAx | `XsApJFV9MAktqnAc6jqzsHVujxkGm9xcSUffaBoYLKC` | 1 | 0.0000 | 85.00 | **LIVE** | **LIVE** | **LIVE** |
-| TTWO | `TTWofwAge91oFhZs7kpQdyrVRkmevgM88xijGvQFbKo` | 1 | 0.0000 | 41.15 | **LIVE** | **LIVE** | **LIVE** |
-| AMZNx | `Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg` | 1 | 0.0000 | 35.13 | **LIVE** | **LIVE** | **LIVE** |
-| AMDx | `XsXcJ6GZ9kVnjqGsjBnktRcuwMBmvKWh8S93RefZ1rF` | 1 | 0.0002 | 17.10 | **LIVE** | **LIVE** | **LIVE** |
-| LLYx | `Xsnuv4omNoHozR6EEW5mXkw8Nrny5rB3jVfLqi6gKMH` | 1 | 0.0010 | 8.06 | **LIVE** | **LIVE** | **LIVE** |
-| BRK.Bx | `Xs6B6zawENwAbWVi7w92rjazLuAr5Az59qgWKcNb45x` | 1 | 2.2855 | 14.11 | **LIVE** | **LIVE** | **LIVE** |
-| COINx | `Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu` | 1 | 0.0985 | 37.12 | **LIVE** | **LIVE** | **LIVE** |
+**The two quantity columns are aggregated differently, and must not be read against each other:**
+
+- **Quote reserve** is the **sum** of `quote_reserve` across *all* pools for that mint.
+- **Migration threshold** is a **per-config** value, shown as the range across the distinct
+  configs backing those pools. It is not summed and not averaged. 22 of the 38 mints have
+  more than one distinct threshold, so no single number represents them.
+
+Comparing the two would suggest, for example, that NVDAx sits at 41.03 against a 39.53
+threshold and is therefore past migration. That reading is wrong: the 41.03 is spread
+across 39 separate pools, each with its own threshold, and those thresholds range from
+5.00 to 100.00. The meaningful measure is per pool, so the table gives the closest single
+pool to *its own* threshold instead.
+
+Across all 166 pools, the only ones at or near their own threshold are the 6 that have
+already migrated (`is_migrated = 1`). Every other pool is below 16% of its own threshold.
+
+| Symbol | Quote mint | Pools | Configs | Quote reserve — SUM of all pools | Migration threshold — PER CONFIG (range) | Closest single pool to its own threshold | Freeze auth | Perm. delegate | Pause auth |
+|---|---|---|---|---|---|---|---|---|---|
+| NVDAx | `Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh` | 39 | 36 | 41.0320 | 5.00 – 100.00 | 100.00% | **LIVE** | **LIVE** | **LIVE** |
+| SPYx | `XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W` | 18 | 15 | 22.9495 | 8.64 – 13.62 | 100.00% | **LIVE** | **LIVE** | **LIVE** |
+| TSLAx | `XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB` | 13 | 13 | 28.5446 | 19.45 – 100.00 | 100.00% | **LIVE** | **LIVE** | **LIVE** |
+| SPCXx | `Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8` | 8 | 8 | 10.2239 | 43.38 – 65.41 | 15.62% | **LIVE** | **LIVE** | **LIVE** |
+| AAPLx | `XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp` | 7 | 5 | 0.1529 | 21.02 – 27.79 | 0.55% | **LIVE** | **LIVE** | **LIVE** |
+| MCDx | `XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2` | 6 | 6 | 0.0000 | 26.49 – 40.96 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| MSTRx | `XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ` | 6 | 6 | 2.8952 | 66.14 – 85.00 | 4.37% | **LIVE** | **LIVE** | **LIVE** |
+| MSFTx | `XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX` | 6 | 6 | 0.3556 | 14.41 – 17.84 | 1.12% | **LIVE** | **LIVE** | **LIVE** |
+| SPCX | `SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb` | 5 | 5 | 9.3914 | 7.00 – 58.19 | 100.00% | **LIVE** | **LIVE** | **LIVE** |
+| MU | `MUxEsUKSMACyw5fZf68wxf5FLnZVhtU9CwH8uNNGay1` | 5 | 5 | 1.0000 | 1.00 – 8.66 | 100.00% | **LIVE** | **LIVE** | **LIVE** |
+| METAx | `Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu` | 4 | 4 | 0.2354 | 8.00 – 15.16 | 2.83% | **LIVE** | **LIVE** | **LIVE** |
+| PLTRx | `XsoBhf2ufR8fTyNSjqfU71DYGaE6Z3SUGAidpzriAA4` | 4 | 4 | 1.7227 | 42.51 – 57.21 | 2.58% | **LIVE** | **LIVE** | **LIVE** |
+| QQQx | `Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ` | 4 | 4 | 0.3056 | 9.94 – 12.31 | 1.79% | **LIVE** | **LIVE** | **LIVE** |
+| GLDx | `Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re` | 4 | 4 | 0.2908 | 1.62 – 16.53 | 17.59% | **LIVE** | **LIVE** | **LIVE** |
+| AAPLon | `123mYEnRLM2LLYsJW3K6oyYh8uP1fngj732iG638ondo` | 3 | 3 | 0.0141 | 4.00 – 23.39 | 0.35% | **LIVE** | none | **LIVE** |
+| GOOGLx | `XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN` | 3 | 3 | 0.0000 | 26.67 – 26.70 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| KOx | `XsaBXg8dU5cPM6ehmVctMkVqoiRG2ZjMo1cyBJ3AykQ` | 3 | 3 | 0.0000 | 79.84 – 98.82 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| INTC | `iNTCy1qTsUEZQe3DSocLz1ZXXai34Gdw8THQh5rxFaF` | 2 | 2 | 0.0000 | 67.60 – 84.09 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| CRCLx | `XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1` | 2 | 2 | 0.0530 | 103.40 – 103.90 | 0.05% | **LIVE** | **LIVE** | **LIVE** |
+| GMEx | `Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc` | 2 | 2 | 0.0000 | 348.22 – 446.15 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| NKE | `NKEda5nHhNGgjrE9nDdMvaEmkmJ96qqxzBVZEcKmjSg` | 2 | 2 | 0.2669 | 177.16 – 191.55 | 0.15% | **LIVE** | **LIVE** | **LIVE** |
+| APOon | `14VXAhoa1R74vi1ZuiQyGLJrnDMfoFBPJSCpGVz3ondo` | 2 | 2 | 0.0000 | 298.12 | 0.00% | **LIVE** | none | **LIVE** |
+| BOT | `BoTx8y9ynfdxf5ZjWtCoBVkff52qKA82ysaLU8ZM6d8T` | 2 | 2 | 0.0000 | 6,183,748.81 – 6,311,749.32 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| MRVLx | `XsuxRGDzbLjnJ72v74b7p9VY6N66uYgTCyfwwRjVCJA` | 2 | 2 | 0.2264 | 29.96 | 0.75% | **LIVE** | **LIVE** | **LIVE** |
+| AMC | `AMC1qwR9KhiyrQBRPrxnfo4JfMeMZqEBvt5tgTytNNoc` | 1 | 1 | 0.0000 | 3,580.07 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| MUon | `Fz9edBpaURPPzpKVRR1A8PENYDEgHqwx5D5th28ondo` | 1 | 1 | 0.0000 | 58.83 | 0.00% | **LIVE** | none | **LIVE** |
+| HOOD | `HooDYv5RewLRiMLnEVq3VJqdqxhuE6c5eYvqejMC3e9A` | 1 | 1 | 0.0000 | 77.49 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| USOon | `rpydAzWdCy85HEmoQkH5PVxYtDYQWjmLxgHHadxondo` | 1 | 1 | 0.0000 | 66.92 | 0.00% | **LIVE** | none | **LIVE** |
+| NBIS | `NBiSF3UaVUFtRzHwAfxyHsBCAZWGEKnMpewAE4oh7BG` | 1 | 1 | 0.0000 | 43.21 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| DFDVx | `Xs2yquAgsHByNzx68WJC55WHjHBvG9JsMB7CWjTLyPy` | 1 | 1 | 53.2042 | 1,467.77 | 3.62% | **LIVE** | **LIVE** | **LIVE** |
+| CADG | `CADGKVBTfVqcTaTAFko4P6Vd5ZMMr7tXYs5Sn1GyLoyu` | 1 | 1 | 0.0000 | 87.88 | 0.00% | none | **LIVE** | none |
+| MAx | `XsApJFV9MAktqnAc6jqzsHVujxkGm9xcSUffaBoYLKC` | 1 | 1 | 0.0000 | 85.00 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| TTWO | `TTWofwAge91oFhZs7kpQdyrVRkmevgM88xijGvQFbKo` | 1 | 1 | 0.0000 | 41.15 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| AMZNx | `Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg` | 1 | 1 | 0.0000 | 35.13 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| AMDx | `XsXcJ6GZ9kVnjqGsjBnktRcuwMBmvKWh8S93RefZ1rF` | 1 | 1 | 0.0002 | 17.10 | 0.00% | **LIVE** | **LIVE** | **LIVE** |
+| LLYx | `Xsnuv4omNoHozR6EEW5mXkw8Nrny5rB3jVfLqi6gKMH` | 1 | 1 | 0.0010 | 8.06 | 0.01% | **LIVE** | **LIVE** | **LIVE** |
+| BRK.Bx | `Xs6B6zawENwAbWVi7w92rjazLuAr5Az59qgWKcNb45x` | 1 | 1 | 2.2855 | 14.11 | 16.20% | **LIVE** | **LIVE** | **LIVE** |
+| COINx | `Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu` | 1 | 1 | 0.0985 | 37.12 | 0.26% | **LIVE** | **LIVE** | **LIVE** |
 
 ## 4. Flagged mints
 
@@ -161,7 +179,7 @@ Specific items worth separate attention:
 
 1. **Does the feature have live surface?** Yes, emphatically — 1,233 badges, not zero. It shipped alongside a real rollout, not ahead of one.
 2. **What risk does each badged mint carry?** Uniformly high in terms of *capability*: freeze, pause and (usually) permanent-delegate authority all remain with the issuer. The badge's design intent — trusting operator review instead of extension checks — means the on-chain program offers no protection here. The saving grace is that the levers are held by regulated issuers (Backed, Ondo) with two keys covering ~99% of the set, which concentrates counterparty risk rather than eliminating it.
-3. **Is anyone using them?** Yes, but at small scale. 166 pools, 115 traded, 6 migrated, and reserves in the tens of units per mint (e.g. NVDAx 41.03, TSLAx 28.54, SPYx 22.95). The economic exposure today is modest; the structural exposure is that a single issuer key can freeze or pause the quote side of every one of those pools.
+3. **Is anyone using them?** Yes, but at small scale. 166 pools, 115 traded, 6 migrated. Reserves are in the tens of units per mint when summed across all of that mint's pools (NVDAx 41.03 across 39 pools, TSLAx 28.54 across 13, SPYx 22.95 across 18) — these are aggregates, not single-pool balances, and are not comparable to the per-config migration thresholds. Apart from the 6 already-migrated pools, no pool exceeds 16% of its own threshold. The economic exposure today is modest; the structural exposure is that a single issuer key can freeze or pause the quote side of every one of those pools.
 
 ### Limits of this analysis
 
