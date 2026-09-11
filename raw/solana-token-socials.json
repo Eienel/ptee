@@ -1,0 +1,118 @@
+{
+  "fetchedAt": "2026-09-11T22:18:09.847Z",
+  "note": "socials come from each token’s own metadata JSON, set by its deployer — unverified",
+  "rows": [
+    {
+      "symbol": "TICKER",
+      "name": "Tickeryard",
+      "mint": "HE9ThcQVt5yDq6xNW74DHnu1PpX8GdzW3S7sXQXfiaic",
+      "quote": "SPYx",
+      "migrated": true,
+      "uri": "https://gateway.pinata.cloud/ipfs/QmQYNUhSspKYog9par3e6YMXFnYz9JS3mtE9zaibhy9KTe",
+      "twitter": "https://x.com/Tickeryardfun",
+      "website": "http://localhost:3000/token/HE9ThcQVt5yDq6xNW74DHnu1PpX8GdzW3S7sXQXfiaic",
+      "telegram": "",
+      "description": ""
+    },
+    {
+      "symbol": "PAIRS",
+      "name": "PAIRS",
+      "mint": "EpbYRMoSPYHF77QtcdWunBGHuzHFK1CHbrd9xaNGpair",
+      "quote": "SPYx",
+      "migrated": true,
+      "uri": "https://pairs.market/m/mtu1gnsgupxi.json"
+    },
+    {
+      "symbol": "TSLAINU",
+      "name": "TESLA INU",
+      "mint": "FWxzTKdFW1gmdEEP64KJHobaVmFKQP9UuWPh8zAbbAud",
+      "quote": "TSLAx",
+      "migrated": true,
+      "uri": "ipfs://bafkreihxrmfmr6g4m6lxbcfih62f6x6nydboxu3xflxct7b6tjbi7ppfii"
+    },
+    {
+      "symbol": "TEST3",
+      "name": "TEST3",
+      "mint": "Ax77wvovw4xbLNbsoWbDacwyFHygQRbfdnsTskax22un",
+      "quote": "SPCX",
+      "migrated": true,
+      "uri": null
+    },
+    {
+      "symbol": "GPUCAT",
+      "name": "GPU Cat",
+      "mint": "7XmaUUj2PQw2sQvPKkomKUQXFNtqzMo2DURHhrk7rnN2",
+      "quote": "NVDAx",
+      "migrated": true,
+      "uri": "ipfs://bafkreife7vn6xroonlpkpm7ix5eiretjsw5zlzoya2e5larksbafdps3pm"
+    },
+    {
+      "symbol": "TEST4",
+      "name": "TEST4",
+      "mint": "B6v5eQshgUJaEJYVj3MfdFqpkMhq2D7r1Knjc7vwxkcf",
+      "quote": "MU",
+      "migrated": true,
+      "uri": null
+    },
+    {
+      "symbol": "GOLDEN",
+      "name": "Golden Ticket",
+      "mint": "6nkrqj1mYrRFYHb2oWNyJGN3GXRuNRuFYENq1difLm6q",
+      "quote": "GLDx",
+      "migrated": false,
+      "uri": "ipfs://bafkreifakdwwc5ydgbhdgjp3nmpexvtylq5vddxzlgballi7nmmzhclvte"
+    },
+    {
+      "symbol": "DIP",
+      "name": "Buy the dip, faggot.",
+      "mint": "8G1R75NNHjvWuWbm8a17we4b1zuZVimcU8Y4vFAiRFeR",
+      "quote": "BRK.Bx",
+      "migrated": false,
+      "uri": "ipfs://bafkreiahjs2q2q7mfejxoyowy2wiiqghpnvx7hui74uiuad7w3bra4szw4"
+    },
+    {
+      "symbol": "ASSTEROID",
+      "name": "ASSTEROID",
+      "mint": "4tvMaA9a66KBRgB9qi15E7o5wrzTeHp6ueKj5GvX1Lqv",
+      "quote": "SPCXx",
+      "migrated": false,
+      "uri": "ipfs://bafkreicfrzbibrvbciamuscj3eyoik6cnzykgxm7jgnlnmzrtk7qqb6rdy"
+    },
+    {
+      "symbol": "SOJU",
+      "name": "Soju",
+      "mint": "DaFwCSWaKJc5UnhmgHsWRWHjYM3Xt4v66AawER1fcZty",
+      "quote": "TSLAx",
+      "migrated": false,
+      "uri": "ipfs://bafkreif6sd5ejneyh5lvmp5hdzrxe4qagqn7semdnnkirfcdi5w7xqxtqe"
+    },
+    {
+      "symbol": "SNP500",
+      "name": "SNP500",
+      "mint": "6VTmWEa7TV8oFjpMJxH5pcvSpEUEhajQQ17FQuvWvWzK",
+      "quote": "SPYx",
+      "migrated": false,
+      "uri": null
+    },
+    {
+      "symbol": "MSTRBALL",
+      "name": "MSTRball",
+      "mint": "5UiUG16XXcxq5ukEwHHBa4ZjRgPNmmdHfyMgePoQuzvh",
+      "quote": "MSTRx",
+      "migrated": false,
+      "uri": "ipfs://bafkreicujpooofpevypupa6m3u23dt7u5bu4u2r5sx6vwjvailtdicxvku"
+    },
+    {
+      "symbol": "SV151",
+      "name": "Scarlet & Violet 151",
+      "mint": "SV151D5pjygAKA8aJJcKzm4wFnRX5G92Fye94jQJk7g",
+      "quote": "USDC",
+      "migrated": true,
+      "uri": "https://gateway.irys.xyz/LdHkmwgCT82QrVjpbmuEPI9MomJCuSdutW44gWQCL1c",
+      "twitter": "https://x.com/dAssetSOL",
+      "website": "https://dassetsol.xyz/",
+      "telegram": null,
+      "description": "SV151 represents a reserve of SV151 packs custodied by the Dynamic Assets team."
+    }
+  ]
+}

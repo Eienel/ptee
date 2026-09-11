@@ -1,0 +1,133 @@
+{
+  "fetchedAt": "2026-09-11T22:17:09.157Z",
+  "robinhood": [
+    {
+      "label": "GOOGL",
+      "addr": "0x2e0847E8910a9732eB3fb1bb4b70a580ADAD4FE3",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Alphabet Class A • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "NVDA",
+      "addr": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
+      "codeHash": "dd432f8669cd184f",
+      "name": "NVIDIA • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "SPY",
+      "addr": "0x117cc2133c37B721F49dE2A7a74833232B3B4C0C",
+      "codeHash": "dd432f8669cd184f",
+      "name": "SPDR S&P 500 ETF Trust • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "SPCX",
+      "addr": "0x4a0E65A3EcceC6dBe60AE065F2e7bb85Fae35eEa",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Space Exploration Technologies Corp. Class A Common Stock • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "GME",
+      "addr": "0x1b0E319c6A659F002271B69dB8A7df2F911c153E",
+      "codeHash": "dd432f8669cd184f",
+      "name": "GameStop • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "AAPL",
+      "addr": "0xaF3D76f1834A1d425780943C99Ea8A608f8a93f9",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Apple • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "QQQ",
+      "addr": "0xD5f3879160bc7c32ebb4dC785F8a4F505888de68",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Invesco QQQ • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "MSTR",
+      "addr": "0xec262a75e413fAfD0dF80480274532C79D42da09",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Strategy Inc. • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "TSLA",
+      "addr": "0x322F0929c4625eD5bAd873c95208D54E1c003b2d",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Tesla • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "META",
+      "addr": "0xc0D6457C16Cc70d6790Dd43521C899C87ce02f35",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Meta Platforms • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "COIN",
+      "addr": "0x6330D8C3178a418788dF01a47479c0ce7CCF450b",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Coinbase • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "AMZN",
+      "addr": "0x12f190a9F9d7D37a250758b26824B97CE941bF54",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Amazon • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "PLTR",
+      "addr": "0x894E1EC2D74FFE5AEF8Dc8A9e84686acCB964F2A",
+      "codeHash": "dd432f8669cd184f",
+      "name": "Palantir Technologies • Robinhood Token",
+      "codeSize": 283
+    },
+    {
+      "label": "HOOD(top volume)",
+      "addr": "0xDAA8f3f54c66E9BE2c44C1B6b566cBD07229CED3",
+      "codeHash": "99253a4bf476a3a3",
+      "name": "TheGreenHood",
+      "codeSize": 3649
+    }
+  ],
+  "base": [
+    {
+      "address": "0x5EF7a66DF9A5E5541664e2f1ff273853a8934da3",
+      "name": "Apple (AAPL)",
+      "symbol": "AAPL",
+      "codeSize": 45,
+      "proxyImplementation": null
+    },
+    {
+      "address": "0xb200000000000000000000955dE0C2D9A115c201",
+      "name": "Apple Inc.",
+      "symbol": "AAPL",
+      "codeSize": 1,
+      "proxyImplementation": null
+    },
+    {
+      "address": "0x72F4C96Fc2488B8CCe485Aa91C60945c281c3B31",
+      "name": "HOOD (Robinhood)",
+      "symbol": "HOOD",
+      "codeSize": 45,
+      "proxyImplementation": null
+    },
+    {
+      "address": "0x8e16D46Cb2dA01cdD49601ec73d7B0344969Ae33",
+      "name": "coin",
+      "symbol": "coin",
+      "codeSize": 4867,
+      "proxyImplementation": null
+    }
+  ]
+}
