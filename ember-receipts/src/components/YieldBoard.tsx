@@ -58,15 +58,9 @@ export function YieldBoard() {
       </header>
 
       <p className="yb-lede">
-        Ember routes part of every trade&rsquo;s fee back to the people holding the coin. This is
-        what each one actually paid out yesterday, per $1,000 of stake &mdash; measured, not
-        projected.
-      </p>
-      <p className="yb-lede">
-        Watch the trade fee. Until Ember 1.23 every coin graduated into a 1% pool whatever it
-        launched with, so a 3% coin lost two thirds of the engine that pays holders the day it
-        succeeded. Coins launched from 13 Sep keep their own rate through graduation; ones that
-        graduated earlier are stuck at 1%, because the config cannot be changed.
+        What each coin paid its holders yesterday, per $1,000 held. A fee marked
+        &ldquo;&rarr; 1%&rdquo; drops when the coin graduates; &ldquo;kept&rdquo; means it
+        survives.
       </p>
 
       {!rows && (
@@ -91,8 +85,8 @@ export function YieldBoard() {
           <div className="yb-table">
             <div className="yb-row head">
               <span>Coin</span>
-              <span>Per $1,000 held</span>
-              <span>Paid to holders</span>
+              <span>Per $1,000</span>
+              <span>24h pot</span>
               <span>Holders</span>
               <span>Trade fee</span>
               <span>Module</span>
@@ -103,15 +97,24 @@ export function YieldBoard() {
               return (
                 <div className="yb-row" key={m.pool}>
                   <span data-label="Coin" className="yb-coin">
-                    {m.image && <img className="coin" src={`https://embercurve.fun${m.image}`} alt="" loading="lazy" />}
+                    {m.image && (
+                      <img
+                        className="coin"
+                        src={`https://embercurve.fun${m.image}`}
+                        alt=""
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    )}
                     <b>{m.symbol}</b>
                     <small className="muted">{m.quoteTicker}</small>
                   </span>
-                  <span data-label="Per $1,000 held" className="yb-rate">
+                  <span data-label="Per $1,000 / day" className="yb-rate">
                     {formatUsd(per1000(y) ?? 0)}
-                    <small className="muted"> /day</small>
                   </span>
-                  <span data-label="Paid to holders">{formatUsd(y.holders24hUsd)}</span>
+                  <span data-label="24h pot">{formatUsd(y.holders24hUsd)}</span>
                   <span data-label="Holders">{m.holders.toLocaleString()}</span>
                   <span data-label="Trade fee">
                     {(currentBps(m) / 100).toFixed(currentBps(m) % 100 ? 1 : 0)}%
@@ -147,18 +150,10 @@ export function YieldBoard() {
           </div>
 
           <p className="fine">
-            Listed only if a coin has at least {FLOOR.holders} holders, a{' '}
-            {formatUsd(FLOOR.marketCapUsd)} market cap and {FLOOR.trades24h} trades in 24 hours.
-            Without that bar the top of this list is three-holder coins with $3,000 market caps
-            showing implausible rates &mdash; the shape of wash trading rather than income.
-          </p>
-          <p className="fine">
-            <strong>Your own share will not match this.</strong> Diamond Hands weights a holder by
-            how long they have held &mdash; 1&times; on day one, 1.5&times; after a day,
-            2&times; after three, 3&times; after a week, and selling any amount or moving wallet
-            resets it to 1&times;. A payout round also pays at most 300 wallets, so holders
-            collect on a rotation. Checked against a real wallet, a flat share of the pot was out
-            by 1.85&times;. Paste that wallet above for what it was actually paid.
+            Needs {FLOOR.holders}+ holders, ${(FLOOR.marketCapUsd / 1000).toFixed(0)}k+ cap and{' '}
+            {FLOOR.trades24h}+ trades to be listed. Your own share differs &mdash; Diamond Hands
+            weights it 1&times;&ndash;3&times; by hold time. Paste a wallet for what it was
+            actually paid.
           </p>
         </>
       )}

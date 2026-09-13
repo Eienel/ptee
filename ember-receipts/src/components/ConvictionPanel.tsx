@@ -193,9 +193,8 @@ export function ConvictionPanel({ pool, symbol }: { pool: string; symbol: string
 
       {perp.paper ? (
         <p className="fine">
-          Paper mode: the venue is not deployed, so this position is simulated at live prices. The
-          collateral is real and is being kept for the coin, but a simulated profit has not been
-          paid to anyone.
+          Simulated at live prices until the venue is deployed. The collateral is real; the profit
+          has not been paid to anyone.
         </p>
       ) : perp.explorer ? (
         <a className="btn-link" href={perp.explorer} target="_blank" rel="noreferrer">
@@ -203,7 +202,7 @@ export function ConvictionPanel({ pool, symbol }: { pool: string; symbol: string
         </a>
       ) : null}
 
-      <p className="fine">Ember&rsquo;s published state, not read from the chain here.</p>
+      <p className="fine">Ember&rsquo;s published state, not read from the chain.</p>
     </section>
   );
 }

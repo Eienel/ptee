@@ -61,9 +61,8 @@ export function Arena() {
       </header>
 
       <p className="arena-lede">
-        A coin can point part of its fees at a leveraged position. Profit is harvested in steps and
-        split between holders, a buy-back burn of the coin, and an $EMBER burn — and a position on
-        the wrong side of a big move is liquidated.
+        Coins that point part of their fees at a leveraged position. Profit is split 50% holders ·
+        30% coin burn · 20% $EMBER burn.
       </p>
 
       {coins.length === 0 ? (
@@ -88,9 +87,7 @@ export function Arena() {
               ))}
             </ul>
           )}
-          <p className="fine">
-            This updates on its own. When a coin opens one, it shows up here.
-          </p>
+
         </div>
       ) : (
         <div className="arena-table" role="table">
@@ -140,10 +137,7 @@ export function Arena() {
       )}
 
       {paperOnly && coins.length > 0 && (
-        <p className="fine">
-          Positions are simulated at live prices until the venue is deployed. A simulated profit has
-          not been paid to anyone.
-        </p>
+        <p className="fine">Simulated at live prices until the venue is deployed — nothing paid yet.</p>
       )}
     </section>
   );

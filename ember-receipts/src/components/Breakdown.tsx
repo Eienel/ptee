@@ -42,8 +42,8 @@ export function Breakdown({ ledger, tokens, prices }: Props) {
         <div className="then-now">
           {partial && (
             <p className="then-now-scope">
-              Across the {ledger.matched} payout{ledger.matched === 1 ? '' : 's'} Ember labelled,
-              not the full receipt.
+              Across the {ledger.matched} labelled payout{ledger.matched === 1 ? '' : 's'}, not the
+              full receipt.
             </p>
           )}
           <div>
@@ -89,21 +89,12 @@ export function Breakdown({ ledger, tokens, prices }: Props) {
       </ul>
 
       <p className="fine">
-        Labels and payout-time values come from Ember&rsquo;s own ledger, joined to this scan by
-        transaction signature. The amounts are this app&rsquo;s, counted from the chain.
+        Labels from Ember&rsquo;s ledger, joined by signature. Amounts counted from the chain.
         {ledger.unmatched > 0 && (
-          <>
-            {' '}
-            {ledger.unmatched} payout{ledger.unmatched === 1 ? '' : 's'} here{' '}
-            {ledger.unmatched === 1 ? 'is' : 'are'} not in Ember&rsquo;s ledger, so{' '}
-            {ledger.unmatched === 1 ? 'it is' : 'they are'} counted but unlabelled.
-          </>
+          <> {ledger.unmatched} not in their ledger, counted but unlabelled.</>
         )}
         {ledger.missedByScan > 0 && (
-          <>
-            {' '}
-            Ember lists {ledger.missedByScan} this scan did not see.
-          </>
+          <> They list {ledger.missedByScan} this scan did not see.</>
         )}
       </p>
     </section>

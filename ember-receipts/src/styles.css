@@ -605,24 +605,32 @@ h1, h2, h3, .breakdown h2, .arena-head h2, .conv-head h3 {
 
 .yb-table { display: flex; flex-direction: column; }
 .yb-row {
-  display: grid; gap: 10px; align-items: center; font-size: 13.5px;
-  grid-template-columns: 1.2fr 0.95fr 0.95fr 0.6fr 0.8fr 1fr 0.8fr;
-  padding: 11px 8px; border-radius: var(--rs);
+  display: grid; gap: 14px; align-items: center; font-size: 13.5px;
+  grid-template-columns:
+    minmax(140px, 1.3fr) minmax(96px, 0.9fr) minmax(88px, 0.9fr)
+    minmax(60px, 0.5fr) minmax(78px, 0.7fr) minmax(96px, 0.9fr) minmax(112px, 0.8fr);
+  padding: 11px 10px; border-radius: var(--rs);
 }
+/* Every cell clips rather than spilling into its neighbour. */
+.yb-row > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .yb-row:not(.head):hover { background: var(--sur2); }
 .yb-row.head {
-  font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3);
+  font-size: 11px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink-3);
   border-bottom: 1px solid var(--line); border-radius: 0; padding-bottom: 8px;
 }
-.yb-coin { display: flex; align-items: center; gap: 7px; min-width: 0; }
-.yb-coin .coin { width: 22px; height: 22px; border-radius: 50%; flex: none; }
+.yb-coin { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.yb-coin b { overflow: hidden; text-overflow: ellipsis; }
+.yb-coin small { flex: none; font-size: 11px; }
+.yb-coin .coin { width: 20px; height: 20px; border-radius: 50%; flex: none; align-self: center; }
 .yb-rate { font-family: var(--disp); font-weight: 700; color: var(--ink); }
-.yb-links { display: flex; gap: 10px; font-size: 12px; }
+.yb-rate small { font-weight: 500; }
+.yb-links { display: flex; gap: 9px; font-size: 12px; }
 .yieldboard .fine { margin-top: 10px; }
 .yieldboard .fine + .fine { margin-top: 8px; }
 
-@media (max-width: 720px) {
+@media (max-width: 860px) {
   .yb-row { grid-template-columns: 1fr; gap: 4px; padding: 12px 10px; }
+  .yb-row > span { white-space: normal; }
   .yb-row.head { display: none; }
   .yb-row:not(.head) { border: 1px solid var(--line); margin-bottom: 8px; }
   .yb-row:not(.head) > span[data-label] { display: flex; justify-content: space-between; gap: 12px; }
@@ -640,6 +648,15 @@ h1, h2, h3, .breakdown h2, .arena-head h2, .conv-head h3 {
 .token-links a:hover { background: var(--sur3); color: var(--ink); }
 .token-stats strong a { color: inherit; }
 .total .sym:hover { color: var(--coral); }
+
+/* The page is 720px because a receipt reads better narrow, but a seven-column
+   table does not. On a wide screen the board breaks out of that column. */
+@media (min-width: 1000px) {
+  .yieldboard {
+    width: min(1080px, calc(100vw - 48px));
+    margin-left: calc((720px - min(1080px, 100vw - 48px)) / 2);
+  }
+}
 
 .keeps {
   color: var(--teal); font-weight: 700; font-size: 11px;

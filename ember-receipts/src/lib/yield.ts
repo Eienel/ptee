@@ -153,14 +153,18 @@ export function per1000(y: Yield): number | null {
 }
 
 /**
- * Ranking by yield alone surfaces junk: of the 67 coins that paid holders in a
- * sampled 24h, 39% had fewer than 50 holders, and the top of the unfiltered
- * list was $3k-cap coins with three holders showing "$261/day per $1,000" —
- * the shape of wash trading, not of income. A ranking that promotes those is
- * worse than no ranking, so credibility is a precondition for being listed
- * rather than a column to sort by afterwards.
+ * Ranking by yield alone surfaces junk: of the 64 coins that paid holders in a
+ * sampled 24h, the top of the unfiltered list was $3k-cap coins with three
+ * holders showing "$261/day per $1,000" — the shape of wash trading, not of
+ * income. A ranking that promotes those is worse than no ranking, so
+ * credibility is a precondition for being listed rather than a column to sort
+ * by afterwards.
+ *
+ * The bar is set where the junk stops rather than as high as possible: it
+ * admits 27 of those 64 with 146 holders at the thinnest, and the implausible
+ * rates only reappear if it drops to roughly 25 holders.
  */
-export const FLOOR = { holders: 250, marketCapUsd: 50_000, trades24h: 100 };
+export const FLOOR = { holders: 100, marketCapUsd: 15_000, trades24h: 30 };
 
 export const credible = (m: Market): boolean =>
   m.holders >= FLOOR.holders &&
