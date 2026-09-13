@@ -12,3 +12,15 @@ diag.png
 *.tmp.mjs
 card-*.svg
 card-*.png
+
+# Generated screenshots and one-off esbuild bundles used to render them.
+green-*.png
+green-*.svg
+/card.mjs
+/scan.mjs
+/tokens.mjs
+/prices.mjs
+/variants.mjs
+/images.mjs
+/attribution.mjs
+/token.mjs
