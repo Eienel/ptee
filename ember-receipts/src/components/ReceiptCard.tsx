@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { EMBER_KEEPER } from '../lib/constants';
-import { formatAmount, formatDate, shortAddress } from '../lib/format';
+import { formatAmount, formatDate, formatUsd, shortAddress } from '../lib/format';
+import { valueOf, type TokenPrice } from '../lib/prices';
 import type { Receipt, TokenTotal } from '../lib/scan';
 import type { TokenMeta } from '../lib/tokens';
 
@@ -9,6 +10,7 @@ interface Props {
   tokens: Map<string, TokenMeta>;
   /** Hero token artwork, already inlined as a data URI so PNG export works. */
   logo?: string | null;
+  prices?: Map<string, TokenPrice>;
 }
 
 const W = 1200;
@@ -25,9 +27,11 @@ const MONO = 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace';
  * with the remaining tokens listed underneath.
  */
 export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard(
-  { receipt, tokens, logo },
+  { receipt, tokens, logo, prices },
   ref,
 ) {
+  const value = prices ? valueOf(receipt.byToken, prices) : null;
+  const worth = value && value.priced > 0 ? formatUsd(value.usd) : null;
   const sym = (t: TokenTotal) => tokens.get(t.mint)?.symbol ?? '—';
   const ranked = [...receipt.byToken].sort((a, b) => b.count - a.count);
   const hero = ranked[0];
@@ -109,6 +113,22 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
       <text x="68" y="348" fill="#6e6e73" fontSize="24" fontFamily={SANS}>
         {receipt.payouts.length.toLocaleString()} payouts since {since}
       </text>
+
+      {/* Dollar value is the legible number, but the token amount above it is
+          the exact one — so this is labelled as a today's-price figure. */}
+      {worth && (
+        <g transform="translate(790, 150)">
+          <text x="0" y="0" fill="#6e6e73" fontSize="19" letterSpacing="2.4" fontFamily={SANS}>
+            WORTH TODAY
+          </text>
+          <text x="0" y="66" fill="#ffb300" fontSize="62" fontWeight="700" letterSpacing="-2" fontFamily={SANS}>
+            {worth}
+          </text>
+          <text x="0" y="98" fill="#6e6e73" fontSize="18" fontFamily={SANS}>
+            at current prices, not at payout
+          </text>
+        </g>
+      )}
 
       {/* other tokens */}
       {rest.map((t, i) => (

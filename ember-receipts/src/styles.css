@@ -317,3 +317,24 @@ button.linkish {
   background: none; border: none; padding: 0; min-height: 0;
   color: var(--flame); font-size: inherit; font-weight: 500; text-decoration: underline;
 }
+
+.total .usd {
+  display: block; margin-top: 4px; font-size: 15px; font-weight: 600;
+  color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.thin-flag {
+  margin-left: 7px; font-size: 10.5px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--amber);
+  border: 1px solid rgba(255, 179, 0, 0.35); border-radius: 999px; padding: 1px 6px;
+}
+.worth {
+  margin: 0 0 16px; padding: 16px 18px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--hairline); color: var(--ink-2);
+  font-size: 15px;
+}
+.worth strong {
+  font-size: 28px; font-weight: 680; letter-spacing: -0.03em; color: var(--amber);
+  margin-right: 8px; font-variant-numeric: tabular-nums;
+}
+.worth small { display: block; margin-top: 9px; color: var(--ink-3); font-size: 12.5px; line-height: 1.55; }
+.worth em { font-style: normal; color: var(--ink-2); }

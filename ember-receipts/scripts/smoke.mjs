@@ -157,6 +157,13 @@ async function run(page, label, width, height) {
     const url = route.request().url();
     if (url.includes('localhost')) return route.continue();
 
+    if (url.includes('lite-api.jup.ag')) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+        [MINTS.EMBER]: { usdPrice: 0.0379, liquidity: 3_382_012, priceChange24h: 75.7 },
+        [MINTS.MET]: { usdPrice: 0.2312, liquidity: 3_806_372, priceChange24h: -2.8 },
+        [MINTS.NVDAx]: { usdPrice: 215.55, liquidity: 8_000, priceChange24h: -1.7 },
+      }) });
+    }
     if (url.includes('dbc.datapi.meteora.ag')) {
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
         created_at: 1789000000000,
@@ -190,7 +197,9 @@ async function run(page, label, width, height) {
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   const sources = await page.locator('.total .source').count();
-  console.log(`${label.padEnd(8)} ${width}x${height}  overflow=${overflow}  tokens=${await page.locator('.total').count()}  rows=${await page.locator('.payouts tbody tr').count()}  attributed=${sources}`);
+  const worth = await page.textContent('.worth strong').catch(() => 'none');
+  const thin = await page.locator('.thin-flag').count();
+  console.log(`${label.padEnd(8)} ${width}x${height}  overflow=${overflow}  tokens=${await page.locator('.total').count()}  rows=${await page.locator('.payouts tbody tr').count()}  attributed=${sources}  worth=${worth}  thinFlags=${thin}`);
   if (overflow !== 0) errors.push(`${label}: page scrolls sideways by ${overflow}px`);
   await page.screenshot({ path: `smoke-${label}.png`, fullPage: true });
 }
@@ -209,6 +218,13 @@ async function runToken(page, label) {
   await page.route('**/*', async (route) => {
     const url = route.request().url();
     if (url.includes('localhost')) return route.continue();
+    if (url.includes('lite-api.jup.ag')) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+        [MINTS.EMBER]: { usdPrice: 0.0379, liquidity: 3_382_012, priceChange24h: 75.7 },
+        [MINTS.MET]: { usdPrice: 0.2312, liquidity: 3_806_372, priceChange24h: -2.8 },
+        [MINTS.NVDAx]: { usdPrice: 215.55, liquidity: 8_000, priceChange24h: -1.7 },
+      }) });
+    }
     if (url.includes('dbc.datapi.meteora.ag')) {
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
         created_at: 1789000000000,

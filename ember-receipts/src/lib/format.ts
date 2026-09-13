@@ -8,6 +8,8 @@ export function formatAmount(value: number, maxDecimals = 4): string {
 export function formatUsd(value: number): string {
   if (value === 0) return '$0.00';
   if (value < 0.01) return '<$0.01';
+  if (value >= 100_000)
+    return '$' + value.toLocaleString('en-US', { maximumFractionDigits: 0 });
   return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 

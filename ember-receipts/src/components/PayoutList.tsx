@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { SOLSCAN_TX } from '../lib/constants';
 import { formatAmount, formatDate } from '../lib/format';
 import type { Receipt } from '../lib/scan';
+import { formatUsd } from '../lib/format';
+import { valueOf, type TokenPrice } from '../lib/prices';
 import type { TokenMeta } from '../lib/tokens';
 
 const PAGE = 25;
@@ -11,9 +13,11 @@ interface Props {
   tokens: Map<string, TokenMeta>;
   /** Payout token mint -> held coins paired against it. */
   attribution: Map<string, string[]>;
+  prices: Map<string, TokenPrice>;
 }
 
-export function PayoutList({ receipt, tokens, attribution }: Props) {
+export function PayoutList({ receipt, tokens, attribution, prices }: Props) {
+  const value = valueOf(receipt.byToken, prices);
   const [shown, setShown] = useState(PAGE);
   const symbolOf = (mint: string) => tokens.get(mint)?.symbol ?? `${mint.slice(0, 4)}…`;
 
@@ -30,6 +34,19 @@ export function PayoutList({ receipt, tokens, attribution }: Props) {
       <h2>
         Every payout <span>{receipt.payouts.length.toLocaleString()} total</span>
       </h2>
+
+      {value.priced > 0 && (
+        <p className="worth">
+          <strong>{formatUsd(value.usd)}</strong> at today&rsquo;s prices
+          {value.unpriced.length > 0 && ` · ${value.unpriced.length} token${value.unpriced.length === 1 ? '' : 's'} had no price`}
+          {value.thin && ' · some prices sit on thin liquidity'}
+          <small>
+            This is what the tokens are worth <em>now</em>, not what they were worth when they
+            landed. Ember&rsquo;s own price moved more than 70% in a day while this was built, so
+            the two can differ a lot. The token amounts above are the exact, verifiable figures.
+          </small>
+        </p>
+      )}
 
       {attribution.size > 0 && (
         <p className="inferred">
@@ -50,6 +67,12 @@ export function PayoutList({ receipt, tokens, attribution }: Props) {
               )}
               {tokens.get(t.mint)?.symbol ?? '—'}
             </span>
+            {prices.get(t.mint) && (
+              <span className="usd">
+                {formatUsd(t.total * prices.get(t.mint)!.usd)}
+                {prices.get(t.mint)!.thin && <span className="thin-flag" title="Thin liquidity behind this price">thin</span>}
+              </span>
+            )}
             <small>{t.count} payouts</small>
             {sourceLabel(t.mint) && <small className="source">{sourceLabel(t.mint)}</small>}
           </div>

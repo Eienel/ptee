@@ -6,8 +6,9 @@ import { TokenPanel } from './components/TokenPanel';
 import { EMBER_KEEPER, SOLSCAN_ACCOUNT } from './lib/constants';
 import { toDataUrl } from './lib/images';
 import { downloadBlob, svgToPngBlob } from './lib/png';
-import { formatAmount } from './lib/format';
+import { formatAmount, formatUsd } from './lib/format';
 import { attributeByQuote, pairedCoins } from './lib/attribution';
+import { fetchPrices, valueOf, type TokenPrice } from './lib/prices';
 import { describeEndpoint, normalizeEndpoint, PUBLIC_RPC } from './lib/rpc';
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
 import { classifyAddress, loadToken, type TokenView } from './lib/token';
@@ -34,6 +35,7 @@ export default function App() {
   const [heroLogo, setHeroLogo] = useState<string | null>(null);
   /** Payout token mint -> held coins paired against it. Inferred, not proven. */
   const [attribution, setAttribution] = useState<Map<string, string[]>>(new Map());
+  const [prices, setPrices] = useState<Map<string, TokenPrice>>(new Map());
   const [progress, setProgress] = useState<ScanProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -72,6 +74,7 @@ export default function App() {
       setToken(null);
       setHeroLogo(null);
       setAttribution(new Map());
+      setPrices(new Map());
       setProgress({ phase: 'accounts', done: 0, total: 1 });
 
       try {
@@ -100,6 +103,9 @@ export default function App() {
         setTokens(meta);
         setReceipt(result);
         setProgress({ phase: 'done', done: 1, total: 1 });
+
+        // Dollar values are a separate, slower concern than the token amounts.
+        void fetchPrices(result.byToken.map((t) => t.mint)).then(setPrices);
 
         // Work out which held coin each payout token came from. Runs after the
         // receipt is on screen because it is supporting detail, not the figures.
@@ -152,12 +158,14 @@ export default function App() {
   const shareUrl = useMemo(() => {
     if (!receipt) return '';
     const top = receipt.byToken[0];
+    const value = valueOf(receipt.byToken, prices);
+    const worth = value.priced > 0 ? ` — worth ${formatUsd(value.usd)} today` : '';
     const line = top
-      ? `${formatAmount(top.total)} ${tokens.get(top.mint)?.symbol ?? ''} across ${receipt.payouts.length} payouts`
+      ? `${formatAmount(top.total)} ${tokens.get(top.mint)?.symbol ?? ''} across ${receipt.payouts.length} payouts${worth}`
       : `${receipt.payouts.length} payouts`;
     const text = `My @embercurve receipt: ${line}.\n\nEvery number verified on-chain, not from a dashboard.`;
     return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`;
-  }, [receipt, tokens]);
+  }, [receipt, tokens, prices]);
 
   const usingPublicRpc = endpoint === PUBLIC_RPC;
 
@@ -255,7 +263,13 @@ export default function App() {
         {receipt && receipt.payouts.length > 0 && (
           <>
             <section className="card-wrap">
-              <ReceiptCard ref={cardRef} receipt={receipt} tokens={tokens} logo={heroLogo} />
+              <ReceiptCard
+                ref={cardRef}
+                receipt={receipt}
+                tokens={tokens}
+                logo={heroLogo}
+                prices={prices}
+              />
             </section>
             <div className="card-actions">
               <button className="primary" onClick={savePng}>
@@ -267,7 +281,12 @@ export default function App() {
               <button onClick={copyLink}>Copy link</button>
               <span className="scanned">{receipt.scanned.toLocaleString()} signatures checked</span>
             </div>
-            <PayoutList receipt={receipt} tokens={tokens} attribution={attribution} />
+            <PayoutList
+              receipt={receipt}
+              tokens={tokens}
+              attribution={attribution}
+              prices={prices}
+            />
           </>
         )}
 

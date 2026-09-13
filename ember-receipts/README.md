@@ -73,6 +73,22 @@ a signature; a source coin does not. It also cannot see a coin that has since be
 is no holding left to match against, which is why a wallet paid 68,817 EMBER can still show
 "cannot attribute" for it.
 
+### Dollar values
+
+Prices come from Jupiter's public price API, which covers these tokens well — including the
+launchpad coins, tagged `launchpad: "met-dbc"` — and returns the liquidity behind each quote.
+A price standing on less than $25,000 of liquidity is marked **thin**, because a quote on a
+near-empty pool is a number, not a valuation.
+
+**These are current prices, not the price at payout.** That distinction is stated on the card
+and beside the total, because the gap is not academic: $EMBER moved more than 70% in a single
+day while this was being written. Valuing at receipt would need a historical price per payout
+timestamp, which Jupiter does not serve and which would mean a paid OHLCV source plus a lookup
+per payout.
+
+The token amounts remain the exact, verifiable figures; the dollar figure is a convenience laid
+over them.
+
 ### The card
 
 Rendered as SVG, so it exports to PNG with no dependency and stays sharp at any size. Token
@@ -179,8 +195,9 @@ cannot complete one.
   and it goes blind on any coin the wallet no longer holds. Proving it outright would need a
   continuous indexer snapshotting Ember's endpoint, which could only capture forward from the
   moment it started.
-- **No USD values and no PnL.** Both need a historical price source. Amounts are in each token's
-  own units.
+- **Dollar values are today's, and there is no PnL.** Earnings are valued at current prices, not
+  at the price when each payout landed, and nothing here computes profit and loss — that needs
+  cost basis for every buy and sell plus historical pricing.
 - **Meteora's DBC index is undocumented.** `dbc.datapi.meteora.ag` is live and indexes 1.6M
   pools, but it is absent from Meteora's published API reference, so every field from it is
   treated as optional and the token view still works without it.
