@@ -292,3 +292,14 @@ footer {
 }
 .coin.lg { width: 46px; height: 46px; margin-right: 0; vertical-align: middle; flex: none; }
 .token-id { display: flex; align-items: center; gap: 14px; }
+
+.crash { padding: 40px 0; display: flex; flex-direction: column; gap: 14px; }
+.crash h1 { font-size: 26px; font-weight: 680; letter-spacing: -0.03em; margin: 0; }
+.crash p { color: var(--ink-2); line-height: 1.6; margin: 0; font-size: 15px; }
+.crash .msg {
+  font-family: var(--mono); font-size: 13.5px; color: #ff9a93;
+  background: rgba(255, 69, 58, 0.12); border: 1px solid rgba(255, 69, 58, 0.3);
+  border-radius: var(--radius-sm); padding: 13px 15px; overflow-wrap: anywhere;
+}
+.crash-actions { margin-top: 6px; }
+.warn-text { color: var(--amber); }

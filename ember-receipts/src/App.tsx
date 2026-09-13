@@ -7,11 +7,11 @@ import { EMBER_KEEPER, SOLSCAN_ACCOUNT } from './lib/constants';
 import { toDataUrl } from './lib/images';
 import { downloadBlob, svgToPngBlob } from './lib/png';
 import { formatAmount } from './lib/format';
+import { initialEndpoint, normalizeEndpoint, PUBLIC_RPC } from './lib/rpc';
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
 import { classifyAddress, loadToken, type TokenView } from './lib/token';
 import { loadImages, resolveTokens, type TokenMeta } from './lib/tokens';
 
-const DEFAULT_RPC = import.meta.env.VITE_RPC_URL ?? 'https://api.mainnet-beta.solana.com';
 const RPC_KEY = 'ember.rpc';
 
 const PHASE_LABEL: Record<ScanProgress['phase'], string> = {
@@ -23,7 +23,9 @@ const PHASE_LABEL: Record<ScanProgress['phase'], string> = {
 };
 
 export default function App() {
-  const [rpc, setRpc] = useState(() => localStorage.getItem(RPC_KEY) ?? DEFAULT_RPC);
+  const [rpc, setRpc] = useState(() =>
+    initialEndpoint(localStorage.getItem(RPC_KEY), import.meta.env.VITE_RPC_URL),
+  );
   const [input, setInput] = useState(() => new URLSearchParams(location.search).get('w') ?? '');
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [token, setToken] = useState<TokenView | null>(null);
@@ -37,7 +39,12 @@ export default function App() {
 
   useEffect(() => localStorage.setItem(RPC_KEY, rpc), [rpc]);
 
-  const connection = useMemo(() => new Connection(rpc, 'confirmed'), [rpc]);
+  // A malformed endpoint must never throw during render: fall back and say so.
+  const endpoint = normalizeEndpoint(rpc);
+  const connection = useMemo(
+    () => new Connection(endpoint ?? PUBLIC_RPC, 'confirmed'),
+    [endpoint],
+  );
 
   const scan = useCallback(
     async (address: string) => {
@@ -134,7 +141,7 @@ export default function App() {
     return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`;
   }, [receipt, tokens]);
 
-  const usingPublicRpc = rpc.includes('api.mainnet-beta.solana.com');
+  const usingPublicRpc = (endpoint ?? PUBLIC_RPC).includes('api.mainnet-beta.solana.com');
 
   return (
     <div className="page">
@@ -171,6 +178,11 @@ export default function App() {
         <details className="rpc">
           <summary>RPC endpoint {usingPublicRpc && <span className="warn-dot">needs attention</span>}</summary>
           <input value={rpc} onChange={(e) => setRpc(e.target.value)} spellCheck={false} />
+          {endpoint === null && (
+            <p className="hint warn-text">
+              That endpoint is not a valid http(s) URL, so the public one is being used instead.
+            </p>
+          )}
           {usingPublicRpc && (
             <p className="hint">
               The public endpoint rate-limits hard and will usually fail this scan — it reads a

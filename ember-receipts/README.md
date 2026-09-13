@@ -110,6 +110,7 @@ cp .env.example .env     # add your RPC endpoint
 npm run dev
 npm run build
 npm run smoke            # drives both views at 1100px and 390px against a stubbed RPC
+npm test                 # endpoint validation, guarding the blank-page regression
 ```
 
 An RPC endpoint is required — this reads full transaction histories and public endpoints cannot
@@ -126,6 +127,13 @@ The app lives in a subdirectory, so the one setting that matters is the root dir
 4. **Environment Variables → `VITE_RPC_URL`** = your RPC endpoint
 5. Deploy
 
+**Set `VITE_RPC_URL` to a real https URL, not an empty field.** The first deploy went out with
+it blank, which is worth knowing about: `??` does not treat an empty string as missing, so the
+blank value reached `new Connection('')`, that threw during render, and the page went
+completely blank with no clue on screen. The endpoint is now validated and a render crash shows
+a message with a reset button, but an unset endpoint still means no scans — public endpoints
+cannot complete one.
+
 ## Status
 
 - The scan engine is validated end to end against three real wallets on a live endpoint.
@@ -133,9 +141,10 @@ The app lives in a subdirectory, so the one setting that matters is the root dir
 - Artwork resolution is validated against four real mints.
 - Layout, both views and the mobile breakpoints are covered by `npm run smoke`, which fails on
   any console error or horizontal overflow.
-- The browser's **live** RPC path has not been exercised: the development sandbox's proxy drops
-  the headless browser's TLS tunnels, so every browser test runs against a stub and every live
-  test runs from Node. **The first deploy is the real test of the in-browser fetch path.**
+- The browser's **live** RPC path has not been exercised from here: the development sandbox's
+  proxy drops the headless browser's TLS tunnels, so browser tests run against a stub and live
+  tests run from Node. Production bundles can still be verified by downloading them and serving
+  them through request interception, which is how the first deploy's blank page was diagnosed.
 
 ## Known limits
 
