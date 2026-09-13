@@ -6,3 +6,6 @@ dist
 receipt.png
 smoke*.png
 tsconfig.tsbuildinfo
+card.svg
+receipt-*.png
+diag.png
