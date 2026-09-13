@@ -149,12 +149,68 @@ function buildTx(signature) {
   };
 }
 
+/**
+ * Ember's API, served on the same-origin `/ember/*` path the app now uses.
+ * The arena and a Conviction position are given real-looking values, because
+ * no coin has ever opened one and the populated layouts are otherwise never
+ * exercised.
+ */
+const ARENA = {
+  computedAt: 1789334406, live: false, venue: 'phoenix',
+  coins: [
+    { pool: POOL, route: '/t/x', symbol: 'FLYWHEEL', name: 'flywheel', image: null, quoteTicker: 'NVDAx',
+      market: 'NVDA', side: 'long', lev: 3, paper: true, open: true, pnl: 412.55, pnlPct: 18.4,
+      reserveUsd: 0, paidHoldersUsd: 1240.5, harvests: 2, liquidations: 0, underwater: false, aliveS: 190000 },
+    { pool: 'Pool2', route: '/t/y', symbol: 'ZECBALL', name: 'Zecball', image: null, quoteTicker: 'ZEC',
+      market: 'GOLD', side: 'short', lev: 5, paper: true, open: false, pnl: 0, pnlPct: 0,
+      reserveUsd: 8.2, paidHoldersUsd: 0, harvests: 0, liquidations: 1, underwater: true, aliveS: 4000 },
+  ],
+};
+
+const PERP = {
+  market: 'NVDA', side: 'long', lev: 3, mark: 189.42, paper: true, convictionBps: 6500,
+  position: { pnl: 412.55, pnlPct: 18.4, collateral: 2240, notional: 6720, entry: 178.1, liq: 126.9, nextHarvestAt: 560 },
+  reserveUsd: 0, paidHoldersUsd: 1240.5, burnUsd: 744.3, emberUsd: 496.2, harvests: 2, liquidations: 1,
+  history: [
+    { type: 'harvest', at: 1789200000, usd: 620, split: { holders: 310, burn: 186, ember: 124 }, sig: 'SigC'.padEnd(64, 'z') },
+    { type: 'topup', at: 1789100000, usd: 180, underwater: true },
+    { type: 'open', at: 1789000000, usd: 1200, notional: 3600 },
+  ],
+  explorer: null,
+  policy: { openUsd: 20, harvestStepPct: 25, harvestClosePct: 40, profitSplit: { holders: 0.5, burn: 0.3, ember: 0.2 } },
+};
+
+function emberStub(url) {
+  if (url.includes('/ember/arena')) return JSON.stringify(ARENA);
+  if (url.includes('/ember/perp/markets')) {
+    return JSON.stringify({
+      markets: [
+        { symbol: 'BTC', name: 'Bitcoin', kind: 'crypto', maxLev: 40 },
+        { symbol: 'NVDA', name: 'Nvidia', kind: 'stock', maxLev: 10 },
+        { symbol: 'GOLD', name: 'Gold', kind: 'commodity', maxLev: 20 },
+      ],
+      tiers: [2, 3, 5], enabled: false, live: false, venue: 'phoenix',
+      profitSplit: { holders: 0.5, burn: 0.3, ember: 0.2 },
+    });
+  }
+  if (url.includes('/ember/perp/')) return JSON.stringify(PERP);
+  if (url.includes('/ember/payouts')) {
+    return JSON.stringify({ payouts: [
+      { pool: POOL, kind: 'payout', amount: 0.076033, quoteTicker: 'NVDAx', signature: 'SigA'.padEnd(64, 'x'), at: 1789200000 },
+      { pool: POOL, kind: 'claim', amount: 0, quoteTicker: 'NVDAx', signature: null, at: 1789200300 },
+      { pool: 'other', kind: 'payout', amount: 5, quoteTicker: 'MET', signature: 'SigB'.padEnd(64, 'y'), at: 1789200600 },
+    ] });
+  }
+  return JSON.stringify({});
+}
+
 async function run(page, label, width, height) {
   page.setDefaultTimeout(30000);
   page.on('pageerror', (e) => errors.push(`${label}: ${e}`));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(`${label}: ${m.text()}`); });
   await page.route('**/*', async (route) => {
     const url = route.request().url();
+    if (url.includes('/ember/')) return route.fulfill({ status: 200, contentType: 'application/json', body: emberStub(url) });
     if (url.includes('localhost')) return route.continue();
 
     if (url.includes('lite-api.jup.ag')) {
@@ -169,15 +225,6 @@ async function run(page, label, width, height) {
         created_at: 1789000000000,
         token_x: { symbol: 'FLYWHEEL', name: 'flywheel', decimals: 6 },
         token_y: { symbol: 'NVDAx', decimals: 6 },
-      }) });
-    }
-    if (url.includes('embercurve.fun')) {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
-        payouts: [
-          { pool: POOL, kind: 'payout', amount: 0.076033, quoteTicker: 'NVDAx', signature: 'SigA'.padEnd(64, 'x'), at: 1789200000 },
-          { pool: POOL, kind: 'claim', amount: 0, quoteTicker: 'NVDAx', signature: null, at: 1789200300 },
-          { pool: 'other', kind: 'payout', amount: 5, quoteTicker: 'MET', signature: 'SigB'.padEnd(64, 'y'), at: 1789200600 },
-        ],
       }) });
     }
     if (route.request().method() !== 'POST') return route.abort();
@@ -217,6 +264,7 @@ async function runToken(page, label) {
   page.on('console', (m) => { if (m.type() === 'error') errors.push(`${label}: ${m.text()}`); });
   await page.route('**/*', async (route) => {
     const url = route.request().url();
+    if (url.includes('/ember/')) return route.fulfill({ status: 200, contentType: 'application/json', body: emberStub(url) });
     if (url.includes('localhost')) return route.continue();
     if (url.includes('lite-api.jup.ag')) {
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
@@ -230,14 +278,6 @@ async function runToken(page, label) {
         created_at: 1789000000000,
         token_x: { symbol: 'FLYWHEEL', name: 'flywheel', decimals: 6 },
         token_y: { symbol: 'NVDAx', decimals: 6 },
-      }) });
-    }
-    if (url.includes('embercurve.fun')) {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
-        payouts: [
-          { pool: POOL, kind: 'payout', amount: 0.076033, quoteTicker: 'NVDAx', signature: 'SigA'.padEnd(64, 'x'), at: 1789200000 },
-          { pool: POOL, kind: 'claim', amount: 0, quoteTicker: 'NVDAx', signature: null, at: 1789200300 },
-        ],
       }) });
     }
     if (route.request().method() !== 'POST') return route.abort();
@@ -254,8 +294,10 @@ async function runToken(page, label) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   const badge = await page.textContent('.badge').catch(() => 'none');
   const pct = await page.textContent('.curve-top strong').catch(() => 'none');
-  console.log(`${label.padEnd(8)} overflow=${overflow}  badge="${badge}"  progress=${pct}  feeRows=${await page.locator('.token tbody tr').count()}`);
+  const conviction = await page.locator('.conviction').count();
+  console.log(`${label.padEnd(8)} overflow=${overflow}  badge="${badge}"  progress=${pct}  feeRows=${await page.locator('.token tbody tr').count()}  conviction=${conviction}`);
   if (overflow !== 0) errors.push(`${label}: scrolls sideways by ${overflow}px`);
+  if (conviction !== 1) errors.push(`${label}: Conviction panel did not render`);
   await page.screenshot({ path: `smoke-${label}.png`, fullPage: true });
 }
 
@@ -263,6 +305,33 @@ await runToken(await browser.newPage({ viewport: { width: 1100, height: 1300 } }
 await runToken(
   await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 }),
   'tokenphone',
+);
+
+/** The arena only shows on the landing page, before a lookup. */
+async function runArena(page, label) {
+  page.setDefaultTimeout(30000);
+  page.on('pageerror', (e) => errors.push(`${label}: ${e}`));
+  page.on('console', (m) => { if (m.type() === 'error') errors.push(`${label}: ${m.text()}`); });
+  await page.route('**/*', async (route) => {
+    const url = route.request().url();
+    if (url.includes('/ember/')) return route.fulfill({ status: 200, contentType: 'application/json', body: emberStub(url) });
+    if (url.includes('localhost')) return route.continue();
+    return route.abort();
+  });
+  await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('.arena-row:not(.head)');
+  const rows = await page.locator('.arena-row:not(.head)').count();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  console.log(`${label.padEnd(8)} overflow=${overflow}  arenaRows=${rows}`);
+  if (overflow !== 0) errors.push(`${label}: scrolls sideways by ${overflow}px`);
+  if (rows !== ARENA.coins.length) errors.push(`${label}: expected ${ARENA.coins.length} arena rows, got ${rows}`);
+  await page.screenshot({ path: `smoke-${label}.png`, fullPage: true });
+}
+
+await runArena(await browser.newPage({ viewport: { width: 1100, height: 900 } }), 'arena');
+await runArena(
+  await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 }),
+  'arenaphone',
 );
 
 console.log('ERRORS:', errors);

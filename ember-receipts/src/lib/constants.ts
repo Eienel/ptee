@@ -22,8 +22,12 @@ export const TOKEN_PROGRAM_ID = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9
 export const TOKEN_2022_PROGRAM_ID = new PublicKey('TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb');
 export const METAPLEX_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
 
-/** Ember's own published ledger, used only to cross-check — never as the source of truth. */
-export const EMBER_PAYOUTS_API = 'https://embercurve.fun/api/solana/payouts';
+/**
+ * Ember's own published ledger, used only to cross-check — never as the source
+ * of truth. Fetched through this origin because embercurve.fun sends no CORS
+ * headers; see `lib/ember.ts`.
+ */
+export const EMBER_PAYOUTS_API = '/ember/payouts';
 
 export const SOLSCAN_TX = (signature: string) => `https://solscan.io/tx/${signature}`;
 export const SOLSCAN_ACCOUNT = (address: string) => `https://solscan.io/account/${address}`;

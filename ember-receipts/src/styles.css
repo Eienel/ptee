@@ -367,3 +367,103 @@ button.linkish {
 }
 .pill.shared { color: var(--accent-shared, #7fd1ff); border-color: rgba(127, 209, 255, 0.3); }
 .pill.solo { color: var(--amber); border-color: rgba(255, 179, 0, 0.3); }
+
+/* ---- Conviction ------------------------------------------------------- */
+.up { color: #5ee07f; }
+.down { color: #ff6b6b; }
+.fine { font-size: 13px; color: var(--ink-3); line-height: 1.6; margin: 0; }
+
+.arena, .conviction {
+  margin: 16px 0 0; padding: 18px 20px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--hairline);
+}
+.arena-head, .conv-head {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.arena-head h2, .conv-head h3 {
+  margin: 0; font-size: 19px; font-weight: 660; letter-spacing: -0.02em; color: var(--ink);
+}
+.conv-side { font-size: 14px; font-weight: 620; }
+.arena-lede, .conv-lede {
+  margin: 0 0 14px; font-size: 14px; line-height: 1.6; color: var(--ink-2);
+}
+
+.market-chips {
+  list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 12px 0;
+}
+.market-chips li {
+  font-size: 12.5px; font-weight: 550; color: var(--ink-2); white-space: nowrap;
+  padding: 5px 10px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--hairline);
+}
+.arena-empty p { margin: 0 0 6px; font-size: 14px; line-height: 1.6; color: var(--ink-2); }
+
+.arena-table { display: flex; flex-direction: column; gap: 2px; }
+.arena-row {
+  display: grid; gap: 10px; align-items: center; text-decoration: none; color: var(--ink);
+  grid-template-columns: 1.4fr 1.3fr 0.5fr 1fr 1.1fr 1.2fr;
+  padding: 11px 10px; border-radius: var(--radius-sm); font-size: 13.5px;
+}
+.arena-row:not(.head):hover { background: var(--surface-2); }
+.arena-row.head {
+  font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3);
+  border-bottom: 1px solid var(--hairline); border-radius: 0; padding-bottom: 8px;
+}
+.arena-coin { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.arena-coin .coin { width: 22px; height: 22px; border-radius: 50%; flex: none; }
+
+.conv-figures {
+  display: flex; flex-wrap: wrap; gap: 12px 30px; align-items: baseline; margin: 4px 0 14px;
+}
+.conv-figures .label {
+  display: block; font-size: 12px; color: var(--ink-3); margin-bottom: 2px;
+}
+.conv-figures strong {
+  font-size: 22px; font-weight: 680; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.conv-figures strong.big { font-size: 30px; }
+.conv-figures strong small { font-size: 14px; font-weight: 620; margin-left: 6px; }
+
+.conv-rows { margin: 0 0 10px; }
+.conv-rows > div {
+  display: flex; justify-content: space-between; gap: 14px; align-items: baseline;
+  padding: 8px 0; border-bottom: 1px solid var(--hairline); font-size: 14px;
+}
+.conv-rows > div:last-child { border-bottom: 0; }
+.conv-rows dt { color: var(--ink-2); }
+.conv-rows dd {
+  margin: 0; font-weight: 620; text-align: right; font-variant-numeric: tabular-nums;
+}
+
+.conv-bar {
+  height: 5px; border-radius: 999px; background: var(--surface-2); overflow: hidden;
+  margin: 4px 0 14px;
+}
+.conv-bar span { display: block; height: 100%; background: var(--amber); }
+.conv-waiting { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+
+.conv-history { list-style: none; padding: 0; margin: 4px 0 12px; }
+.conv-history li {
+  display: flex; justify-content: space-between; gap: 14px; align-items: baseline;
+  padding: 7px 0; font-size: 13px; color: var(--ink-3);
+  border-bottom: 1px solid var(--hairline);
+}
+.conv-history li:last-child { border-bottom: 0; }
+.conv-history b {
+  color: var(--ink-2); font-weight: 560; text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 720px) {
+  .arena-row { grid-template-columns: 1fr; gap: 4px; padding: 12px 10px; }
+  .arena-row.head { display: none; }
+  .arena-row:not(.head) > span[data-label] { display: flex; justify-content: space-between; gap: 12px; }
+  .arena-row:not(.head) > span[data-label]::before {
+    content: attr(data-label); color: var(--ink-3); font-size: 12px; flex: none;
+  }
+  .arena-row .arena-coin::before { align-self: center; }
+  .arena-row:not(.head) { border: 1px solid var(--hairline); }
+  .conv-figures strong.big { font-size: 26px; }
+}
+.conviction .fine + .fine { margin-top: 8px; }

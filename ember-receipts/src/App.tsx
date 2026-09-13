@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PayoutList } from './components/PayoutList';
 import { ReceiptCard } from './components/ReceiptCard';
 import { TokenPanel } from './components/TokenPanel';
+import { Arena } from './components/Arena';
+import { ConvictionPanel } from './components/ConvictionPanel';
 import { EMBER_KEEPER, SOLSCAN_ACCOUNT } from './lib/constants';
 import { toDataUrl } from './lib/images';
 import { downloadBlob, svgToPngBlob } from './lib/png';
@@ -264,6 +266,9 @@ export default function App() {
         {error && <p className="alert">{error}</p>}
 
         {token && <TokenPanel token={token} />}
+        {token && token.launchedOnEmber && (
+          <ConvictionPanel pool={token.pool} symbol={token.symbol} />
+        )}
 
         {receipt && receipt.payouts.length === 0 && (
           <p className="empty">
@@ -332,6 +337,8 @@ export default function App() {
             <p className="fine">Read-only. No wallet connection, nothing to sign.</p>
           </section>
         )}
+
+        {!receipt && !token && !busy && <Arena />}
 
       </main>
 

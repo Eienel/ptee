@@ -157,6 +157,38 @@ refused the original bytes are embedded instead.
 Verified against EMBER, MET, FLYWHEEL and NVDAx — covering IPFS, plain HTTPS, and a Token-2022
 mint whose metadata lives in an extension rather than a Metaplex account.
 
+## Conviction
+
+Ember's newest module points part of a coin's fees at a leveraged position. A coin picks a
+market, a side and a locked leverage tier; a share of the creator side of every fee becomes
+collateral on an isolated venue sub-account; profit is harvested in steps and split **50% to
+holders, 30% into a buy-back burn of the coin, 20% into an $EMBER burn**. A position on the
+wrong side of a big move is liquidated, and the coin rebuilds from fresh fees.
+
+The landing page carries the arena — every coin with a position open, its side, leverage, how
+long it has survived, what it has paid holders, unrealized PnL and harvest streak. A token view
+adds a panel for that coin: entry versus mark, liquidation price and how far away it is, and a
+bar showing how close the position is to its next take-profit.
+
+**Right now nothing is running.** The module is shipped and configurable with 19 markets
+(7 crypto, 8 stocks, 3 commodities, 1 meme) and 2×/3×/5× tiers, but `/arena` returns an empty
+set, the venue (`phoenix`) is not deployed, and every position would be **paper** — simulated at
+live prices. So the arena says that in words rather than rendering an empty table, and paper
+figures are shown in muted type, labelled simulated, and never counted as earnings. The
+populated layouts were exercised against stubbed responses at both widths.
+
+Unlike everything else here, Conviction is **Ember's published state, not read from the chain**.
+That is a deliberate line: only Ember knows a coin's module configuration or a simulated
+position, and the panel says so on its face. Nothing from Conviction feeds the receipt card.
+
+### Getting past CORS
+
+`embercurve.fun` sends no `Access-Control-Allow-Origin`, so a browser blocks a direct call to it
+from this origin. Every Ember request now goes through a same-origin `/ember/*` path, rewritten
+to `embercurve.fun/api/solana/*` by `vercel.json` in production and by the Vite dev proxy
+locally. This also fixes the token view's fee-activity fetch, which was calling the API directly
+and silently failing in the browser while working from Node.
+
 ## Running it
 
 ```bash
@@ -208,6 +240,9 @@ cannot complete one.
 - The scan engine is validated end to end against three real wallets on a live endpoint.
 - The token view is validated end to end against a real Ember launch on a live endpoint.
 - Artwork resolution is validated against four real mints.
+- Conviction is validated against Ember's live endpoints for its real state (no positions open,
+  paper mode) and against stubbed responses for the populated arena and position layouts, at
+  both widths, with zero console errors and zero horizontal overflow.
 - Layout, both views and the mobile breakpoints are covered by `npm run smoke`, which fails on
   any console error or horizontal overflow.
 - The browser's **live** RPC path has not been exercised from here: the development sandbox's
@@ -237,6 +272,10 @@ cannot complete one.
   treated as optional and the token view still works without it.
 - **Ember's ledger is a short window.** An empty fee history is not evidence that a pool has
   never paid out, and the interface says so rather than implying a coin is dead.
+- **Conviction has never been seen with real data.** No coin has opened a position, so the
+  populated layouts are verified against stubs built from the field names Ember's own client
+  reads, not against a live position. Field names are certain; how the numbers behave in
+  practice is not.
 
 ## Layout
 
@@ -247,6 +286,8 @@ src/lib/token.ts       token view: pool lookup, curve state, Ember fee activity
 src/lib/tokens.ts      ticker/name/uri resolution (Metaplex + Token-2022 metadata)
 src/lib/images.ts      off-chain artwork, gateway racing, data-URI inlining
 src/lib/png.ts         SVG -> PNG export, no dependencies
-src/components/        receipt card (SVG), payout table, token panel
+src/lib/ember.ts       same-origin proxy path for Ember's API (it sends no CORS headers)
+src/lib/conviction.ts  Conviction contract: markets, arena, per-coin position
+src/components/        receipt card (SVG), payout table, token panel, arena, Conviction panel
 scripts/smoke.mjs      browser test of both views at two widths
 ```
