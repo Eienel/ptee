@@ -64,9 +64,27 @@ function handle(req) {
   if (method === 'getParsedTransaction' || method === 'getTransaction') {
     return ok(buildTx(params[0]));
   }
-  if (method === 'getMultipleAccounts') return ok({ context: { slot: 1 }, value: params[0].map(() => null) });
+  if (method === 'getMultipleAccounts') {
+    // Attribution batches config reads to pull each pool's quote mint.
+    return ok({ context: { slot: 1 }, value: params[0].map((address) => {
+      if (address !== CONFIG) return null;
+      const cfg = Buffer.alloc(1048);
+      new PublicKey(MINTS.NVDAx).toBuffer().copy(cfg, 8);
+      new PublicKey(KEEPER).toBuffer().copy(cfg, 40);
+      cfg.writeBigUInt64LE(26041600n, 264);
+      return { data: [cfg.toString('base64'), 'base64'], executable: false, lamports: 1, owner: DBC, rentEpoch: 0, space: 1048 };
+    }) });
+  }
 
   if (method === 'getProgramAccounts') {
+    // Attribution asks for a pool per held mint with a dataSlice; the token
+    // view asks for the whole account.
+    const sliced = params[1]?.dataSlice;
+    if (sliced) {
+      const config = Buffer.alloc(32);
+      new PublicKey(CONFIG).toBuffer().copy(config, 0);
+      return ok([{ pubkey: POOL, account: { data: [config.toString('base64'), 'base64'], executable: false, lamports: 1, owner: DBC, rentEpoch: 0, space: 32 } }]);
+    }
     // The token view looks up a DBC pool by base mint.
     const pool = Buffer.alloc(424);
     new PublicKey(CONFIG).toBuffer().copy(pool, 72);
@@ -171,7 +189,8 @@ async function run(page, label, width, height) {
   await page.waitForTimeout(600);
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  console.log(`${label.padEnd(8)} ${width}x${height}  overflow=${overflow}  tokens=${await page.locator('.total').count()}  rows=${await page.locator('.payouts tbody tr').count()}`);
+  const sources = await page.locator('.total .source').count();
+  console.log(`${label.padEnd(8)} ${width}x${height}  overflow=${overflow}  tokens=${await page.locator('.total').count()}  rows=${await page.locator('.payouts tbody tr').count()}  attributed=${sources}`);
   if (overflow !== 0) errors.push(`${label}: page scrolls sideways by ${overflow}px`);
   await page.screenshot({ path: `smoke-${label}.png`, fullPage: true });
 }

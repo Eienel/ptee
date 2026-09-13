@@ -57,6 +57,22 @@ Measured against live wallets on a real endpoint:
 Caveat: if the keeper ever closed its account for a mint it once paid in, payouts in that mint
 are not discoverable this way. $MET and $EMBER are always included regardless.
 
+### Where each payout came from
+
+Ember pays holders in whatever their coin is paired against. That is verified twice: across
+156 distinct pools in Ember's ledger **not one pays in more than one token**, and on-chain the
+payout token is exactly the pool config's `quote_mint` (8 of 8 sampled pools matched).
+
+So a payout can be traced backwards. A credit in GOOGLx came from a GOOGLx-paired coin, and the
+candidates are the GOOGLx-paired coins the wallet holds. One candidate is an unambiguous
+attribution; several is a shortlist. It costs one filtered pool lookup per held mint plus one
+batched config read — 22 held mints resolved in 0.3s.
+
+**This is the one inferred thing in the app and it is labelled as such.** Every amount links to
+a signature; a source coin does not. It also cannot see a coin that has since been sold — there
+is no holding left to match against, which is why a wallet paid 68,817 EMBER can still show
+"cannot attribute" for it.
+
 ### The card
 
 Rendered as SVG, so it exports to PNG with no dependency and stays sharp at any size. Token
@@ -148,12 +164,13 @@ cannot complete one.
 
 ## Known limits
 
-- **Per-coin attribution for a wallet is not possible.** A receipt shows what you earned and in
-  which token, but not which launched coin generated each payout. That mapping exists only in
-  Ember's `/api/solana/payouts`, which has no recipient field and exposes roughly the last hour
-  with no pagination — `limit` caps at 500 records; `offset`, `page` and `days` are ignored.
-  Historical attribution would need a continuous indexer snapshotting that endpoint, and it
-  could only ever capture forward from the moment it started.
+- **Per-coin attribution is inferred, never proven.** Ember's `/api/solana/payouts` has no
+  recipient field and exposes roughly the last hour with no pagination — `limit` caps at 500
+  records; `offset`, `page` and `days` are ignored — so payouts cannot be matched to coins from
+  their data. The pairing inversion described above recovers most of it, but it is inference,
+  and it goes blind on any coin the wallet no longer holds. Proving it outright would need a
+  continuous indexer snapshotting Ember's endpoint, which could only capture forward from the
+  moment it started.
 - **No USD values and no PnL.** Both need a historical price source. Amounts are in each token's
   own units.
 - **Meteora's DBC index is undocumented.** `dbc.datapi.meteora.ag` is live and indexes 1.6M

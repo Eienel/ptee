@@ -7,6 +7,7 @@ import { EMBER_KEEPER, SOLSCAN_ACCOUNT } from './lib/constants';
 import { toDataUrl } from './lib/images';
 import { downloadBlob, svgToPngBlob } from './lib/png';
 import { formatAmount } from './lib/format';
+import { attributeByQuote, pairedCoins } from './lib/attribution';
 import { initialEndpoint, normalizeEndpoint, PUBLIC_RPC } from './lib/rpc';
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
 import { classifyAddress, loadToken, type TokenView } from './lib/token';
@@ -31,6 +32,8 @@ export default function App() {
   const [token, setToken] = useState<TokenView | null>(null);
   const [tokens, setTokens] = useState<Map<string, TokenMeta>>(new Map());
   const [heroLogo, setHeroLogo] = useState<string | null>(null);
+  /** Payout token mint -> held coins paired against it. Inferred, not proven. */
+  const [attribution, setAttribution] = useState<Map<string, string[]>>(new Map());
   const [progress, setProgress] = useState<ScanProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -65,6 +68,7 @@ export default function App() {
       setReceipt(null);
       setToken(null);
       setHeroLogo(null);
+      setAttribution(new Map());
       setProgress({ phase: 'accounts', done: 0, total: 1 });
 
       try {
@@ -94,10 +98,21 @@ export default function App() {
         setReceipt(result);
         setProgress({ phase: 'done', done: 1, total: 1 });
 
+        // Work out which held coin each payout token came from. Runs after the
+        // receipt is on screen because it is supporting detail, not the figures.
+        void pairedCoins(connection, result.heldMints).then(async (paired) => {
+          setAttribution(attributeByQuote(paired));
+          const extra = paired.map((p) => p.mint).filter((m) => !meta.has(m));
+          if (extra.length > 0) {
+            const names = await resolveTokens(connection, extra);
+            setTokens((current) => new Map([...current, ...names]));
+          }
+        });
+
         // Artwork resolves after the receipt is already on screen, so a slow
         // IPFS gateway never delays the numbers.
         void loadImages(meta).then(async (withImages) => {
-          setTokens(withImages);
+          setTokens((current) => new Map([...current, ...withImages]));
           const hero = result.byToken[0];
           const image = hero ? withImages.get(hero.mint)?.image : null;
           if (image) setHeroLogo(await toDataUrl(image));
@@ -232,7 +247,7 @@ export default function App() {
               <button onClick={copyLink}>Copy link</button>
               <span className="scanned">{receipt.scanned.toLocaleString()} signatures checked</span>
             </div>
-            <PayoutList receipt={receipt} tokens={tokens} />
+            <PayoutList receipt={receipt} tokens={tokens} attribution={attribution} />
           </>
         )}
 

@@ -303,3 +303,11 @@ footer {
 }
 .crash-actions { margin-top: 6px; }
 .warn-text { color: var(--amber); }
+
+.total .source { color: var(--flame); font-size: 12px; margin-top: 5px; }
+.inferred {
+  margin: -6px 0 16px; padding: 12px 14px; font-size: 13px; line-height: 1.55;
+  color: var(--ink-2); background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+}
+.inferred strong { color: var(--amber); font-weight: 600; }

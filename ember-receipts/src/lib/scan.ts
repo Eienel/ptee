@@ -37,6 +37,8 @@ export interface Receipt {
   /** Token accounts the wallet owns, and how many were worth scanning. */
   accountsOwned: number;
   accountsScanned: number;
+  /** Mints the wallet holds that Ember could have paid in — the scanned set. */
+  heldMints: string[];
 }
 
 export interface ScanProgress {
@@ -263,5 +265,6 @@ export async function scanWallet(
     scanned: list.length,
     accountsOwned: owned.length,
     accountsScanned: accounts.length,
+    heldMints: [...new Set(accounts.map((a) => a.mint))],
   };
 }

@@ -6,14 +6,39 @@ import type { TokenMeta } from '../lib/tokens';
 
 const PAGE = 25;
 
-export function PayoutList({ receipt, tokens }: { receipt: Receipt; tokens: Map<string, TokenMeta> }) {
+interface Props {
+  receipt: Receipt;
+  tokens: Map<string, TokenMeta>;
+  /** Payout token mint -> held coins paired against it. */
+  attribution: Map<string, string[]>;
+}
+
+export function PayoutList({ receipt, tokens, attribution }: Props) {
   const [shown, setShown] = useState(PAGE);
+  const symbolOf = (mint: string) => tokens.get(mint)?.symbol ?? `${mint.slice(0, 4)}…`;
+
+  /** Ember pays in the coin's pair, so the source is the held coin quoted in it. */
+  function sourceLabel(payoutMint: string): string | null {
+    const candidates = attribution.get(payoutMint);
+    if (!candidates || candidates.length === 0) return null;
+    if (candidates.length === 1) return `likely from ${symbolOf(candidates[0])}`;
+    return `likely from ${candidates.slice(0, 3).map(symbolOf).join(', ')}${candidates.length > 3 ? '…' : ''}`;
+  }
 
   return (
     <section className="payouts">
       <h2>
         Every payout <span>{receipt.payouts.length.toLocaleString()} total</span>
       </h2>
+
+      {attribution.size > 0 && (
+        <p className="inferred">
+          Ember pays holders in whatever their coin is paired against, so a payout can be traced
+          back to the coins you hold that are quoted in it. Those source coins are{' '}
+          <strong>inferred</strong> — unlike the amounts, they are not proven by a signature, and
+          a coin you have since sold cannot be matched at all.
+        </p>
+      )}
 
       <div className="totals">
         {receipt.byToken.map((t) => (
@@ -26,6 +51,7 @@ export function PayoutList({ receipt, tokens }: { receipt: Receipt; tokens: Map<
               {tokens.get(t.mint)?.symbol ?? '—'}
             </span>
             <small>{t.count} payouts</small>
+            {sourceLabel(t.mint) && <small className="source">{sourceLabel(t.mint)}</small>}
           </div>
         ))}
       </div>
