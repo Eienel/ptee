@@ -184,11 +184,15 @@ each coin actually paid out in the last 24 hours, per $1,000 of stake.
 
 Two things had to be established before any of it could be shown honestly.
 
-**Ember's `volumeUsd` is not measured volume.** For every one of the 2,532 coins, `feesUsd /
-volumeUsd` equals the coin's fee rate to four decimal places — 1% for graduated coins on DAMM
-v2, 2% or 3% for the rest. Volume is derived from fees, not observed alongside them. Anything
-phrased as "a percentage of volume" would therefore be a restatement of fees wearing a disguise,
-so fees are used directly and volume is not used at all.
+**Ember's `volumeUsd` is not measured volume.** For every coin, `feesUsd / volumeUsd` equals
+that coin's *current* fee rate exactly. The obvious innocent explanation — that graduated coins
+really do all charge 1% — was tested and fails: all 17 graduated coins that launched at a 3% tax
+report an all-time rate of exactly 1.000000%, which is impossible for a real blend, since every
+one of them traded at 3% for its whole bonding-curve life before graduating at 1%. Volume is
+back-computed from fees at today's rate and applied retroactively, which also means all-time
+volume is overstated by about 3x for those coins. Anything phrased as "a percentage of volume"
+would therefore be a restatement of fees wearing a disguise, so fees are used directly and
+volume is not used at all.
 
 **The rate is not stable enough to forecast.** The trailing-24h share of fees reaching holders
 runs between 0.09x and 0.89x of the same coin's all-time share (median 0.38x), because fees are
@@ -206,12 +210,26 @@ ranking that promotes those is worse than no ranking, so a coin is listed only w
 holders, a $50,000+ market cap and 100+ trades in 24 hours**. The smoke test asserts that a
 three-holder coin is excluded.
 
+### The fee cliff at graduation, and its removal
+
+Until Ember 1.23 every coin graduated onto DAMM v2 at 1% no matter what it launched with, so a
+3% coin built around holder rewards lost two thirds of the engine that pays holders on the day
+it succeeded. From **2026-09-13T20:33:52Z** new launches carry their own tax through graduation;
+coins that graduated before then keep 1%, because the config is immutable.
+
+That cutover is visible in the data rather than taken on trust: 17 coins now carry a
+`dammFeeBps` other than 100, every one of them created after that timestamp, and of the coins
+created since, only one is still on 1%. For a holder this is now the single largest variable in
+what a coin will pay, so the board shows each coin's current trade fee and marks the ones whose
+fee survives graduation instead of averaging the two regimes together.
+
 ### Why your own share will not match
 
 A flat share of the pot is a coin-level statistic, not a personal one. Two mechanisms guarantee a
-gap and neither is computable from public data: Diamond Hands weights a holder between 1x and 3x
-by how long they have held, and a payout round pays at most 300 wallets, so holders collect on a
-rotation rather than every round. Checked against the one wallet whose real earnings are
+gap and neither is computable from public data: Diamond Hands weights a holder by how long they
+have held — 1x on day one, 1.5x after a day, 2x after three, 3x after a week, reset to 1x by
+selling any amount or moving wallet — and a payout round pays at most 300 wallets, so holders
+collect on a rotation rather than every round. Checked against the one wallet whose real earnings are
 readable, a flat share was out by **1.85x** — $39.92/day modelled against $73.69/day actually
 received. The interface says so and points at the receipt, which is measured rather than
 modelled.

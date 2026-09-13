@@ -606,7 +606,7 @@ h1, h2, h3, .breakdown h2, .arena-head h2, .conv-head h3 {
 .yb-table { display: flex; flex-direction: column; }
 .yb-row {
   display: grid; gap: 10px; align-items: center; font-size: 13.5px;
-  grid-template-columns: 1.3fr 1fr 1fr 0.7fr 1.1fr 0.9fr;
+  grid-template-columns: 1.2fr 0.95fr 0.95fr 0.6fr 0.8fr 1fr 0.8fr;
   padding: 11px 8px; border-radius: var(--rs);
 }
 .yb-row:not(.head):hover { background: var(--sur2); }
@@ -640,3 +640,8 @@ h1, h2, h3, .breakdown h2, .arena-head h2, .conv-head h3 {
 .token-links a:hover { background: var(--sur3); color: var(--ink); }
 .token-stats strong a { color: inherit; }
 .total .sym:hover { color: var(--coral); }
+
+.keeps {
+  color: var(--teal); font-weight: 700; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}

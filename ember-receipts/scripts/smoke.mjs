@@ -198,18 +198,20 @@ function emberStub(url) {
   }
   if (url.includes('/ember/perp/')) return JSON.stringify(PERP);
   if (url.includes('/ember/markets')) {
-    const coin = (symbol, holders, cap, trades, pot, mode) => ({
+    const coin = (symbol, holders, cap, trades, pot, mode, feeBps = 200, dammFeeBps = 100) => ({
       pool: 'Pool' + symbol, mint: MINTS.EMBER, symbol, name: symbol, image: null,
       route: '/t/' + symbol, quoteTicker: 'MET', creator: KEEPER, config: CONFIG, dammPool: null,
-      feeBps: 200, dammFeeBps: 100, holdersBps: 10000, mode, graduated: true,
+      feeBps, dammFeeBps, holdersBps: 10000, mode, graduated: true,
       holders, priceUsd: 0.01, marketCapUsd: cap, fees24hUsd: pot * 2, trades24h: trades,
       change24h: 0, createdAt: 1788985224,
       allTime: { feesUsd: pot * 40, byKindUsd: { holders: pot * 10 }, volumeUsd: pot * 4000 },
       ledger24h: { byKindUsd: { holders: pot }, paidUsd: pot, claimedUsd: pot },
     });
     return JSON.stringify({ markets: [
-      coin('REBME', 665, 133000, 3004, 4619, 'holders'),
-      coin('LOTTO', 1141, 308000, 6438, 5134, 'lotto'),
+      // pre-1.23: graduated, so its fee was cut to 1%
+      coin('REBME', 665, 133000, 3004, 4619, 'holders', 300, 100),
+      // post-1.23: keeps its 3% through graduation
+      coin('LOTTO', 1141, 308000, 6438, 5134, 'lotto', 300, 300),
       // must be excluded: 3 holders, $3k cap — the wash-trading shape
       coin('HEATBLAST', 3, 3000, 12, 813, 'holders'),
     ] });
@@ -410,6 +412,8 @@ async function runYield(page, label) {
   if (overflow !== 0) errors.push(`${label}: scrolls sideways by ${overflow}px`);
   if (rows !== 2) errors.push(`${label}: expected 2 credible coins, got ${rows}`);
   if (text.includes('HEATBLAST')) errors.push(`${label}: a 3-holder $3k coin was not filtered out`);
+  const kept = await page.locator('.keeps').count();
+  if (kept !== 1) errors.push(`${label}: expected 1 coin flagged as keeping its fee, got ${kept}`);
   await page.screenshot({ path: `smoke-${label}.png`, fullPage: true });
 }
 

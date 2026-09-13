@@ -78,6 +78,25 @@ export const fetchMarkets = () => emberJson<Markets>('/markets', 20000);
 export const toHolders = (byKind: ByKind | undefined): number =>
   byKind ? TO_HOLDERS.reduce((sum, k) => sum + (byKind[k] ?? 0), 0) : 0;
 
+/**
+ * The fee a trade pays once the coin has graduated onto DAMM v2.
+ *
+ * Until Ember 1.23 this was 1% for every coin no matter what it launched with,
+ * so a 3% coin built around holder rewards lost two thirds of its engine the
+ * day it succeeded. From 2026-09-13T20:33:52Z new launches carry their own tax
+ * through graduation; already-graduated coins keep their 1% because the config
+ * is immutable. Both kinds are live at once, and for a holder the difference is
+ * most of the answer to what a coin will pay, so it is shown rather than
+ * averaged away.
+ */
+export const postGraduationBps = (m: Market): number => m.dammFeeBps;
+
+/** True when graduating does not cut the fee that funds holder rewards. */
+export const keepsFee = (m: Market): boolean => m.dammFeeBps >= m.feeBps && m.feeBps > 100;
+
+/** What a trade is charged right now. */
+export const currentBps = (m: Market): number => (m.graduated ? m.dammFeeBps : m.feeBps);
+
 export interface Yield {
   market: Market;
   /** Paid to holders in the last 24h, in USD, as Ember reported it. */
