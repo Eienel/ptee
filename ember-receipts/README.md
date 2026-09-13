@@ -130,8 +130,16 @@ npm test                 # endpoint validation, guarding the blank-page regressi
 ```
 
 An RPC endpoint is required — this reads full transaction histories and public endpoints cannot
-complete a scan. `VITE_RPC_URL` is compiled into the client bundle and is therefore **public**:
-restrict the key to your domain in your provider's dashboard, or proxy it.
+complete a scan.
+
+`VITE_RPC_URL` is compiled into the client bundle and is therefore **public**. That is inherent
+to a browser app with no backend, so the protection has to come from the provider: **restrict
+the key to your domain** in your RPC provider's dashboard, or put a proxy in front of it.
+
+The interface never displays it. Only the host is shown (`Network: solana-mainnet.g.alchemy.com`)
+and the override field starts empty rather than pre-filled, so the key is not in the DOM whether
+that panel is open or closed. This does not make it secret — it is still in the bundle — it just
+avoids printing it on the page for anyone to copy.
 
 ## Deploying to Vercel (from a phone)
 

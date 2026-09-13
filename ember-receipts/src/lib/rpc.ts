@@ -24,3 +24,16 @@ export function normalizeEndpoint(value: unknown): string | null {
 export function initialEndpoint(stored: unknown, configured: unknown): string {
   return normalizeEndpoint(stored) ?? normalizeEndpoint(configured) ?? PUBLIC_RPC;
 }
+
+/**
+ * A display form that never reveals an API key. Endpoints carry the key in the
+ * path or query, so only the host is ever shown — the value is already in the
+ * bundle, but there is no reason to print it on the page as well.
+ */
+export function describeEndpoint(endpoint: string): string {
+  try {
+    return new URL(endpoint).host;
+  } catch {
+    return 'invalid endpoint';
+  }
+}

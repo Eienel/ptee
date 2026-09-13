@@ -8,7 +8,7 @@ import { toDataUrl } from './lib/images';
 import { downloadBlob, svgToPngBlob } from './lib/png';
 import { formatAmount } from './lib/format';
 import { attributeByQuote, pairedCoins } from './lib/attribution';
-import { initialEndpoint, normalizeEndpoint, PUBLIC_RPC } from './lib/rpc';
+import { describeEndpoint, normalizeEndpoint, PUBLIC_RPC } from './lib/rpc';
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
 import { classifyAddress, loadToken, type TokenView } from './lib/token';
 import { loadImages, resolveTokens, type TokenMeta } from './lib/tokens';
@@ -24,9 +24,9 @@ const PHASE_LABEL: Record<ScanProgress['phase'], string> = {
 };
 
 export default function App() {
-  const [rpc, setRpc] = useState(() =>
-    initialEndpoint(localStorage.getItem(RPC_KEY), import.meta.env.VITE_RPC_URL),
-  );
+  // Only a user's own override is kept in state and storage. The configured
+  // endpoint is never put in an input, so its key is never rendered.
+  const [override, setOverride] = useState(() => localStorage.getItem(RPC_KEY) ?? '');
   const [input, setInput] = useState(() => new URLSearchParams(location.search).get('w') ?? '');
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [token, setToken] = useState<TokenView | null>(null);
@@ -40,14 +40,17 @@ export default function App() {
   const cardRef = useRef<SVGSVGElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  useEffect(() => localStorage.setItem(RPC_KEY, rpc), [rpc]);
+  useEffect(() => {
+    if (override.trim()) localStorage.setItem(RPC_KEY, override);
+    else localStorage.removeItem(RPC_KEY);
+  }, [override]);
 
+  const configured = normalizeEndpoint(import.meta.env.VITE_RPC_URL);
+  const custom = normalizeEndpoint(override);
   // A malformed endpoint must never throw during render: fall back and say so.
-  const endpoint = normalizeEndpoint(rpc);
-  const connection = useMemo(
-    () => new Connection(endpoint ?? PUBLIC_RPC, 'confirmed'),
-    [endpoint],
-  );
+  const endpoint = custom ?? configured ?? PUBLIC_RPC;
+  const overrideRejected = override.trim().length > 0 && custom === null;
+  const connection = useMemo(() => new Connection(endpoint, 'confirmed'), [endpoint]);
 
   const scan = useCallback(
     async (address: string) => {
@@ -156,7 +159,7 @@ export default function App() {
     return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`;
   }, [receipt, tokens]);
 
-  const usingPublicRpc = (endpoint ?? PUBLIC_RPC).includes('api.mainnet-beta.solana.com');
+  const usingPublicRpc = endpoint === PUBLIC_RPC;
 
   return (
     <div className="page">
@@ -191,17 +194,34 @@ export default function App() {
         </form>
 
         <details className="rpc">
-          <summary>RPC endpoint {usingPublicRpc && <span className="warn-dot">needs attention</span>}</summary>
-          <input value={rpc} onChange={(e) => setRpc(e.target.value)} spellCheck={false} />
-          {endpoint === null && (
+          <summary>
+            Network: {describeEndpoint(endpoint)}
+            {usingPublicRpc && <span className="warn-dot">rate limited</span>}
+          </summary>
+          <input
+            value={override}
+            onChange={(e) => setOverride(e.target.value)}
+            spellCheck={false}
+            placeholder="Use your own RPC endpoint (optional)"
+            aria-label="Custom RPC endpoint"
+          />
+          {overrideRejected && (
             <p className="hint warn-text">
-              That endpoint is not a valid http(s) URL, so the public one is being used instead.
+              That is not a valid http(s) URL, so it is being ignored.
             </p>
           )}
-          {usingPublicRpc && (
+          {override.trim() && !overrideRejected && (
             <p className="hint">
-              The public endpoint rate-limits hard and will usually fail this scan — it reads a
-              wallet&rsquo;s full transaction history. Paste a Helius or Triton URL.
+              Using your endpoint instead of the built-in one.{' '}
+              <button className="linkish" onClick={() => setOverride('')}>
+                Reset
+              </button>
+            </p>
+          )}
+          {usingPublicRpc && !override.trim() && (
+            <p className="hint">
+              No endpoint is configured for this site, so the public one is in use. It rate-limits
+              hard and will usually fail a scan — paste your own above.
             </p>
           )}
         </details>
