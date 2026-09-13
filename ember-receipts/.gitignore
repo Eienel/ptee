@@ -9,3 +9,6 @@ tsconfig.tsbuildinfo
 card.svg
 receipt-*.png
 diag.png
+*.tmp.mjs
+card-*.svg
+card-*.png
