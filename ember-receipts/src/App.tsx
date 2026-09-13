@@ -1,3 +1,4 @@
+import type React from 'react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PayoutList } from './components/PayoutList';
@@ -9,6 +10,7 @@ import { downloadBlob, svgToPngBlob } from './lib/png';
 import { formatAmount, formatUsd } from './lib/format';
 import { attributeByQuote, pairedCoins } from './lib/attribution';
 import { fetchPrices, valueOf, type TokenPrice } from './lib/prices';
+import { variantById, VARIANTS } from './lib/variants';
 import { describeEndpoint, normalizeEndpoint, PUBLIC_RPC } from './lib/rpc';
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
 import { classifyAddress, loadToken, type TokenView } from './lib/token';
@@ -36,6 +38,18 @@ export default function App() {
   /** Payout token mint -> held coins paired against it. Inferred, not proven. */
   const [attribution, setAttribution] = useState<Map<string, string[]>>(new Map());
   const [prices, setPrices] = useState<Map<string, TokenPrice>>(new Map());
+  // Card style rides in the URL so a shared link keeps the look it was made in.
+  const [variantId, setVariantId] = useState(
+    () => new URLSearchParams(location.search).get('v') ?? VARIANTS[0].id,
+  );
+  const variant = variantById(variantId);
+
+  useEffect(() => {
+    const url = new URL(location.href);
+    if (variantId === VARIANTS[0].id) url.searchParams.delete('v');
+    else url.searchParams.set('v', variantId);
+    history.replaceState(null, '', url);
+  }, [variantId]);
   const [progress, setProgress] = useState<ScanProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -144,11 +158,11 @@ export default function App() {
     if (!cardRef.current || !receipt) return;
     try {
       const blob = await svgToPngBlob(cardRef.current);
-      downloadBlob(blob, `ember-receipt-${receipt.wallet.slice(0, 6)}.png`);
+      downloadBlob(blob, `ember-receipt-${receipt.wallet.slice(0, 6)}-${variantId}.png`);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }
-  }, [receipt]);
+  }, [receipt, variantId]);
 
   const copyLink = useCallback(() => {
     navigator.clipboard?.writeText(location.href);
@@ -269,8 +283,22 @@ export default function App() {
                 tokens={tokens}
                 logo={heroLogo}
                 prices={prices}
+                variant={variant}
               />
             </section>
+            <div className="variants" role="group" aria-label="Card style">
+              {VARIANTS.map((v) => (
+                <button
+                  key={v.id}
+                  className={v.id === variantId ? 'chip on' : 'chip'}
+                  onClick={() => setVariantId(v.id)}
+                  style={{ '--chip': v.accent2 } as React.CSSProperties}
+                >
+                  {v.label}
+                </button>
+              ))}
+            </div>
+
             <div className="card-actions">
               <button className="primary" onClick={savePng}>
                 Download PNG

@@ -338,3 +338,16 @@ button.linkish {
 }
 .worth small { display: block; margin-top: 9px; color: var(--ink-3); font-size: 12.5px; line-height: 1.55; }
 .worth em { font-style: normal; color: var(--ink-2); }
+
+/* ---------- card style chips ---------- */
+.variants { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 4px; -webkit-overflow-scrolling: touch; }
+.variants::-webkit-scrollbar { display: none; }
+.chip {
+  min-height: 40px; padding: 9px 15px; border-radius: 999px; white-space: nowrap;
+  font-size: 14px; font-weight: 550; color: var(--ink-2);
+  background: var(--surface); border: 1px solid var(--hairline);
+}
+.chip.on {
+  color: #0a0a0c; font-weight: 650;
+  background: var(--chip, var(--amber)); border-color: transparent;
+}

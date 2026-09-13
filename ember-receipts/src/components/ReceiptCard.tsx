@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import { EMBER_KEEPER } from '../lib/constants';
 import { formatAmount, formatDate, formatUsd, shortAddress } from '../lib/format';
 import { valueOf, type TokenPrice } from '../lib/prices';
+import { DEFAULT_VARIANT, type Variant } from '../lib/variants';
 import type { Receipt, TokenTotal } from '../lib/scan';
 import type { TokenMeta } from '../lib/tokens';
 
@@ -11,6 +12,7 @@ interface Props {
   /** Hero token artwork, already inlined as a data URI so PNG export works. */
   logo?: string | null;
   prices?: Map<string, TokenPrice>;
+  variant?: Variant;
 }
 
 const W = 1200;
@@ -27,9 +29,10 @@ const MONO = 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace';
  * with the remaining tokens listed underneath.
  */
 export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard(
-  { receipt, tokens, logo, prices },
+  { receipt, tokens, logo, prices, variant = DEFAULT_VARIANT },
   ref,
 ) {
+  const v = variant;
   const value = prices ? valueOf(receipt.byToken, prices) : null;
   const worth = value && value.priced > 0 ? formatUsd(value.usd) : null;
   const sym = (t: TokenTotal) => tokens.get(t.mint)?.symbol ?? '—';
@@ -55,23 +58,39 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
     >
       <defs>
         <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
-          <stop offset="0" stopColor="#1a0d04" />
-          <stop offset="0.55" stopColor="#0a0705" />
-          <stop offset="1" stopColor="#000000" />
+          <stop offset="0" stopColor={v.bg[0]} />
+          <stop offset="0.55" stopColor={v.bg[1]} />
+          <stop offset="1" stopColor={v.bg[2]} />
         </linearGradient>
         <linearGradient id="flame" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#ff6a00" />
-          <stop offset="1" stopColor="#ffb300" />
+          <stop offset="0" stopColor={v.accent} />
+          <stop offset="1" stopColor={v.accent2} />
         </linearGradient>
         <radialGradient id="glow" cx="0.16" cy="0.06" r="0.85">
-          <stop offset="0" stopColor="#ff7a1a" stopOpacity="0.34" />
-          <stop offset="1" stopColor="#ff7a1a" stopOpacity="0" />
+          <stop offset="0" stopColor={v.glow} stopOpacity="0.34" />
+          <stop offset="1" stopColor={v.glow} stopOpacity="0" />
         </radialGradient>
       </defs>
 
       <rect width={W} height={H} fill="url(#bg)" />
       <rect width={W} height={H} fill="url(#glow)" />
       <rect width={W} height="5" fill="url(#flame)" />
+
+      {/* Optional watermark, drawn under everything else. */}
+      {v.stamp && (
+        <text
+          x="64"
+          y={H - 112}
+          fill={v.stampColor ?? v.accent}
+          fillOpacity="0.075"
+          fontSize="150"
+          fontWeight="800"
+          letterSpacing="-5"
+          fontFamily={SANS}
+        >
+          {v.stamp}
+        </text>
+      )}
 
       {/* masthead */}
       {logo && (
@@ -83,10 +102,10 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
           <circle cx="92" cy="86" r="24" fill="none" stroke="#ffffff" strokeOpacity="0.18" />
         </>
       )}
-      <text x={logo ? 132 : 68} y="96" fill="#ff8a3d" fontSize="23" fontWeight="640" letterSpacing="4.2" fontFamily={SANS}>
+      <text x={logo ? 132 : 68} y="96" fill={v.accent2} fontSize="23" fontWeight="640" letterSpacing="4.2" fontFamily={SANS}>
         EMBER RECEIPT
       </text>
-      <text x={W - 68} y="96" fill="#6e6e73" fontSize="23" textAnchor="end" fontFamily={MONO}>
+      <text x={W - 68} y="96" fill={v.muted} fontSize="23" textAnchor="end" fontFamily={MONO}>
         {shortAddress(receipt.wallet, 6)}
       </text>
 
@@ -94,7 +113,7 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
       <text
         x="68"
         y="252"
-        fill="#ffffff"
+        fill={v.ink}
         fontSize={heroSize}
         fontWeight="700"
         letterSpacing="-5"
@@ -104,13 +123,13 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
       >
         {heroText}
       </text>
-      <text x="68" y="306" fill="#ffb300" fontSize="40" fontWeight="620" letterSpacing="-0.6" fontFamily={SANS}>
+      <text x="68" y="306" fill={v.accent2} fontSize="40" fontWeight="620" letterSpacing="-0.6" fontFamily={SANS}>
         {hero ? sym(hero) : ''}
-        <tspan fill="#a1a1a6" fontSize="25" fontWeight="400" letterSpacing="0">
+        <tspan fill={v.muted} fontSize="25" fontWeight="400" letterSpacing="0">
           {'  '}earned as a holder
         </tspan>
       </text>
-      <text x="68" y="348" fill="#6e6e73" fontSize="24" fontFamily={SANS}>
+      <text x="68" y="348" fill={v.muted} fontSize="24" fontFamily={SANS}>
         {receipt.payouts.length.toLocaleString()} payouts since {since}
       </text>
 
@@ -118,13 +137,13 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
           the exact one — so this is labelled as a today's-price figure. */}
       {worth && (
         <g transform="translate(790, 150)">
-          <text x="0" y="0" fill="#6e6e73" fontSize="19" letterSpacing="2.4" fontFamily={SANS}>
+          <text x="0" y="0" fill={v.muted} fontSize="19" letterSpacing="2.4" fontFamily={SANS}>
             WORTH TODAY
           </text>
-          <text x="0" y="66" fill="#ffb300" fontSize="62" fontWeight="700" letterSpacing="-2" fontFamily={SANS}>
+          <text x="0" y="66" fill={v.accent2} fontSize="62" fontWeight="700" letterSpacing="-2" fontFamily={SANS}>
             {worth}
           </text>
-          <text x="0" y="98" fill="#6e6e73" fontSize="18" fontFamily={SANS}>
+          <text x="0" y="98" fill={v.muted} fontSize="18" fontFamily={SANS}>
             at current prices, not at payout
           </text>
         </g>
@@ -134,13 +153,13 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
       {rest.map((t, i) => (
         <g key={t.mint} transform={`translate(68, ${420 + i * 60})`}>
           <rect x="0" y="-32" width="640" height="50" rx="14" fill="#ffffff" fillOpacity="0.05" />
-          <text x="20" y="3" fill="#ffffff" fontSize="26" fontWeight="600" fontFamily={SANS}>
+          <text x="20" y="3" fill={v.ink} fontSize="26" fontWeight="600" fontFamily={SANS}>
             {formatAmount(t.total)}
           </text>
-          <text x="200" y="3" fill="#a1a1a6" fontSize="24" fontFamily={SANS}>
+          <text x="200" y="3" fill={v.muted} fontSize="24" fontFamily={SANS}>
             {sym(t)}
           </text>
-          <text x="620" y="3" fill="#6e6e73" fontSize="21" textAnchor="end" fontFamily={SANS}>
+          <text x="620" y="3" fill={v.muted} fontSize="21" textAnchor="end" fontFamily={SANS}>
             {t.count} payout{t.count === 1 ? '' : 's'}
           </text>
         </g>
@@ -148,37 +167,37 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
 
       {/* right rail */}
       <g transform="translate(790, 372)">
-        <text x="0" y="0" fill="#6e6e73" fontSize="19" letterSpacing="2.4" fontFamily={SANS}>
+        <text x="0" y="0" fill={v.muted} fontSize="19" letterSpacing="2.4" fontFamily={SANS}>
           BIGGEST SINGLE
         </text>
-        <text x="0" y="44" fill="#f5f5f7" fontSize="34" fontWeight="600" letterSpacing="-0.8" fontFamily={SANS}>
+        <text x="0" y="44" fill={v.ink} fontSize="34" fontWeight="600" letterSpacing="-0.8" fontFamily={SANS}>
           {receipt.biggest
             ? `${formatAmount(receipt.biggest.amount)} ${tokens.get(receipt.biggest.mint)?.symbol ?? ''}`
             : '—'}
         </text>
-        <text x="0" y="104" fill="#6e6e73" fontSize="19" letterSpacing="2.4" fontFamily={SANS}>
+        <text x="0" y="104" fill={v.muted} fontSize="19" letterSpacing="2.4" fontFamily={SANS}>
           TOKENS PAID IN
         </text>
-        <text x="0" y="148" fill="#f5f5f7" fontSize="34" fontWeight="600" letterSpacing="-0.8" fontFamily={SANS}>
+        <text x="0" y="148" fill={v.ink} fontSize="34" fontWeight="600" letterSpacing="-0.8" fontFamily={SANS}>
           {receipt.byToken.length}
         </text>
       </g>
 
       <line x1="68" y1={H - 88} x2={W - 68} y2={H - 88} stroke="#ffffff" strokeOpacity="0.11" />
-      <text x="68" y={H - 46} fill="#6e6e73" fontSize="20" fontFamily={MONO}>
+      <text x="68" y={H - 46} fill={v.muted} fontSize="20" fontFamily={MONO}>
         verified on-chain · keeper {shortAddress(EMBER_KEEPER.toBase58(), 4)}
       </text>
       {/* built by — X mark drawn as a path so the PNG export needs no font or image */}
       <g transform={`translate(${W - 68}, ${H - 52})`}>
-        <text x="0" y="6" fill="#f5f5f7" fontSize="20" textAnchor="end" fontWeight="600" fontFamily={SANS}>
+        <text x="0" y="6" fill={v.ink} fontSize="20" textAnchor="end" fontWeight="600" fontFamily={SANS}>
           @eienel_eth
         </text>
-        <text x={-166} y="6" fill="#6e6e73" fontSize="20" textAnchor="end" fontFamily={SANS}>
+        <text x={-166} y="6" fill={v.muted} fontSize="20" textAnchor="end" fontFamily={SANS}>
           built by
         </text>
         <g transform="translate(-156, -8) scale(0.0155)">
           <path
-            fill="#f5f5f7"
+            fill={v.ink}
             d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.163 519.284ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.828Z"
           />
         </g>
