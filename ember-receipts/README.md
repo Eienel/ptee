@@ -217,6 +217,11 @@ cannot complete one.
 
 ## Known limits
 
+- **A few wallets cannot be scanned at all.** One tested wallet holds so many token accounts
+  that the RPC response exceeds what the runtime can decode into a string, failing inside the
+  client as `ERR_STRING_TOO_LONG` before any of our code runs. That is reported as a plain
+  explanation rather than a crash; scanning such a wallet would need a paginated indexer.
+
 - **Per-coin attribution is inferred, never proven.** Ember's `/api/solana/payouts` has no
   recipient field and exposes roughly the last hour with no pagination — `limit` caps at 500
   records; `offset`, `page` and `days` are ignored — so payouts cannot be matched to coins from

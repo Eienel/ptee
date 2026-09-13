@@ -43,12 +43,7 @@ export function PayoutList({ receipt, tokens, attribution, prices }: Props) {
           <span>
             <strong>{receipt.shapes.solo}</strong> sent only to you
           </span>
-          <small>
-            Ember&rsquo;s own labels — holder share, wheel, lotto, jackpot — are not written
-            on-chain, and once landed a holder round and a lotto round are both just a batch of
-            transfers. What a transaction does show is whether you were one of several recipients
-            or the only one, so that is what is reported.
-          </small>
+          <small>Ember&rsquo;s module labels are not written on-chain; recipient count is.</small>
         </p>
       )}
 
@@ -57,20 +52,14 @@ export function PayoutList({ receipt, tokens, attribution, prices }: Props) {
           <strong>{formatUsd(value.usd)}</strong> at today&rsquo;s prices
           {value.unpriced.length > 0 && ` · ${value.unpriced.length} token${value.unpriced.length === 1 ? '' : 's'} had no price`}
           {value.thin && ' · some prices sit on thin liquidity'}
-          <small>
-            This is what the tokens are worth <em>now</em>, not what they were worth when they
-            landed. Ember&rsquo;s own price moved more than 70% in a day while this was built, so
-            the two can differ a lot. The token amounts above are the exact, verifiable figures.
-          </small>
+          <small>Worth <em>now</em>, not at payout. The token amounts are the exact figures.</small>
         </p>
       )}
 
       {attribution.size > 0 && (
         <p className="inferred">
-          Ember pays holders in whatever their coin is paired against, so a payout can be traced
-          back to the coins you hold that are quoted in it. Those source coins are{' '}
-          <strong>inferred</strong> — unlike the amounts, they are not proven by a signature, and
-          a coin you have since sold cannot be matched at all.
+          Source coins are <strong>inferred</strong> from what you hold, not proven by a
+          signature. A coin you have sold cannot be matched.
         </p>
       )}
 

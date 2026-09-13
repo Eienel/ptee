@@ -69,11 +69,10 @@ export function TokenPanel({ token }: { token: TokenView }) {
 
       {token.feeActivity.length === 0 ? (
         <p className="empty">
-          No activity for this pool in Ember&rsquo;s published window
+          No activity in Ember&rsquo;s published window
           {token.feeActivityWindow &&
-            ` (${timeOnly(token.feeActivityWindow.from)}–${timeOnly(token.feeActivityWindow.to)} today)`}
-          . That window is roughly the last hour and cannot be paged back, so this is not
-          evidence that the pool has never paid out.
+            ` (${timeOnly(token.feeActivityWindow.from)}–${timeOnly(token.feeActivityWindow.to)})`}
+          . That window is about an hour, so this does not mean the pool has never paid out.
         </p>
       ) : (
         <table>
@@ -107,9 +106,7 @@ export function TokenPanel({ token }: { token: TokenView }) {
       )}
 
       <p className="fine">
-        Curve figures are read from the pool and config accounts on-chain. Launch date and
-        ticker come from Meteora&rsquo;s DBC index. Fee activity is Ember&rsquo;s own published
-        ledger, each row linking to its transaction.
+        Curve read on-chain. Fee activity is Ember&rsquo;s published ledger, each row linked.
       </p>
     </section>
   );

@@ -322,22 +322,17 @@ export default function App() {
 
         {!receipt && !token && !busy && (
           <section className="explain">
-            <h1>Every number here is a transaction you can open.</h1>
             <p>
-              Paste a <strong>wallet</strong> and it finds every transaction signed and funded by
-              Ember&rsquo;s keeper that increased your token balance, and adds them up. Paste a{' '}
-              <strong>token</strong> and it reads that coin&rsquo;s bonding curve straight from its
-              pool account — how far along it is, what it is paired with, and what Ember has paid
-              out of its fees. Nothing is taken from a dashboard; the amounts come from the balance
-              changes in the transactions themselves, which is not always the same as the figure
-              reported for a round.
+              A wallet gets a receipt of every Ember payout it has received. A token gets its
+              curve and what its fees have paid out.{' '}
+              <a href="https://github.com/Eienel/ptee/tree/main/ember-receipts" target="_blank" rel="noreferrer">
+                How it works
+              </a>
             </p>
-            <p className="fine">
-              Read-only. No wallet connection, no signing, nothing to approve — paste an address and
-              it reads public data.
-            </p>
+            <p className="fine">Read-only. No wallet connection, nothing to sign.</p>
           </section>
         )}
+
       </main>
 
       <footer>

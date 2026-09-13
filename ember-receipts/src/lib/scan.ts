@@ -73,6 +73,16 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const isRateLimit = (err: unknown) =>
   /429|too many requests|rate/i.test(err instanceof Error ? err.message : String(err));
 
+/**
+ * Some accounts produce responses too large for the runtime to decode at all
+ * ("Cannot create a string longer than..."). A single such account must not
+ * take down the whole scan.
+ */
+const isOversized = (err: unknown) =>
+  /string longer than|ERR_STRING_TOO_LONG|allocation|heap out of memory/i.test(
+    err instanceof Error ? err.message : String(err),
+  );
+
 /** Retries a rate-limited call with exponential backoff; other errors propagate. */
 async function withBackoff<T>(fn: () => Promise<T>): Promise<T> {
   for (let attempt = 0; ; attempt++) {
@@ -90,13 +100,36 @@ interface OwnedAccount {
   mint: string;
 }
 
-/** Every token account the wallet owns, across both token programs. */
+export class TooManyAccountsError extends Error {
+  constructor() {
+    super(
+      'This wallet holds too many token accounts for the RPC to return in one response. ' +
+        'Scanning it would need a paginated indexer rather than a direct read.',
+    );
+    this.name = 'TooManyAccountsError';
+  }
+}
+
+/**
+ * Every token account the wallet owns, across both token programs.
+ *
+ * A handful of wallets hold so many accounts that the response exceeds what the
+ * runtime can even decode into a string, which surfaces as ERR_STRING_TOO_LONG
+ * from deep inside the RPC client. That is not something the caller can retry
+ * around, so it is turned into a plain explanation instead of a stack trace.
+ */
 async function tokenAccountsOf(connection: Connection, owner: PublicKey): Promise<OwnedAccount[]> {
-  const results = await Promise.all(
-    [TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID].map((programId) =>
-      connection.getTokenAccountsByOwner(owner, { programId }),
-    ),
-  );
+  let results;
+  try {
+    results = await Promise.all(
+      [TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID].map((programId) =>
+        connection.getTokenAccountsByOwner(owner, { programId }),
+      ),
+    );
+  } catch (err) {
+    if (isOversized(err)) throw new TooManyAccountsError();
+    throw err;
+  }
   return results.flatMap((r) =>
     r.value.map((v) => ({
       pubkey: v.pubkey,
@@ -136,12 +169,20 @@ async function allSignatures(
   const out: ConfirmedSignatureInfo[] = [];
   let before: string | undefined;
   while (out.length < cap) {
-    const page = await withBackoff(() =>
-      connection.getSignaturesForAddress(address, {
-        before,
-        limit: Math.min(SIGNATURE_PAGE, cap - out.length),
-      }),
-    );
+    let page;
+    try {
+      page = await withBackoff(() =>
+        connection.getSignaturesForAddress(address, {
+          before,
+          limit: Math.min(SIGNATURE_PAGE, cap - out.length),
+        }),
+      );
+    } catch (err) {
+      if (!isOversized(err)) throw err;
+      // Stop paging this account rather than failing the scan; what was read
+      // already still counts.
+      break;
+    }
     if (page.length === 0) break;
     out.push(...page);
     before = page[page.length - 1].signature;
@@ -255,15 +296,19 @@ export async function scanWallet(
         txs.forEach((tx, j) => collect(batch[j], tx));
         cursor += batch.length;
       } catch (err) {
-        if (!isRateLimit(err)) throw err;
+        if (!isRateLimit(err) && !isOversized(err)) throw err;
         sequential = true; // retry the same slice one signature at a time
         continue;
       }
     } else {
       const signature = list[cursor];
+      // One undecodable transaction should cost that transaction, nothing more.
       const tx = await withBackoff(() =>
         connection.getParsedTransaction(signature, { maxSupportedTransactionVersion: 0 }),
-      );
+      ).catch((err) => {
+        if (isOversized(err)) return null;
+        throw err;
+      });
       collect(signature, tx);
       cursor += 1;
       await sleep(260);

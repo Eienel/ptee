@@ -136,12 +136,9 @@ button.primary:hover:not(:disabled) { background: linear-gradient(180deg, #ff964
 .empty { color: var(--ink-2); font-size: 15.5px; line-height: 1.62; }
 
 /* ---------- intro ---------- */
-.explain h1 {
-  font-size: clamp(28px, 7.5vw, 40px); line-height: 1.08; letter-spacing: -0.035em;
-  font-weight: 680; margin: 10px 0 14px;
-}
-.explain p { color: var(--ink-2); line-height: 1.62; margin: 0 0 14px; font-size: 16px; }
-.explain .fine { font-size: 13.5px; color: var(--ink-3); }
+.explain { padding-top: 4px; }
+.explain p { color: var(--ink-2); line-height: 1.6; margin: 0 0 10px; font-size: 15px; }
+.explain .fine { font-size: 13px; color: var(--ink-3); margin: 0; }
 
 /* ---------- card ---------- */
 .card-wrap {
