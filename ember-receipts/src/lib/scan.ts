@@ -6,9 +6,23 @@ import {
 } from '@solana/web3.js';
 import { EMBER_KEEPER, EMBER_MINT, MET_MINT, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from './constants';
 
+/**
+ * What the transaction's shape tells us about the payout.
+ *
+ * Ember's own labels (holders, lotto, wheel, jackpot, creator payout) are not
+ * written on-chain, and several of them are indistinguishable once landed: a
+ * holder round and a lotto round are both just N transfers. What a transaction
+ * does show is whether the wallet was one of several recipients or the only
+ * one, which is a real distinction and the honest limit of what can be read.
+ */
+export type PayoutShape = 'shared' | 'solo';
+
 export interface Payout {
   signature: string;
   slot: number;
+  /** How many wallets this transaction credited in total. */
+  recipients: number;
+  shape: PayoutShape;
   /** Block time in unix seconds; 0 when the cluster did not return one. */
   at: number;
   mint: string;
@@ -39,6 +53,8 @@ export interface Receipt {
   accountsScanned: number;
   /** Mints the wallet holds that Ember could have paid in — the scanned set. */
   heldMints: string[];
+  /** Payout counts by transaction shape. */
+  shapes: { shared: number; solo: number };
 }
 
 export interface ScanProgress {
@@ -148,8 +164,19 @@ function creditsToWallet(tx: ParsedTransactionWithMeta, wallet: string): Omit<Pa
   if (feePayer !== EMBER_KEEPER.toBase58()) return [];
 
   const before = new Map((meta.preTokenBalances ?? []).map((b) => [b.accountIndex, b]));
-  const credits: Omit<Payout, 'signature'>[] = [];
 
+  // Count every wallet this transaction credited, not just ours: that is what
+  // separates a round shared with other holders from a payout sent only to us.
+  const creditedOwners = new Set<string>();
+  for (const post of meta.postTokenBalances ?? []) {
+    const pre = before.get(post.accountIndex);
+    const delta = Number(post.uiTokenAmount.amount) - Number(pre?.uiTokenAmount.amount ?? 0);
+    if (delta > 0 && post.owner) creditedOwners.add(post.owner);
+  }
+  const recipients = creditedOwners.size;
+  const shape: PayoutShape = recipients > 1 ? 'shared' : 'solo';
+
+  const credits: Omit<Payout, 'signature'>[] = [];
   for (const post of meta.postTokenBalances ?? []) {
     if (post.owner !== wallet) continue;
     const pre = before.get(post.accountIndex);
@@ -157,7 +184,10 @@ function creditsToWallet(tx: ParsedTransactionWithMeta, wallet: string): Omit<Pa
     const delta =
       (Number(post.uiTokenAmount.amount) - Number(pre?.uiTokenAmount.amount ?? 0)) / 10 ** decimals;
     if (delta > 0) {
-      credits.push({ slot: tx.slot, at: tx.blockTime ?? 0, mint: post.mint, decimals, amount: delta });
+      credits.push({
+        slot: tx.slot, at: tx.blockTime ?? 0, mint: post.mint, decimals, amount: delta,
+        recipients, shape,
+      });
     }
   }
   return credits;
@@ -266,5 +296,9 @@ export async function scanWallet(
     accountsOwned: owned.length,
     accountsScanned: accounts.length,
     heldMints: [...new Set(accounts.map((a) => a.mint))],
+    shapes: {
+      shared: payouts.filter((p) => p.shape === 'shared').length,
+      solo: payouts.filter((p) => p.shape === 'solo').length,
+    },
   };
 }

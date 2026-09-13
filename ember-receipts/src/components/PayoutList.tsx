@@ -35,6 +35,23 @@ export function PayoutList({ receipt, tokens, attribution, prices }: Props) {
         Every payout <span>{receipt.payouts.length.toLocaleString()} total</span>
       </h2>
 
+      {(receipt.shapes.shared > 0 || receipt.shapes.solo > 0) && (
+        <p className="shapes">
+          <span>
+            <strong>{receipt.shapes.shared}</strong> shared rounds
+          </span>
+          <span>
+            <strong>{receipt.shapes.solo}</strong> sent only to you
+          </span>
+          <small>
+            Ember&rsquo;s own labels — holder share, wheel, lotto, jackpot — are not written
+            on-chain, and once landed a holder round and a lotto round are both just a batch of
+            transfers. What a transaction does show is whether you were one of several recipients
+            or the only one, so that is what is reported.
+          </small>
+        </p>
+      )}
+
       {value.priced > 0 && (
         <p className="worth">
           <strong>{formatUsd(value.usd)}</strong> at today&rsquo;s prices
@@ -93,7 +110,12 @@ export function PayoutList({ receipt, tokens, attribution, prices }: Props) {
             <tr key={`${p.signature}-${p.mint}`}>
               <td data-label="Date">{p.at ? formatDate(p.at) : '—'}</td>
               <td className="num gain" data-label="Amount">{formatAmount(p.amount, 6)}</td>
-              <td data-label="Token">{tokens.get(p.mint)?.symbol ?? '—'}</td>
+              <td data-label="Token">
+                {tokens.get(p.mint)?.symbol ?? '—'}
+                <span className={p.shape === 'shared' ? 'pill shared' : 'pill solo'}>
+                  {p.shape === 'shared' ? `1 of ${p.recipients}` : 'solo'}
+                </span>
+              </td>
               <td data-label="Proof">
                 <a href={SOLSCAN_TX(p.signature)} target="_blank" rel="noreferrer">
                   {p.signature.slice(0, 8)}…

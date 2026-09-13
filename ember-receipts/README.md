@@ -57,6 +57,29 @@ Measured against live wallets on a real endpoint:
 Caveat: if the keeper ever closed its account for a mint it once paid in, payouts in that mint
 are not discoverable this way. $MET and $EMBER are always included regardless.
 
+### Telling the earnings apart
+
+Ember runs several payout modules — holder share, wheel, lotto, jackpots, creator fees — and
+**none of those labels are written on-chain.** Its API carries them, but only for roughly the
+last hour, so a receipt covering days cannot be labelled from it.
+
+Transaction shape recovers some of it. Fingerprints are clear for a few kinds: a burn is a
+`burnChecked`, a fee claim invokes DAMM v2's `ClaimPositionFee`, a wheel payout creates
+recipient token accounts before transferring. But a holder round and a lotto round are both
+just N `transferChecked` instructions, and a jackpot, a creator payout and a treasury transfer
+are all a single one. Those cannot be told apart once landed.
+
+What a transaction *does* show is how many wallets it credited, so that is what is reported:
+
+| Shape | Meaning |
+|---|---|
+| **shared** | you were one of several wallets paid by that transaction |
+| **solo** | that transaction paid only you |
+
+On real wallets the split is stark and matches what the wallets are: one holder shows 146 of
+146 payouts as six-recipient batches; a coin creator shows 51 of 51 as solo. That is a genuine
+distinction, and it is the honest limit of what the chain can tell you.
+
 ### Where each payout came from
 
 Ember pays holders in whatever their coin is paired against. That is verified twice: across
