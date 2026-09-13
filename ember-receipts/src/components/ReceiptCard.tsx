@@ -2,10 +2,13 @@ import { forwardRef } from 'react';
 import { EMBER_KEEPER } from '../lib/constants';
 import { formatAmount, formatDate, shortAddress } from '../lib/format';
 import type { Receipt, TokenTotal } from '../lib/scan';
+import type { TokenMeta } from '../lib/tokens';
 
 interface Props {
   receipt: Receipt;
-  symbols: Map<string, string>;
+  tokens: Map<string, TokenMeta>;
+  /** Hero token artwork, already inlined as a data URI so PNG export works. */
+  logo?: string | null;
 }
 
 const W = 1200;
@@ -22,10 +25,10 @@ const MONO = 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace';
  * with the remaining tokens listed underneath.
  */
 export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard(
-  { receipt, symbols },
+  { receipt, tokens, logo },
   ref,
 ) {
-  const sym = (t: TokenTotal) => symbols.get(t.mint) ?? '—';
+  const sym = (t: TokenTotal) => tokens.get(t.mint)?.symbol ?? '—';
   const ranked = [...receipt.byToken].sort((a, b) => b.count - a.count);
   const hero = ranked[0];
   const rest = ranked.slice(1, 4);
@@ -67,7 +70,16 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
       <rect width={W} height="5" fill="url(#flame)" />
 
       {/* masthead */}
-      <text x="68" y="96" fill="#ff8a3d" fontSize="23" fontWeight="640" letterSpacing="4.2" fontFamily={SANS}>
+      {logo && (
+        <>
+          <clipPath id="logoClip">
+            <circle cx="92" cy="86" r="24" />
+          </clipPath>
+          <image href={logo} x="68" y="62" width="48" height="48" clipPath="url(#logoClip)" preserveAspectRatio="xMidYMid slice" />
+          <circle cx="92" cy="86" r="24" fill="none" stroke="#ffffff" strokeOpacity="0.18" />
+        </>
+      )}
+      <text x={logo ? 132 : 68} y="96" fill="#ff8a3d" fontSize="23" fontWeight="640" letterSpacing="4.2" fontFamily={SANS}>
         EMBER RECEIPT
       </text>
       <text x={W - 68} y="96" fill="#6e6e73" fontSize="23" textAnchor="end" fontFamily={MONO}>
@@ -121,7 +133,7 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
         </text>
         <text x="0" y="44" fill="#f5f5f7" fontSize="34" fontWeight="600" letterSpacing="-0.8" fontFamily={SANS}>
           {receipt.biggest
-            ? `${formatAmount(receipt.biggest.amount)} ${symbols.get(receipt.biggest.mint) ?? ''}`
+            ? `${formatAmount(receipt.biggest.amount)} ${tokens.get(receipt.biggest.mint)?.symbol ?? ''}`
             : '—'}
         </text>
         <text x="0" y="104" fill="#6e6e73" fontSize="19" letterSpacing="2.4" fontFamily={SANS}>

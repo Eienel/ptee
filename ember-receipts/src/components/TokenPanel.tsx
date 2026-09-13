@@ -11,7 +11,9 @@ export function TokenPanel({ token }: { token: TokenView }) {
   return (
     <section className="token">
       <div className="token-head">
-        <div>
+        <div className="token-id">
+          {token.image && <img className="coin lg" src={token.image} alt="" />}
+          <div>
           <h2>
             {token.symbol ?? 'Unknown token'}
             {token.name && token.name !== token.symbol && <small>{token.name}</small>}
@@ -19,6 +21,7 @@ export function TokenPanel({ token }: { token: TokenView }) {
           <a className="addr" href={SOLSCAN_ACCOUNT(token.mint)} target="_blank" rel="noreferrer">
             {shortAddress(token.mint, 6)}
           </a>
+          </div>
         </div>
         <span className={token.launchedOnEmber ? 'badge ok' : 'badge warn'}>
           {token.launchedOnEmber ? 'Launched on Ember' : 'Not an Ember launch'}

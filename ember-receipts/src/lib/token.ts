@@ -1,5 +1,6 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import { EMBER_KEEPER, EMBER_PAYOUTS_API } from './constants';
+import { loadImages, resolveTokens } from './tokens';
 
 /** Meteora's Dynamic Bonding Curve program. */
 export const DBC_PROGRAM_ID = new PublicKey('dbcij3LWUppWqq96dh6gJWwBifmcGfLSB5D4DuSMaqN');
@@ -30,6 +31,7 @@ export interface TokenView {
   creator: string;
   symbol: string | null;
   name: string | null;
+  image: string | null;
   createdAt: number | null;
   quoteMint: string;
   quoteSymbol: string | null;
@@ -132,15 +134,21 @@ export async function loadToken(connection: Connection, mint: PublicKey): Promis
   const scale = 10 ** quoteDecimals;
 
   const pool = account.pubkey.toBase58();
-  const [meta, activity] = await Promise.all([meteoraPool(pool), emberActivity(pool)]);
+  const [meta, activity, onChainMeta] = await Promise.all([
+    meteoraPool(pool),
+    emberActivity(pool),
+    resolveTokens(connection, [mint.toBase58()]).then(loadImages),
+  ]);
+  const local = onChainMeta.get(mint.toBase58());
 
   return {
     mint: mint.toBase58(),
     pool,
     config: configAddress,
     creator: pk(data, POOL.creator),
-    symbol: meta?.token_x?.symbol ?? null,
-    name: meta?.token_x?.name ?? null,
+    symbol: meta?.token_x?.symbol ?? local?.symbol ?? null,
+    name: meta?.token_x?.name ?? local?.name ?? null,
+    image: local?.image ?? null,
     createdAt: meta?.created_at ? Math.floor(meta.created_at / 1000) : null,
     quoteMint,
     quoteSymbol: meta?.token_y?.symbol ?? null,

@@ -283,3 +283,12 @@ footer {
   .token td[data-label='Event'] { grid-column: 2; grid-row: 1; text-align: right; font-size: 13px; color: var(--ink-3); }
   .token td[data-label='Proof'] { grid-column: 2; grid-row: 2; text-align: right; font-size: 13px; }
 }
+
+/* ---------- coin artwork ---------- */
+.coin {
+  width: 18px; height: 18px; border-radius: 50%; object-fit: cover;
+  vertical-align: -3px; margin-right: 6px;
+  background: var(--surface-2); border: 1px solid var(--hairline);
+}
+.coin.lg { width: 46px; height: 46px; margin-right: 0; vertical-align: middle; flex: none; }
+.token-id { display: flex; align-items: center; gap: 14px; }

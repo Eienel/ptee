@@ -1,20 +1,28 @@
 # Ember Receipts
 
-Per-wallet earnings receipts for [Embercurve](https://embercurve.fun), read from the Solana chain.
-
-Ember publishes platform-wide totals on `/meteora` and a public payouts API — but both are
-aggregate. There is no recipient field anywhere in their data, so nobody can see what a
-*single wallet* earned. This fills that gap.
-
-One input takes either kind of address and answers the right question:
-
-- a **wallet** → a receipt of every Ember payout it has received
-- a **token** → that coin's bonding curve, what it is paired with, and what Ember has paid
-  out of its fees
+Read what a wallet has actually earned from [Embercurve](https://embercurve.fun), and what any
+Ember-launched coin has done with its fees — straight from the Solana chain.
 
 **Unofficial. Not affiliated with Embercurve.** Built by [@eienel_eth](https://x.com/eienel_eth).
 
-## How it decides what counts
+One input takes either kind of address and answers the right question:
+
+- a **wallet** → a receipt of every Ember payout it has received, exportable as a card
+- a **token** → that coin's bonding curve, what it is paired with, and what Ember has paid out
+  of its fees
+
+---
+
+## Why this exists
+
+Ember publishes platform-wide totals on `/meteora` and a public payouts API, and those numbers
+hold up — I checked a sample of them against the chain and they matched. But both are
+**aggregate**. There is no recipient field anywhere in Ember's data, so no holder can see what
+*they* were paid. That is the gap this fills.
+
+## The wallet receipt
+
+### How it decides what counts
 
 1. Ember's payout keeper is `GZjYfGyUNQfDChcQ66Gc3ZMcQqPEisyRYe1nPyQhP9bp`. That was not
    assumed — it is the `fee_claimer` on the $EMBER pool config, and it was the fee payer and
@@ -22,49 +30,23 @@ One input takes either kind of address and answers the right question:
 2. A transaction counts as a payout when the keeper **signed and funded it** and the wallet's
    **token balance went up**.
 3. The credited amount is read from the transaction's own balance deltas, not from Ember's
-   reported figure for the round. Those are not always the same number — one observed
-   `holders` round reported 153.011418 MET while the transaction moved 237.798726.
+   reported figure for the round. Those are not always the same: one observed `holders` round
+   reported 153.011418 MET while the transaction moved 237.798726.
 
-Verified against sample transactions: payouts are plain SPL transfers (ComputeBudget + Token
-program only), with no DEX program involved and nothing debited from the recipient — so
-swaps where Ember may sponsor gas are not miscounted as earnings.
+### The false positive this had to avoid
 
-## The token view
+If Ember sponsored gas on user swaps, then buying a coin would look like a payout — keeper pays
+the fee, your balance goes up — and every receipt would be inflated. Sampled payout
+transactions contain only ComputeBudget and Token program instructions, no DEX program, and
+debit nothing from the recipient. They are plain transfers, so trades are not miscounted.
 
-Paste a mint and it resolves the coin's Meteora bonding curve pool by matching the base mint
-on-chain (`getProgramAccounts` on the DBC program, `dataSize` 424, `memcmp` at offset 136),
-then reads the pool and its config directly:
-
-| Shown | Source |
-|---|---|
-| Curve progress, quote reserve, migration threshold | pool + config accounts, on-chain |
-| Graduated to DAMM v2 | pool `is_migrated` / `migration_progress` |
-| Ticker, name, launch date | `dbc.datapi.meteora.ag/pools/{pool}` |
-| Fee activity | Ember's published payouts ledger, each row linked to its transaction |
-
-It also answers a question worth asking before buying anything: **is this actually an Ember
-launch?** The badge compares the pool config's `fee_claimer` against Ember's keeper. A coin
-with a Meteora curve whose fees are claimed by someone else is not in Ember's payout modules,
-however it is being marketed.
-
-Verified end to end against FLYWHEEL (`Hh2waXY7qfq5GUyQuzr3AJo29g9hTVThdjfHRB1jHNRC`):
-launched 12 Sep, paired with **GOOGLx**, curve filled to 100% and graduated, with payouts
-arriving in GOOGLx. Loads in about a second.
-
-Two caveats, stated in the interface as well as here:
-
-- Meteora's DBC index is **undocumented** — it is not in their published API reference, so
-  treat it as liable to change.
-- Ember's payouts ledger reaches back roughly an hour and cannot be paged, so an empty fee
-  history is not evidence that a pool has never paid out.
-
-## Why it is fast
+### Why it is fast
 
 A wallet can hold hundreds of token accounts while only a handful could ever have received an
-Ember payout. The scan intersects the wallet's mints with the mints the keeper holds an
-account for, then only walks those accounts.
+Ember payout. The scan intersects the wallet's mints with the mints the keeper holds an account
+for, then walks only those.
 
-Measured on real wallets:
+Measured against live wallets on a real endpoint:
 
 | Wallet | Token accounts | Scanned | Signatures | Payouts | Time |
 |---|---|---|---|---|---|
@@ -72,8 +54,53 @@ Measured on real wallets:
 | `7xDbVZyJ…` | 20 | 4 | 203 | 146 | 3.4s |
 | `2TnrgMN6…` | 7 | 2 | 60 | 51 | 1.1s |
 
-Caveat: if the keeper ever closed its account for a mint it once paid in, payouts in that
-mint are not discoverable this way. $MET and $EMBER are always included regardless.
+Caveat: if the keeper ever closed its account for a mint it once paid in, payouts in that mint
+are not discoverable this way. $MET and $EMBER are always included regardless.
+
+### The card
+
+Rendered as SVG, so it exports to PNG with no dependency and stays sharp at any size. Token
+artwork is inlined as a data URI before export — a remote image would either taint the canvas
+or fail to load in the detached SVG.
+
+## The token view
+
+Paste a mint and it resolves the coin's Meteora bonding curve pool by matching the base mint
+on-chain (`getProgramAccounts` on the DBC program, `dataSize` 424, `memcmp` at offset 136),
+then reads the pool and config accounts directly.
+
+| Shown | Source |
+|---|---|
+| Curve progress, quote reserve, migration threshold | pool + config accounts, on-chain |
+| Graduated to DAMM v2 | pool `is_migrated` / `migration_progress` |
+| Ticker, name, launch date | `dbc.datapi.meteora.ag/pools/{pool}` |
+| Coin artwork | mint metadata → off-chain JSON → `image` |
+| Fee activity | Ember's published ledger, each row linked to its transaction |
+
+It also answers a question worth asking before buying anything: **is this actually an Ember
+launch?** The badge compares the pool config's `fee_claimer` against Ember's keeper. A coin with
+a Meteora curve whose fees are claimed by someone else is not in Ember's payout modules, however
+it is being marketed.
+
+Verified end to end against FLYWHEEL (`Hh2waXY7qfq5GUyQuzr3AJo29g9hTVThdjfHRB1jHNRC`): launched
+12 Sep, paired with **GOOGLx**, curve filled to 100% and graduated, payouts arriving in GOOGLx.
+Loads in about a second.
+
+## Coin artwork
+
+Logos are two hops off-chain — the mint's metadata points at a JSON document, which points at
+the image — and both are usually IPFS. Gateways are **raced in parallel** rather than tried in
+turn, so one rate-limited gateway does not add its timeout to everyone else's wait. Artwork
+resolves *after* the numbers are on screen, so a slow gateway never delays the receipt, and a
+failure just means no logo.
+
+For the card, artwork is redrawn at 128px before being inlined. Token art is routinely around
+a megabyte — Ember's own logo is 977KB — which is wasteful to embed for a 48px circle, and an
+earlier size cap silently dropped it. Downscaling needs a CORS-permitted response; when that is
+refused the original bytes are embedded instead.
+
+Verified against EMBER, MET, FLYWHEEL and NVDAx — covering IPFS, plain HTTPS, and a Token-2022
+mint whose metadata lives in an extension rather than a Metaplex account.
 
 ## Running it
 
@@ -82,11 +109,12 @@ npm install
 cp .env.example .env     # add your RPC endpoint
 npm run dev
 npm run build
+npm run smoke            # drives both views at 1100px and 390px against a stubbed RPC
 ```
 
-An RPC endpoint is required — this reads full transaction histories and public endpoints
-cannot complete a scan. `VITE_RPC_URL` is compiled into the client bundle and is therefore
-**public**: restrict the key to your domain in your provider's dashboard, or proxy it.
+An RPC endpoint is required — this reads full transaction histories and public endpoints cannot
+complete a scan. `VITE_RPC_URL` is compiled into the client bundle and is therefore **public**:
+restrict the key to your domain in your provider's dashboard, or proxy it.
 
 ## Deploying to Vercel (from a phone)
 
@@ -98,37 +126,42 @@ The app lives in a subdirectory, so the one setting that matters is the root dir
 4. **Environment Variables → `VITE_RPC_URL`** = your RPC endpoint
 5. Deploy
 
-`VITE_RPC_URL` is compiled into the client bundle and is readable by anyone who opens the
-site. Restrict the key to your deployed domain in your provider's dashboard before sharing
-the link.
-
 ## Status
 
 - The scan engine is validated end to end against three real wallets on a live endpoint.
-- The layout, card and mobile breakpoints are covered by `npm run smoke`, which drives the
-  real UI at 1100px and 390px against a stubbed RPC and fails on any console error or
-  horizontal overflow.
-- The browser's **live** RPC path could not be exercised in the development sandbox (its
-  proxy drops the headless browser's TLS tunnels). The scan engine itself is validated
-  against a live endpoint from Node, and the cards shown were rendered from real scans.
-  First deploy is the real test of the in-browser fetch path.
+- The token view is validated end to end against a real Ember launch on a live endpoint.
+- Artwork resolution is validated against four real mints.
+- Layout, both views and the mobile breakpoints are covered by `npm run smoke`, which fails on
+  any console error or horizontal overflow.
+- The browser's **live** RPC path has not been exercised: the development sandbox's proxy drops
+  the headless browser's TLS tunnels, so every browser test runs against a stub and every live
+  test runs from Node. **The first deploy is the real test of the in-browser fetch path.**
 
 ## Known limits
 
-- **Per-coin attribution is not available.** A receipt shows what you earned and in which
-  token, but not which launched coin generated each payout. That mapping only exists in
-  Ember's `/api/solana/payouts`, which has no recipient field and exposes roughly the last
-  50 minutes with no pagination — so historical attribution would need a continuous indexer
-  snapshotting that endpoint.
-- **No USD values and no PnL.** Both need a historical price source; payout amounts here are
-  in each token's own units.
+- **Per-coin attribution for a wallet is not possible.** A receipt shows what you earned and in
+  which token, but not which launched coin generated each payout. That mapping exists only in
+  Ember's `/api/solana/payouts`, which has no recipient field and exposes roughly the last hour
+  with no pagination — `limit` caps at 500 records; `offset`, `page` and `days` are ignored.
+  Historical attribution would need a continuous indexer snapshotting that endpoint, and it
+  could only ever capture forward from the moment it started.
+- **No USD values and no PnL.** Both need a historical price source. Amounts are in each token's
+  own units.
+- **Meteora's DBC index is undocumented.** `dbc.datapi.meteora.ag` is live and indexes 1.6M
+  pools, but it is absent from Meteora's published API reference, so every field from it is
+  treated as optional and the token view still works without it.
+- **Ember's ledger is a short window.** An empty fee history is not evidence that a pool has
+  never paid out, and the interface says so rather than implying a coin is dead.
 
 ## Layout
 
 ```
 src/lib/constants.ts   keeper, mints, explorer links
-src/lib/scan.ts        the scan engine: accounts -> signatures -> transactions -> credits
-src/lib/tokens.ts      ticker resolution (Metaplex + Token-2022 metadata)
+src/lib/scan.ts        wallet scan: accounts -> signatures -> transactions -> credits
+src/lib/token.ts       token view: pool lookup, curve state, Ember fee activity
+src/lib/tokens.ts      ticker/name/uri resolution (Metaplex + Token-2022 metadata)
+src/lib/images.ts      off-chain artwork, gateway racing, data-URI inlining
 src/lib/png.ts         SVG -> PNG export, no dependencies
-src/components/        the receipt card (SVG) and payout table
+src/components/        receipt card (SVG), payout table, token panel
+scripts/smoke.mjs      browser test of both views at two widths
 ```

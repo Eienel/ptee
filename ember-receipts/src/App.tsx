@@ -4,11 +4,12 @@ import { PayoutList } from './components/PayoutList';
 import { ReceiptCard } from './components/ReceiptCard';
 import { TokenPanel } from './components/TokenPanel';
 import { EMBER_KEEPER, SOLSCAN_ACCOUNT } from './lib/constants';
+import { toDataUrl } from './lib/images';
 import { downloadBlob, svgToPngBlob } from './lib/png';
 import { formatAmount } from './lib/format';
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
 import { classifyAddress, loadToken, type TokenView } from './lib/token';
-import { resolveSymbols } from './lib/tokens';
+import { loadImages, resolveTokens, type TokenMeta } from './lib/tokens';
 
 const DEFAULT_RPC = import.meta.env.VITE_RPC_URL ?? 'https://api.mainnet-beta.solana.com';
 const RPC_KEY = 'ember.rpc';
@@ -26,7 +27,8 @@ export default function App() {
   const [input, setInput] = useState(() => new URLSearchParams(location.search).get('w') ?? '');
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [token, setToken] = useState<TokenView | null>(null);
-  const [symbols, setSymbols] = useState<Map<string, string>>(new Map());
+  const [tokens, setTokens] = useState<Map<string, TokenMeta>>(new Map());
+  const [heroLogo, setHeroLogo] = useState<string | null>(null);
   const [progress, setProgress] = useState<ScanProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -55,6 +57,7 @@ export default function App() {
       setError(null);
       setReceipt(null);
       setToken(null);
+      setHeroLogo(null);
       setProgress({ phase: 'accounts', done: 0, total: 1 });
 
       try {
@@ -79,9 +82,19 @@ export default function App() {
           signal: controller.signal,
         });
         setProgress({ phase: 'metadata', done: 0, total: 1 });
-        setSymbols(await resolveSymbols(connection, result.byToken.map((t) => t.mint)));
+        const meta = await resolveTokens(connection, result.byToken.map((t) => t.mint));
+        setTokens(meta);
         setReceipt(result);
         setProgress({ phase: 'done', done: 1, total: 1 });
+
+        // Artwork resolves after the receipt is already on screen, so a slow
+        // IPFS gateway never delays the numbers.
+        void loadImages(meta).then(async (withImages) => {
+          setTokens(withImages);
+          const hero = result.byToken[0];
+          const image = hero ? withImages.get(hero.mint)?.image : null;
+          if (image) setHeroLogo(await toDataUrl(image));
+        });
 
         const url = new URL(location.href);
         url.searchParams.set('w', result.wallet);
@@ -115,11 +128,11 @@ export default function App() {
     if (!receipt) return '';
     const top = receipt.byToken[0];
     const line = top
-      ? `${formatAmount(top.total)} ${symbols.get(top.mint) ?? ''} across ${receipt.payouts.length} payouts`
+      ? `${formatAmount(top.total)} ${tokens.get(top.mint)?.symbol ?? ''} across ${receipt.payouts.length} payouts`
       : `${receipt.payouts.length} payouts`;
     const text = `My @embercurve receipt: ${line}.\n\nEvery number verified on-chain, not from a dashboard.`;
     return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`;
-  }, [receipt, symbols]);
+  }, [receipt, tokens]);
 
   const usingPublicRpc = rpc.includes('api.mainnet-beta.solana.com');
 
@@ -195,7 +208,7 @@ export default function App() {
         {receipt && receipt.payouts.length > 0 && (
           <>
             <section className="card-wrap">
-              <ReceiptCard ref={cardRef} receipt={receipt} symbols={symbols} />
+              <ReceiptCard ref={cardRef} receipt={receipt} tokens={tokens} logo={heroLogo} />
             </section>
             <div className="card-actions">
               <button className="primary" onClick={savePng}>
@@ -207,7 +220,7 @@ export default function App() {
               <button onClick={copyLink}>Copy link</button>
               <span className="scanned">{receipt.scanned.toLocaleString()} signatures checked</span>
             </div>
-            <PayoutList receipt={receipt} symbols={symbols} />
+            <PayoutList receipt={receipt} tokens={tokens} />
           </>
         )}
 
