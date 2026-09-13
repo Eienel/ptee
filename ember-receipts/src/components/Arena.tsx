@@ -2,13 +2,6 @@ import { useEffect, useState } from 'react';
 import { formatUsd } from '../lib/format';
 import { fetchArena, fetchMarkets, type Arena as ArenaData, type Markets } from '../lib/conviction';
 
-const KIND_MARK: Record<string, string> = {
-  crypto: '₿',
-  stock: '📈',
-  commodity: '🥇',
-  meme: '🐸',
-};
-
 const alive = (seconds: number) =>
   seconds >= 86400 ? `${Math.floor(seconds / 86400)}d` : `${Math.max(1, Math.floor(seconds / 3600))}h`;
 
@@ -66,29 +59,17 @@ export function Arena() {
       </p>
 
       {coins.length === 0 ? (
-        <div className="arena-empty">
-          <p>
-            No coin has a Conviction position open yet.
-            {markets && (
-              <>
-                {' '}
-                The module is live on Ember with {markets.markets.length} markets and{' '}
-                {markets.tiers.join('×, ')}× leverage tiers
-                {markets.live ? '' : `, and the ${arena?.venue ?? markets.venue} venue is not deployed yet`}.
-              </>
-            )}
-          </p>
+        <p className="arena-empty">
+          None open yet.
           {markets && (
-            <ul className="market-chips">
-              {markets.markets.map((m) => (
-                <li key={m.symbol} title={`${m.name} · up to ${m.maxLev}×`}>
-                  <span aria-hidden="true">{KIND_MARK[m.kind] ?? ''}</span> {m.symbol}
-                </li>
-              ))}
-            </ul>
+            <>
+              {' '}
+              {markets.markets.length} markets and {markets.tiers.join('\u00d7, ')}&times; are live
+              on Ember
+              {markets.live ? '' : `, and the ${arena?.venue ?? markets.venue} venue is not deployed`}.
+            </>
           )}
-
-        </div>
+        </p>
       ) : (
         <div className="arena-table" role="table">
           <div className="arena-row head" role="row">
