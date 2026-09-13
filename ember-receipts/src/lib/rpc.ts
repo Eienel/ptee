@@ -26,6 +26,20 @@ export function initialEndpoint(stored: unknown, configured: unknown): string {
 }
 
 /**
+ * An earlier version seeded the settings box with whatever endpoint was active
+ * and stored it, so browsers that used the site then are holding the site's own
+ * endpoint in localStorage. Read back today that looks like a user override and
+ * gets displayed. A stored value identical to the configured one is therefore
+ * not an override at all, and is discarded.
+ */
+export function userOverride(stored: unknown, configured: unknown): string {
+  const value = normalizeEndpoint(stored);
+  if (!value) return '';
+  const built = normalizeEndpoint(configured);
+  return built && value === built ? '' : value;
+}
+
+/**
  * A display form that never reveals an API key. Endpoints carry the key in the
  * path or query, so only the host is ever shown — the value is already in the
  * bundle, but there is no reason to print it on the page as well.

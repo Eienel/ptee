@@ -9,7 +9,7 @@ import { readFileSync, unlinkSync } from 'node:fs';
 
 execFileSync('npx', ['esbuild', 'src/lib/rpc.ts', '--bundle', '--format=esm', '--platform=node',
   '--outfile=.rpc.test.mjs', '--log-level=warning'], { stdio: 'inherit' });
-const { normalizeEndpoint, initialEndpoint, PUBLIC_RPC } = await import('../.rpc.test.mjs');
+const { normalizeEndpoint, initialEndpoint, userOverride, PUBLIC_RPC } = await import('../.rpc.test.mjs');
 
 // Rejected: anything that is not a usable http(s) URL.
 for (const bad of ['', '   ', undefined, null, 42, {}, 'not a url', 'ftp://example.com', 'ws://example.com']) {
@@ -27,6 +27,16 @@ assert.equal(initialEndpoint(null, 'https://built.example'), 'https://built.exam
 assert.equal(initialEndpoint('', 'https://built.example'), 'https://built.example');
 assert.equal(initialEndpoint('', ''), PUBLIC_RPC, 'an empty build-time value must fall back, not crash');
 assert.equal(initialEndpoint(undefined, undefined), PUBLIC_RPC);
+
+// A stored value equal to the configured endpoint is legacy state, not a
+// choice: an earlier build seeded the box with the active endpoint and saved it.
+assert.equal(userOverride('https://built.example', 'https://built.example'), '',
+  'the site\'s own endpoint must not read back as a user override');
+assert.equal(userOverride('https://mine.example', 'https://built.example'), 'https://mine.example');
+assert.equal(userOverride('', 'https://built.example'), '');
+assert.equal(userOverride(null, 'https://built.example'), '');
+assert.equal(userOverride('garbage', 'https://built.example'), '');
+assert.equal(userOverride('https://mine.example', undefined), 'https://mine.example');
 
 unlinkSync('.rpc.test.mjs');
 console.log('rpc endpoint handling: all assertions passed');

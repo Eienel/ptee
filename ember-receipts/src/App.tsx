@@ -11,7 +11,7 @@ import { formatAmount, formatUsd } from './lib/format';
 import { attributeByQuote, pairedCoins } from './lib/attribution';
 import { fetchPrices, valueOf, type TokenPrice } from './lib/prices';
 import { variantById, VARIANTS } from './lib/variants';
-import { describeEndpoint, normalizeEndpoint, PUBLIC_RPC } from './lib/rpc';
+import { describeEndpoint, normalizeEndpoint, PUBLIC_RPC, userOverride } from './lib/rpc';
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
 import { classifyAddress, loadToken, type TokenView } from './lib/token';
 import { loadImages, resolveTokens, type TokenMeta } from './lib/tokens';
@@ -29,7 +29,9 @@ const PHASE_LABEL: Record<ScanProgress['phase'], string> = {
 export default function App() {
   // Only a user's own override is kept in state and storage. The configured
   // endpoint is never put in an input, so its key is never rendered.
-  const [override, setOverride] = useState(() => localStorage.getItem(RPC_KEY) ?? '');
+  const [override, setOverride] = useState(() =>
+    userOverride(localStorage.getItem(RPC_KEY), import.meta.env.VITE_RPC_URL),
+  );
   const [input, setInput] = useState(() => new URLSearchParams(location.search).get('w') ?? '');
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [token, setToken] = useState<TokenView | null>(null);

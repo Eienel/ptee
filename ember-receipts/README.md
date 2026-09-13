@@ -157,6 +157,12 @@ and the override field starts empty rather than pre-filled, so the key is not in
 that panel is open or closed. This does not make it secret — it is still in the bundle — it just
 avoids printing it on the page for anyone to copy.
 
+Anyone can paste their own endpoint in that panel, which is stored and used in place of the
+built-in one. Only a genuine override is kept: an earlier build seeded the box with whatever
+endpoint was active and saved it, so browsers that visited then are holding the site's own
+endpoint in `localStorage`. A stored value identical to the configured one is treated as that
+legacy state and discarded rather than shown back as "your endpoint".
+
 ## Deploying to Vercel (from a phone)
 
 The app lives in a subdirectory, so the one setting that matters is the root directory.
