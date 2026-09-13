@@ -345,7 +345,7 @@ export default function App() {
             <p>
               A wallet gets a receipt of every Ember payout it has received. A token gets its
               curve and what its fees have paid out.{' '}
-              <a href="https://github.com/Eienel/ptee/tree/main/ember-receipts" target="_blank" rel="noreferrer">
+              <a href="https://github.com/Eienel/ptee/tree/HEAD/ember-receipts" target="_blank" rel="noreferrer">
                 How it works
               </a>
             </p>
