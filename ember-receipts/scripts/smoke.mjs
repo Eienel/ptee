@@ -401,8 +401,8 @@ async function runYield(page, label) {
     if (url.includes('localhost')) return route.continue();
     return route.abort();
   });
-  await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'domcontentloaded' });
-  await page.click('.yieldboard button.primary');
+  // ?board must populate the table with no click at all.
+  await page.goto(`http://localhost:${PORT}/?board=1`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('.yb-row:not(.head)');
   const rows = await page.locator('.yb-row:not(.head)').count();
   const text = await page.locator('.yb-table').innerText();

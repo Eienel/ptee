@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SOLSCAN_ACCOUNT } from '../lib/constants';
 import { formatUsd } from '../lib/format';
 import {
@@ -49,6 +49,12 @@ export function YieldBoard() {
     }
     setRows(leaderboard(data.markets, Math.floor(Date.now() / 1000), 20));
   }, []);
+
+  // ?board lands straight on the data. The payload is several megabytes, so it
+  // stays behind a click otherwise rather than costing every visitor the fetch.
+  useEffect(() => {
+    if (new URLSearchParams(location.search).has('board')) void load();
+  }, [load]);
 
   return (
     <section className="yieldboard">
