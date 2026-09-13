@@ -11,6 +11,10 @@ import { PublicKey } from '@solana/web3.js';
 const PORT = 4182;
 const KEEPER = 'GZjYfGyUNQfDChcQ66Gc3ZMcQqPEisyRYe1nPyQhP9bp';
 const WALLET = '2TnrgMN6JgKu91L7eC3ewtDY1a57rjduLjNVtNMGoQmb';
+const DBC = 'dbcij3LWUppWqq96dh6gJWwBifmcGfLSB5D4DuSMaqN';
+const POOL = 'oJiZ19wCJd22G4Bo5bE4EUyFVewJ4jYGuZ91wddouJZ';
+const CONFIG = 'B76NiZrQhD21yMuU9xBsAGEdHsRND3h5Ki6gc3yW57tq';
+const TOKEN_MINT = 'Hh2waXY7qfq5GUyQuzr3AJo29g9hTVThdjfHRB1jHNRC';
 const MINTS = {
   EMBER: '5dvXTZ5qwgafnHtwu3Ls3QrWx1U4LQsFeCuJgkk4QEC6',
   MET: 'METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL',
@@ -61,7 +65,39 @@ function handle(req) {
     return ok(buildTx(params[0]));
   }
   if (method === 'getMultipleAccounts') return ok({ context: { slot: 1 }, value: params[0].map(() => null) });
-  if (method === 'getAccountInfo') return ok({ context: { slot: 1 }, value: null });
+
+  if (method === 'getProgramAccounts') {
+    // The token view looks up a DBC pool by base mint.
+    const pool = Buffer.alloc(424);
+    new PublicKey(CONFIG).toBuffer().copy(pool, 72);
+    new PublicKey(KEEPER).toBuffer().copy(pool, 104);
+    new PublicKey(TOKEN_MINT).toBuffer().copy(pool, 136);
+    pool.writeBigUInt64LE(26041600n, 240); // quote reserve
+    pool.writeUInt8(1, 305); // is_migrated
+    pool.writeUInt8(3, 308); // migration_progress
+    return ok([{ pubkey: POOL, account: { data: [pool.toString('base64'), 'base64'], executable: false, lamports: 1, owner: DBC, rentEpoch: 0, space: 424 } }]);
+  }
+
+  if (method === 'getAccountInfo') {
+    const address = params[0];
+    const account = (data, owner) => ok({ context: { slot: 1 },
+      value: { data: [data.toString('base64'), 'base64'], executable: false, lamports: 1, owner, rentEpoch: 0, space: data.length } });
+
+    if (address === TOKEN_MINT) return account(Buffer.alloc(82), 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+    if (address === CONFIG) {
+      const cfg = Buffer.alloc(1048);
+      new PublicKey(MINTS.NVDAx).toBuffer().copy(cfg, 8);
+      new PublicKey(KEEPER).toBuffer().copy(cfg, 40);
+      cfg.writeBigUInt64LE(26041600n, 264);
+      return account(cfg, DBC);
+    }
+    if (address === MINTS.NVDAx) {
+      const mint = Buffer.alloc(82);
+      mint.writeUInt8(6, 44);
+      return account(mint, 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+    }
+    return ok({ context: { slot: 1 }, value: null }); // wallets classify here
+  }
   return ok(null);
 }
 
@@ -102,6 +138,23 @@ async function run(page, label, width, height) {
   await page.route('**/*', async (route) => {
     const url = route.request().url();
     if (url.includes('localhost')) return route.continue();
+
+    if (url.includes('dbc.datapi.meteora.ag')) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+        created_at: 1789000000000,
+        token_x: { symbol: 'FLYWHEEL', name: 'flywheel', decimals: 6 },
+        token_y: { symbol: 'NVDAx', decimals: 6 },
+      }) });
+    }
+    if (url.includes('embercurve.fun')) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+        payouts: [
+          { pool: POOL, kind: 'payout', amount: 0.076033, quoteTicker: 'NVDAx', signature: 'SigA'.padEnd(64, 'x'), at: 1789200000 },
+          { pool: POOL, kind: 'claim', amount: 0, quoteTicker: 'NVDAx', signature: null, at: 1789200300 },
+          { pool: 'other', kind: 'payout', amount: 5, quoteTicker: 'MET', signature: 'SigB'.padEnd(64, 'y'), at: 1789200600 },
+        ],
+      }) });
+    }
     if (route.request().method() !== 'POST') return route.abort();
     const body = JSON.parse(route.request().postData() ?? '{}');
     const result = Array.isArray(body) ? body.map(handle) : handle(body);
@@ -109,8 +162,8 @@ async function run(page, label, width, height) {
   });
 
   await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'domcontentloaded' });
-  await page.fill('input[aria-label="Wallet address"]', WALLET);
-  await page.click('button:has-text("Get receipt")');
+  await page.fill('input[aria-label="Wallet or token address"]', WALLET);
+  await page.click('button:has-text("Look it up")');
   await page.waitForSelector('.card-svg, .empty, .alert');
   const failed = await page.locator('.empty, .alert').count();
   if (failed) console.log(`${label}: ${await page.textContent('.empty, .alert')}`);
@@ -127,6 +180,54 @@ await run(await browser.newPage({ viewport: { width: 1100, height: 1400 } }), 'd
 await run(
   await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 }),
   'phone', 390, 844,
+);
+
+// token view: the same input box, given a mint instead of a wallet
+async function runToken(page, label) {
+  page.setDefaultTimeout(30000);
+  page.on('pageerror', (e) => errors.push(`${label}: ${e}`));
+  page.on('console', (m) => { if (m.type() === 'error') errors.push(`${label}: ${m.text()}`); });
+  await page.route('**/*', async (route) => {
+    const url = route.request().url();
+    if (url.includes('localhost')) return route.continue();
+    if (url.includes('dbc.datapi.meteora.ag')) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+        created_at: 1789000000000,
+        token_x: { symbol: 'FLYWHEEL', name: 'flywheel', decimals: 6 },
+        token_y: { symbol: 'NVDAx', decimals: 6 },
+      }) });
+    }
+    if (url.includes('embercurve.fun')) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+        payouts: [
+          { pool: POOL, kind: 'payout', amount: 0.076033, quoteTicker: 'NVDAx', signature: 'SigA'.padEnd(64, 'x'), at: 1789200000 },
+          { pool: POOL, kind: 'claim', amount: 0, quoteTicker: 'NVDAx', signature: null, at: 1789200300 },
+        ],
+      }) });
+    }
+    if (route.request().method() !== 'POST') return route.abort();
+    const body = JSON.parse(route.request().postData() ?? '{}');
+    return route.fulfill({ status: 200, contentType: 'application/json',
+      body: JSON.stringify(Array.isArray(body) ? body.map(handle) : handle(body)) });
+  });
+
+  await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'domcontentloaded' });
+  await page.fill('input[aria-label="Wallet or token address"]', TOKEN_MINT);
+  await page.click('button:has-text("Look it up")');
+  await page.waitForSelector('.token, .alert');
+  await page.waitForTimeout(500);
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  const badge = await page.textContent('.badge').catch(() => 'none');
+  const pct = await page.textContent('.curve-top strong').catch(() => 'none');
+  console.log(`${label.padEnd(8)} overflow=${overflow}  badge="${badge}"  progress=${pct}  feeRows=${await page.locator('.token tbody tr').count()}`);
+  if (overflow !== 0) errors.push(`${label}: scrolls sideways by ${overflow}px`);
+  await page.screenshot({ path: `smoke-${label}.png`, fullPage: true });
+}
+
+await runToken(await browser.newPage({ viewport: { width: 1100, height: 1300 } }), 'token');
+await runToken(
+  await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 }),
+  'tokenphone',
 );
 
 console.log('ERRORS:', errors);

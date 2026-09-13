@@ -2,10 +2,12 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PayoutList } from './components/PayoutList';
 import { ReceiptCard } from './components/ReceiptCard';
+import { TokenPanel } from './components/TokenPanel';
 import { EMBER_KEEPER, SOLSCAN_ACCOUNT } from './lib/constants';
 import { downloadBlob, svgToPngBlob } from './lib/png';
 import { formatAmount } from './lib/format';
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
+import { classifyAddress, loadToken, type TokenView } from './lib/token';
 import { resolveSymbols } from './lib/tokens';
 
 const DEFAULT_RPC = import.meta.env.VITE_RPC_URL ?? 'https://api.mainnet-beta.solana.com';
@@ -23,6 +25,7 @@ export default function App() {
   const [rpc, setRpc] = useState(() => localStorage.getItem(RPC_KEY) ?? DEFAULT_RPC);
   const [input, setInput] = useState(() => new URLSearchParams(location.search).get('w') ?? '');
   const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [token, setToken] = useState<TokenView | null>(null);
   const [symbols, setSymbols] = useState<Map<string, string>>(new Map());
   const [progress, setProgress] = useState<ScanProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -51,9 +54,26 @@ export default function App() {
       setBusy(true);
       setError(null);
       setReceipt(null);
+      setToken(null);
       setProgress({ phase: 'accounts', done: 0, total: 1 });
 
       try {
+        // One input, two answers: a mint gets the token view, a wallet gets a receipt.
+        const kind = await classifyAddress(connection, wallet);
+        if (kind === 'mint') {
+          const view = await loadToken(connection, wallet);
+          if (!view) {
+            setError('That token has no Meteora bonding curve pool, so it was not launched on a DBC.');
+          } else {
+            setToken(view);
+            const url = new URL(location.href);
+            url.searchParams.set('w', view.mint);
+            history.replaceState(null, '', url);
+          }
+          setProgress(null);
+          return;
+        }
+
         const result = await scanWallet(connection, wallet, {
           onProgress: setProgress,
           signal: controller.signal,
@@ -110,7 +130,7 @@ export default function App() {
           <span className="flame" aria-hidden="true">🔥</span>
           <div>
             <strong>Ember Receipts</strong>
-            <small>what a wallet actually earned, read from the chain</small>
+            <small>wallets and Ember launches, read from the chain</small>
           </div>
         </div>
       </header>
@@ -126,12 +146,12 @@ export default function App() {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Paste any Solana wallet address"
+            placeholder="Paste a wallet or an Ember token address"
             spellCheck={false}
-            aria-label="Wallet address"
+            aria-label="Wallet or token address"
           />
           <button className="primary" disabled={busy || input.trim().length === 0}>
-            {busy ? 'Scanning…' : 'Get receipt'}
+            {busy ? 'Reading the chain…' : 'Look it up'}
           </button>
         </form>
 
@@ -158,6 +178,8 @@ export default function App() {
         )}
 
         {error && <p className="alert">{error}</p>}
+
+        {token && <TokenPanel token={token} />}
 
         {receipt && receipt.payouts.length === 0 && (
           <p className="empty">
@@ -189,15 +211,17 @@ export default function App() {
           </>
         )}
 
-        {!receipt && !busy && (
+        {!receipt && !token && !busy && (
           <section className="explain">
             <h1>Every number here is a transaction you can open.</h1>
             <p>
-              Embercurve publishes totals for the whole platform, but nothing per wallet. This reads
-              the chain directly: it finds every transaction signed and funded by Ember&rsquo;s
-              keeper that increased your token balance, and adds them up. Nothing is taken from a
-              dashboard — the amounts come from the balance changes in the transactions themselves,
-              which is not always the same as the figure reported for a round.
+              Paste a <strong>wallet</strong> and it finds every transaction signed and funded by
+              Ember&rsquo;s keeper that increased your token balance, and adds them up. Paste a{' '}
+              <strong>token</strong> and it reads that coin&rsquo;s bonding curve straight from its
+              pool account — how far along it is, what it is paired with, and what Ember has paid
+              out of its fees. Nothing is taken from a dashboard; the amounts come from the balance
+              changes in the transactions themselves, which is not always the same as the figure
+              reported for a round.
             </p>
             <p className="fine">
               Read-only. No wallet connection, no signing, nothing to approve — paste an address and

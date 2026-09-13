@@ -6,6 +6,12 @@ Ember publishes platform-wide totals on `/meteora` and a public payouts API — 
 aggregate. There is no recipient field anywhere in their data, so nobody can see what a
 *single wallet* earned. This fills that gap.
 
+One input takes either kind of address and answers the right question:
+
+- a **wallet** → a receipt of every Ember payout it has received
+- a **token** → that coin's bonding curve, what it is paired with, and what Ember has paid
+  out of its fees
+
 **Unofficial. Not affiliated with Embercurve.** Built by [@eienel_eth](https://x.com/eienel_eth).
 
 ## How it decides what counts
@@ -22,6 +28,35 @@ aggregate. There is no recipient field anywhere in their data, so nobody can see
 Verified against sample transactions: payouts are plain SPL transfers (ComputeBudget + Token
 program only), with no DEX program involved and nothing debited from the recipient — so
 swaps where Ember may sponsor gas are not miscounted as earnings.
+
+## The token view
+
+Paste a mint and it resolves the coin's Meteora bonding curve pool by matching the base mint
+on-chain (`getProgramAccounts` on the DBC program, `dataSize` 424, `memcmp` at offset 136),
+then reads the pool and its config directly:
+
+| Shown | Source |
+|---|---|
+| Curve progress, quote reserve, migration threshold | pool + config accounts, on-chain |
+| Graduated to DAMM v2 | pool `is_migrated` / `migration_progress` |
+| Ticker, name, launch date | `dbc.datapi.meteora.ag/pools/{pool}` |
+| Fee activity | Ember's published payouts ledger, each row linked to its transaction |
+
+It also answers a question worth asking before buying anything: **is this actually an Ember
+launch?** The badge compares the pool config's `fee_claimer` against Ember's keeper. A coin
+with a Meteora curve whose fees are claimed by someone else is not in Ember's payout modules,
+however it is being marketed.
+
+Verified end to end against FLYWHEEL (`Hh2waXY7qfq5GUyQuzr3AJo29g9hTVThdjfHRB1jHNRC`):
+launched 12 Sep, paired with **GOOGLx**, curve filled to 100% and graduated, with payouts
+arriving in GOOGLx. Loads in about a second.
+
+Two caveats, stated in the interface as well as here:
+
+- Meteora's DBC index is **undocumented** — it is not in their published API reference, so
+  treat it as liable to change.
+- Ember's payouts ledger reaches back roughly an hour and cannot be paged, so an empty fee
+  history is not evidence that a pool has never paid out.
 
 ## Why it is fast
 
