@@ -57,9 +57,25 @@ export function TokenPanel({ token }: { token: TokenView }) {
       </div>
 
       <div className="token-stats">
-        <div><span>Paired with</span><strong>{token.quoteSymbol ?? shortAddress(token.quoteMint)}</strong></div>
+        <div>
+          <span>Paired with</span>
+          <strong>
+            <a href={SOLSCAN_ACCOUNT(token.quoteMint)} target="_blank" rel="noreferrer">
+              {token.quoteSymbol ?? shortAddress(token.quoteMint)}
+            </a>
+          </strong>
+        </div>
         <div><span>Launched</span><strong>{token.createdAt ? formatDate(token.createdAt) : 'unknown'}</strong></div>
         <div><span>Migration flag</span><strong>{token.migrationProgress}</strong></div>
+      </div>
+
+      <div className="token-links">
+        <a href={SOLSCAN_ACCOUNT(token.mint)} target="_blank" rel="noreferrer">Mint</a>
+        <a href={SOLSCAN_ACCOUNT(token.pool)} target="_blank" rel="noreferrer">Curve pool</a>
+        <a href={SOLSCAN_ACCOUNT(token.config)} target="_blank" rel="noreferrer">Pool config</a>
+        <a href={SOLSCAN_ACCOUNT(token.creator)} target="_blank" rel="noreferrer">Creator</a>
+        <a href={SOLSCAN_ACCOUNT(token.feeClaimer)} target="_blank" rel="noreferrer">Fee claimer</a>
+        <a href={`https://embercurve.fun/t/${token.mint}`} target="_blank" rel="noreferrer">On Ember</a>
       </div>
 
       <h3>

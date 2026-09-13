@@ -177,6 +177,53 @@ refused the original bytes are embedded instead.
 Verified against EMBER, MET, FLYWHEEL and NVDAx — covering IPFS, plain HTTPS, and a Token-2022
 mint whose metadata lives in an extension rather than a Metaplex account.
 
+## What holding pays
+
+Ember routes part of every trade's fee back to holders. The board on the landing page shows what
+each coin actually paid out in the last 24 hours, per $1,000 of stake.
+
+Two things had to be established before any of it could be shown honestly.
+
+**Ember's `volumeUsd` is not measured volume.** For every one of the 2,532 coins, `feesUsd /
+volumeUsd` equals the coin's fee rate to four decimal places — 1% for graduated coins on DAMM
+v2, 2% or 3% for the rest. Volume is derived from fees, not observed alongside them. Anything
+phrased as "a percentage of volume" would therefore be a restatement of fees wearing a disguise,
+so fees are used directly and volume is not used at all.
+
+**The rate is not stable enough to forecast.** The trailing-24h share of fees reaching holders
+runs between 0.09x and 0.89x of the same coin's all-time share (median 0.38x), because fees are
+claimed and distributed in batched rounds and because a coin's economics change when it
+graduates. Projecting the all-time rate forward would overstate earnings by up to eleven times.
+So nothing here is a projection: every figure is a window that already happened, and nothing is
+annualised.
+
+### Why there is a bar for being listed
+
+Ranking purely by yield surfaces junk. Of 67 coins that paid holders in a sampled 24 hours, 39%
+had fewer than 50 holders, and the unfiltered top of the list was $3,000-market-cap coins with
+three holders showing "$261/day per $1,000" — the shape of wash trading, not of income. A
+ranking that promotes those is worse than no ranking, so a coin is listed only with **250+
+holders, a $50,000+ market cap and 100+ trades in 24 hours**. The smoke test asserts that a
+three-holder coin is excluded.
+
+### Why your own share will not match
+
+A flat share of the pot is a coin-level statistic, not a personal one. Two mechanisms guarantee a
+gap and neither is computable from public data: Diamond Hands weights a holder between 1x and 3x
+by how long they have held, and a payout round pays at most 300 wallets, so holders collect on a
+rotation rather than every round. Checked against the one wallet whose real earnings are
+readable, a flat share was out by **1.85x** — $39.92/day modelled against $73.69/day actually
+received. The interface says so and points at the receipt, which is measured rather than
+modelled.
+
+## Design
+
+The look is not invented. Embercurve's own stylesheet was read and its tokens adopted: warm
+paper `#F7F6F3` in light and a warm-neutral `#17191C` in dark rather than pure black, coral
+`#E76F51` for calls to action, Figtree for text with Bricolage Grotesque for display figures,
+20px card radii, full-pill controls and a soft layered shadow instead of a bare hairline. Both
+themes follow the system preference.
+
 ## Conviction
 
 Ember's newest module points part of a coin's fees at a leveraged position. A coin picks a
@@ -295,6 +342,14 @@ cannot complete one.
 - **Meteora's DBC index is undocumented.** `dbc.datapi.meteora.ag` is live and indexes 1.6M
   pools, but it is absent from Meteora's published API reference, so every field from it is
   treated as optional and the token view still works without it.
+- **Ember's API goes down.** Its whole host returned 502 for a spell while this was being
+  built, large endpoints first. Every Ember-sourced panel degrades to "unavailable" and the
+  on-chain scan, which runs through a separate RPC, keeps working.
+- **The markets payload is about 6 MB.** There is no pagination or field selection — `limit`,
+  `size`, `page` and `fields` are all ignored — so the yield board loads on a click rather than
+  on page load.
+- **The webfonts have not been seen rendering.** The sandbox browser cannot reach a font CDN, so
+  layout is verified with the fallback stack; the display face is unverified in a real browser.
 - **Ember's ledger is a short window.** An empty fee history is not evidence that a pool has
   never paid out, and the interface says so rather than implying a coin is dead.
 - **Conviction has never been seen with real data.** No coin has opened a position, so the
@@ -313,8 +368,9 @@ src/lib/images.ts      off-chain artwork, gateway racing, data-URI inlining
 src/lib/png.ts         SVG -> PNG export, no dependencies
 src/lib/ember.ts       same-origin proxy path for Ember's API (it sends no CORS headers)
 src/lib/ledger.ts      Ember's per-wallet labels, joined onto the scan by signature
+src/lib/yield.ts       what holding a coin has paid, with the credibility floor
 src/lib/conviction.ts  Conviction contract: markets, arena, per-coin position
 src/components/        receipt card (SVG), payout table, module breakdown, token panel,
-                       arena, Conviction panel
+                       arena, Conviction panel, yield board
 scripts/smoke.mjs      browser test of both views at two widths
 ```

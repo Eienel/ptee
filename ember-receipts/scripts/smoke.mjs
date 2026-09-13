@@ -197,6 +197,23 @@ function emberStub(url) {
     });
   }
   if (url.includes('/ember/perp/')) return JSON.stringify(PERP);
+  if (url.includes('/ember/markets')) {
+    const coin = (symbol, holders, cap, trades, pot, mode) => ({
+      pool: 'Pool' + symbol, mint: MINTS.EMBER, symbol, name: symbol, image: null,
+      route: '/t/' + symbol, quoteTicker: 'MET', creator: KEEPER, config: CONFIG, dammPool: null,
+      feeBps: 200, dammFeeBps: 100, holdersBps: 10000, mode, graduated: true,
+      holders, priceUsd: 0.01, marketCapUsd: cap, fees24hUsd: pot * 2, trades24h: trades,
+      change24h: 0, createdAt: 1788985224,
+      allTime: { feesUsd: pot * 40, byKindUsd: { holders: pot * 10 }, volumeUsd: pot * 4000 },
+      ledger24h: { byKindUsd: { holders: pot }, paidUsd: pot, claimedUsd: pot },
+    });
+    return JSON.stringify({ markets: [
+      coin('REBME', 665, 133000, 3004, 4619, 'holders'),
+      coin('LOTTO', 1141, 308000, 6438, 5134, 'lotto'),
+      // must be excluded: 3 holders, $3k cap — the wash-trading shape
+      coin('HEATBLAST', 3, 3000, 12, 813, 'holders'),
+    ] });
+  }
   if (url.includes('/ember/wallet/')) {
     // Ember's per-wallet ledger, joined onto the scan by signature. Two of the
     // three stubbed payouts are labelled; the third is deliberately absent so
@@ -231,6 +248,10 @@ async function run(page, label, width, height) {
   page.on('console', (m) => { if (m.type() === 'error') errors.push(`${label}: ${m.text()}`); });
   await page.route('**/*', async (route) => {
     const url = route.request().url();
+    // Webfonts come from a CDN in production; the layout must not depend on them.
+    if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
+      return route.fulfill({ status: 200, contentType: 'text/css', body: '' });
+    }
     if (url.includes('/ember/')) return route.fulfill({ status: 200, contentType: 'application/json', body: emberStub(url) });
     if (url.includes('localhost')) return route.continue();
 
@@ -292,6 +313,10 @@ async function runToken(page, label) {
   page.on('console', (m) => { if (m.type() === 'error') errors.push(`${label}: ${m.text()}`); });
   await page.route('**/*', async (route) => {
     const url = route.request().url();
+    // Webfonts come from a CDN in production; the layout must not depend on them.
+    if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
+      return route.fulfill({ status: 200, contentType: 'text/css', body: '' });
+    }
     if (url.includes('/ember/')) return route.fulfill({ status: 200, contentType: 'application/json', body: emberStub(url) });
     if (url.includes('localhost')) return route.continue();
     if (url.includes('lite-api.jup.ag')) {
@@ -342,6 +367,10 @@ async function runArena(page, label) {
   page.on('console', (m) => { if (m.type() === 'error') errors.push(`${label}: ${m.text()}`); });
   await page.route('**/*', async (route) => {
     const url = route.request().url();
+    // Webfonts come from a CDN in production; the layout must not depend on them.
+    if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
+      return route.fulfill({ status: 200, contentType: 'text/css', body: '' });
+    }
     if (url.includes('/ember/')) return route.fulfill({ status: 200, contentType: 'application/json', body: emberStub(url) });
     if (url.includes('localhost')) return route.continue();
     return route.abort();
@@ -355,6 +384,40 @@ async function runArena(page, label) {
   if (rows !== ARENA.coins.length) errors.push(`${label}: expected ${ARENA.coins.length} arena rows, got ${rows}`);
   await page.screenshot({ path: `smoke-${label}.png`, fullPage: true });
 }
+
+/** The yield board: loads on request, and must exclude the junk coin. */
+async function runYield(page, label) {
+  page.setDefaultTimeout(30000);
+  page.on('pageerror', (e) => errors.push(`${label}: ${e}`));
+  page.on('console', (m) => { if (m.type() === 'error') errors.push(`${label}: ${m.text()}`); });
+  await page.route('**/*', async (route) => {
+    const url = route.request().url();
+    if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
+      return route.fulfill({ status: 200, contentType: 'text/css', body: '' });
+    }
+    if (url.includes('/ember/')) return route.fulfill({ status: 200, contentType: 'application/json', body: emberStub(url) });
+    if (url.includes('localhost')) return route.continue();
+    return route.abort();
+  });
+  await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'domcontentloaded' });
+  await page.click('.yieldboard button.primary');
+  await page.waitForSelector('.yb-row:not(.head)');
+  const rows = await page.locator('.yb-row:not(.head)').count();
+  const text = await page.locator('.yb-table').innerText();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  const links = await page.locator('.yb-links a').count();
+  console.log(`${label.padEnd(8)} overflow=${overflow}  yieldRows=${rows}  solscanLinks=${links}`);
+  if (overflow !== 0) errors.push(`${label}: scrolls sideways by ${overflow}px`);
+  if (rows !== 2) errors.push(`${label}: expected 2 credible coins, got ${rows}`);
+  if (text.includes('HEATBLAST')) errors.push(`${label}: a 3-holder $3k coin was not filtered out`);
+  await page.screenshot({ path: `smoke-${label}.png`, fullPage: true });
+}
+
+await runYield(await browser.newPage({ viewport: { width: 1100, height: 1000 } }), 'yield');
+await runYield(
+  await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 }),
+  'yieldphone',
+);
 
 await runArena(await browser.newPage({ viewport: { width: 1100, height: 900 } }), 'arena');
 await runArena(

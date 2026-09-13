@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SOLSCAN_TX } from '../lib/constants';
+import { SOLSCAN_ACCOUNT, SOLSCAN_TX } from '../lib/constants';
 import { formatAmount, formatDate } from '../lib/format';
 import type { Receipt } from '../lib/scan';
 import { formatUsd } from '../lib/format';
@@ -90,12 +90,12 @@ export function PayoutList({ receipt, tokens, attribution, prices, ledger }: Pro
         {receipt.byToken.map((t) => (
           <div key={t.mint} className="total">
             <span className="amount">{formatAmount(t.total)}</span>
-            <span className="sym">
+            <a className="sym" href={SOLSCAN_ACCOUNT(t.mint)} target="_blank" rel="noreferrer">
               {tokens.get(t.mint)?.image && (
                 <img className="coin" src={tokens.get(t.mint)!.image!} alt="" loading="lazy" />
               )}
               {tokens.get(t.mint)?.symbol ?? '—'}
-            </span>
+            </a>
             {prices.get(t.mint) && (
               <span className="usd">
                 {formatUsd(t.total * prices.get(t.mint)!.usd)}

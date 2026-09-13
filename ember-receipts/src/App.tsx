@@ -17,6 +17,7 @@ import { describeEndpoint, normalizeEndpoint, PUBLIC_RPC, userOverride } from '.
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
 import { buildLedger, fetchEmberWallet, type Ledger } from './lib/ledger';
 import { Breakdown } from './components/Breakdown';
+import { YieldBoard } from './components/YieldBoard';
 import { classifyAddress, loadToken, type TokenView } from './lib/token';
 import { loadImages, resolveTokens, type TokenMeta } from './lib/tokens';
 
@@ -352,6 +353,7 @@ export default function App() {
           </section>
         )}
 
+        {!receipt && !token && !busy && <YieldBoard />}
         {!receipt && !token && !busy && <Arena />}
 
       </main>
