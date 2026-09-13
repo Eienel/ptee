@@ -8,7 +8,11 @@
  * for what only Ember knows — module configuration and paper-mode positions —
  * and never as evidence for a figure the chain can settle.
  */
-export const EMBER_API = '/ember';
+export const EMBER_API =
+  typeof window === 'undefined'
+    ? // Node has no same-origin rule to satisfy, so it calls the host directly.
+      'https://embercurve.fun/api/solana'
+    : '/ember';
 
 export async function emberJson<T>(path: string, timeoutMs = 9000): Promise<T | null> {
   try {

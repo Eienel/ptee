@@ -15,6 +15,8 @@ import { fetchPrices, valueOf, type TokenPrice } from './lib/prices';
 import { variantById, VARIANTS } from './lib/variants';
 import { describeEndpoint, normalizeEndpoint, PUBLIC_RPC, userOverride } from './lib/rpc';
 import { scanWallet, type Receipt, type ScanProgress } from './lib/scan';
+import { buildLedger, fetchEmberWallet, type Ledger } from './lib/ledger';
+import { Breakdown } from './components/Breakdown';
 import { classifyAddress, loadToken, type TokenView } from './lib/token';
 import { loadImages, resolveTokens, type TokenMeta } from './lib/tokens';
 
@@ -42,6 +44,8 @@ export default function App() {
   /** Payout token mint -> held coins paired against it. Inferred, not proven. */
   const [attribution, setAttribution] = useState<Map<string, string[]>>(new Map());
   const [prices, setPrices] = useState<Map<string, TokenPrice>>(new Map());
+  /** Ember's own labels for our payouts, joined by signature. Never the ledger. */
+  const [ledger, setLedger] = useState<Ledger | null>(null);
   // Card style rides in the URL so a shared link keeps the look it was made in.
   const [variantId, setVariantId] = useState(
     () => new URLSearchParams(location.search).get('v') ?? VARIANTS[0].id,
@@ -93,6 +97,7 @@ export default function App() {
       setHeroLogo(null);
       setAttribution(new Map());
       setPrices(new Map());
+      setLedger(null);
       setProgress({ phase: 'accounts', done: 0, total: 1 });
 
       try {
@@ -124,6 +129,13 @@ export default function App() {
 
         // Dollar values are a separate, slower concern than the token amounts.
         void fetchPrices(result.byToken.map((t) => t.mint)).then(setPrices);
+
+        // Ember's ledger names the module behind each payout and the coin it
+        // came from — neither is recoverable from the chain. It is joined onto
+        // our scan by signature, so a failure here costs labels, never figures.
+        void fetchEmberWallet(wallet.toBase58()).then((ember) => {
+          if (ember) setLedger(buildLedger(result, ember, (m) => meta.get(m)?.symbol ?? null));
+        });
 
         // Work out which held coin each payout token came from. Runs after the
         // receipt is on screen because it is supporting detail, not the figures.
@@ -316,11 +328,13 @@ export default function App() {
               <button onClick={copyLink}>Copy link</button>
               <span className="scanned">{receipt.scanned.toLocaleString()} signatures checked</span>
             </div>
+            <Breakdown ledger={ledger} tokens={tokens} prices={prices} />
             <PayoutList
               receipt={receipt}
               tokens={tokens}
               attribution={attribution}
               prices={prices}
+              ledger={ledger}
             />
           </>
         )}

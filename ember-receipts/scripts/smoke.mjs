@@ -21,6 +21,10 @@ const MINTS = {
   NVDAx: 'Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh',
 };
 
+/** The signatures the stubbed cluster returns, so Ember's ledger can join them. */
+const SIGS = Array.from({ length: 9 }, (_, i) =>
+  new PublicKey(Buffer.alloc(32, (i + 1) * 7)).toBase58() + new PublicKey(Buffer.alloc(32, i + 3)).toBase58());
+
 const server = spawn('npx', ['vite', 'preview', '--port', String(PORT)], { stdio: 'ignore' });
 process.on('exit', () => server.kill());
 for (let i = 0; i < 80; i++) {
@@ -56,9 +60,8 @@ function handle(req) {
     });
   }
   if (method === 'getSignaturesForAddress') {
-    return ok(Array.from({ length: 9 }, (_, i) => ({
-      signature: new PublicKey(Buffer.alloc(32, (i + 1) * 7)).toBase58() + new PublicKey(Buffer.alloc(32, i + 3)).toBase58(),
-      slot: 446000000 + i, err: null, blockTime: 1789200000 + i * 3600, memo: null,
+    return ok(SIGS.map((signature, i) => ({
+      signature, slot: 446000000 + i, err: null, blockTime: 1789200000 + i * 3600, memo: null,
     })));
   }
   if (method === 'getParsedTransaction' || method === 'getTransaction') {
@@ -194,6 +197,24 @@ function emberStub(url) {
     });
   }
   if (url.includes('/ember/perp/')) return JSON.stringify(PERP);
+  if (url.includes('/ember/wallet/')) {
+    // Ember's per-wallet ledger, joined onto the scan by signature. Two of the
+    // three stubbed payouts are labelled; the third is deliberately absent so
+    // the unmatched path is exercised.
+    const pay = (kind, signature, amount, usd, at) => ({
+      kind, pool: POOL, mint: MINTS.EMBER, symbol: 'FLYWHEEL', quoteTicker: 'EMBER',
+      amount, usd, unit: 'quote', signature, at, usdAtPayout: true,
+    });
+    return JSON.stringify({
+      wallet: WALLET, totalUsd: 12.5, count: 2, at: 1789334732,
+      byCoin: [{ pool: POOL, mint: MINTS.EMBER, symbol: 'FLYWHEEL', quoteTicker: 'EMBER',
+                 count: 2, amount: 3, usd: 12.5, lastAt: 1789200600, kinds: { holders: 1, lotto: 1 } }],
+      payouts: [
+        pay('holders', SIGS[0], 2, 8.5, 1789200000),
+        pay('lotto', SIGS[1], 1, 4, 1789200300),
+      ],
+    });
+  }
   if (url.includes('/ember/payouts')) {
     return JSON.stringify({ payouts: [
       { pool: POOL, kind: 'payout', amount: 0.076033, quoteTicker: 'NVDAx', signature: 'SigA'.padEnd(64, 'x'), at: 1789200000 },
@@ -246,8 +267,15 @@ async function run(page, label, width, height) {
   const sources = await page.locator('.total .source').count();
   const worth = await page.textContent('.worth strong').catch(() => 'none');
   const thin = await page.locator('.thin-flag').count();
-  console.log(`${label.padEnd(8)} ${width}x${height}  overflow=${overflow}  tokens=${await page.locator('.total').count()}  rows=${await page.locator('.payouts tbody tr').count()}  attributed=${sources}  worth=${worth}  thinFlags=${thin}`);
+  await page.waitForSelector('.breakdown', { timeout: 15000 });
+  const kinds = await page.locator('.kinds li').count();
+  const thenNow = await page.locator('.then-now').count();
+  const labelledRows = await page.locator(`td[data-label="For"]`).count();
+  console.log(`${label.padEnd(8)} ${width}x${height}  overflow=${overflow}  tokens=${await page.locator('.total').count()}  rows=${await page.locator('.payouts tbody tr').count()}  attributed=${sources}  worth=${worth}  thinFlags=${thin}  kinds=${kinds}  thenNow=${thenNow}  forCells=${labelledRows}`);
   if (overflow !== 0) errors.push(`${label}: page scrolls sideways by ${overflow}px`);
+  // Two kinds are stubbed and labelled; the rest of the scan stays unlabelled.
+  if (kinds !== 2) errors.push(`${label}: expected 2 payout kinds, got ${kinds}`);
+  if (thenNow !== 1) errors.push(`${label}: payout-time value did not render`);
   await page.screenshot({ path: `smoke-${label}.png`, fullPage: true });
 }
 

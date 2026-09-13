@@ -5,6 +5,7 @@ import type { Receipt } from '../lib/scan';
 import { formatUsd } from '../lib/format';
 import { valueOf, type TokenPrice } from '../lib/prices';
 import type { TokenMeta } from '../lib/tokens';
+import { kindEmoji, kindLabel, type Ledger } from '../lib/ledger';
 
 const PAGE = 25;
 
@@ -14,15 +15,37 @@ interface Props {
   /** Payout token mint -> held coins paired against it. */
   attribution: Map<string, string[]>;
   prices: Map<string, TokenPrice>;
+  /** Ember's labels, joined by signature. Absent until they load, or on failure. */
+  ledger: Ledger | null;
 }
 
-export function PayoutList({ receipt, tokens, attribution, prices }: Props) {
+export function PayoutList({ receipt, tokens, attribution, prices, ledger }: Props) {
+  // Ember names the module and the coin outright; the pairing inference below
+  // is only the fallback for payouts its ledger does not cover.
+  const labels = new Map(
+    (ledger?.labelled ?? [])
+      .filter((row) => row.kind != null)
+      .map((row) => [row.payout.signature, row] as const),
+  );
   const value = valueOf(receipt.byToken, prices);
   const [shown, setShown] = useState(PAGE);
   const symbolOf = (mint: string) => tokens.get(mint)?.symbol ?? `${mint.slice(0, 4)}…`;
 
+  /** Coins Ember names as the payer of this token, as fact rather than inference. */
+  function knownSources(payoutMint: string): string[] {
+    const names = new Set<string>();
+    for (const row of labels.values()) {
+      if (row.payout.mint === payoutMint && row.source) names.add(row.source);
+    }
+    return [...names];
+  }
+
   /** Ember pays in the coin's pair, so the source is the held coin quoted in it. */
   function sourceLabel(payoutMint: string): string | null {
+    const known = knownSources(payoutMint);
+    if (known.length > 0) {
+      return `from ${known.slice(0, 3).join(', ')}${known.length > 3 ? '…' : ''}`;
+    }
     const candidates = attribution.get(payoutMint);
     if (!candidates || candidates.length === 0) return null;
     if (candidates.length === 1) return `likely from ${symbolOf(candidates[0])}`;
@@ -56,7 +79,7 @@ export function PayoutList({ receipt, tokens, attribution, prices }: Props) {
         </p>
       )}
 
-      {attribution.size > 0 && (
+      {attribution.size > 0 && labels.size === 0 && (
         <p className="inferred">
           Source coins are <strong>inferred</strong> from what you hold, not proven by a
           signature. A coin you have sold cannot be matched.
@@ -91,6 +114,7 @@ export function PayoutList({ receipt, tokens, attribution, prices }: Props) {
             <th>Date</th>
             <th className="num">Amount</th>
             <th>Token</th>
+            <th>For</th>
             <th>Proof</th>
           </tr>
         </thead>
@@ -99,11 +123,21 @@ export function PayoutList({ receipt, tokens, attribution, prices }: Props) {
             <tr key={`${p.signature}-${p.mint}`}>
               <td data-label="Date">{p.at ? formatDate(p.at) : '—'}</td>
               <td className="num gain" data-label="Amount">{formatAmount(p.amount, 6)}</td>
-              <td data-label="Token">
-                {tokens.get(p.mint)?.symbol ?? '—'}
-                <span className={p.shape === 'shared' ? 'pill shared' : 'pill solo'}>
-                  {p.shape === 'shared' ? `1 of ${p.recipients}` : 'solo'}
-                </span>
+              <td data-label="Token">{tokens.get(p.mint)?.symbol ?? '—'}</td>
+              <td data-label="For">
+                {labels.get(p.signature)?.kind ? (
+                  <>
+                    <span aria-hidden="true">{kindEmoji(labels.get(p.signature)!.kind!)}</span>{' '}
+                    {kindLabel(labels.get(p.signature)!.kind!)}
+                    {labels.get(p.signature)!.source && (
+                      <small className="muted"> · {labels.get(p.signature)!.source}</small>
+                    )}
+                  </>
+                ) : (
+                  <span className={p.shape === 'shared' ? 'pill shared' : 'pill solo'}>
+                    {p.shape === 'shared' ? `1 of ${p.recipients}` : 'solo'}
+                  </span>
+                )}
               </td>
               <td data-label="Proof">
                 <a href={SOLSCAN_TX(p.signature)} target="_blank" rel="noreferrer">

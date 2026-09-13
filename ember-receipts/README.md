@@ -60,10 +60,28 @@ are not discoverable this way. $MET and $EMBER are always included regardless.
 ### Telling the earnings apart
 
 Ember runs several payout modules — holder share, wheel, lotto, jackpots, creator fees — and
-**none of those labels are written on-chain.** Its API carries them, but only for roughly the
-last hour, so a receipt covering days cannot be labelled from it.
+**none of those labels are written on-chain.**
 
-Transaction shape recovers some of it. Fingerprints are clear for a few kinds: a burn is a
+They are recoverable from Ember, though, through a different endpoint than the one that misled
+me at first. `/api/solana/payouts` is a platform-wide firehose covering roughly the last hour.
+`/api/solana/wallet/{address}` is per-wallet and goes back to the wallet's first payout, and
+each row carries the module `kind`, the coin that paid, and the USD value **at the moment of
+payout**. Every row also carries its transaction signature.
+
+That signature is the whole design. Ember's labels are joined onto our own scan by signature —
+an exact match with nothing inferred — so the amounts stay ours, counted from the chain, and
+only the label and the payout-time price come from Ember. A payout we found that Ember does not
+list stays in the receipt, counted and unlabelled, rather than being dropped to make the two
+agree.
+
+On a real wallet that matters: our scan found **84** keeper payouts, Ember's ledger lists **81**.
+The three it omits sit inside its own published window, are keeper-signed, and have the same
+six-recipient shape and magnitude as the rest — they are gaps in Ember's indexer, not phantom
+credits of ours. Our total is the superset, and the interface says how many went unlabelled.
+
+Where a label is missing, transaction shape is still the fallback:
+
+Fingerprints are clear for a few kinds: a burn is a
 `burnChecked`, a fee claim invokes DAMM v2's `ClaimPositionFee`, a wheel payout creates
 recipient token accounts before transferring. But a holder round and a lotto round are both
 just N `transferChecked` instructions, and a jackpot, a creator payout and a treasury transfer
@@ -78,7 +96,7 @@ What a transaction *does* show is how many wallets it credited, so that is what 
 
 On real wallets the split is stark and matches what the wallets are: one holder shows 146 of
 146 payouts as six-recipient batches; a coin creator shows 51 of 51 as solo. That is a genuine
-distinction, and it is the honest limit of what the chain can tell you.
+distinction, and it is the honest limit of what the chain alone can tell you.
 
 ### Where each payout came from
 
@@ -91,10 +109,12 @@ candidates are the GOOGLx-paired coins the wallet holds. One candidate is an una
 attribution; several is a shortlist. It costs one filtered pool lookup per held mint plus one
 batched config read — 22 held mints resolved in 0.3s.
 
-**This is the one inferred thing in the app and it is labelled as such.** Every amount links to
-a signature; a source coin does not. It also cannot see a coin that has since been sold — there
-is no holding left to match against, which is why a wallet paid 68,817 EMBER can still show
-"cannot attribute" for it.
+**This is now the fallback, not the primary.** Ember's per-wallet ledger names the paying coin
+outright, per payout, so where a payout is labelled the source is fact and is shown without
+hedging. The pairing inference below still covers everything Ember's ledger misses, and it is
+labelled as inference wherever it is the only thing available. It also cannot see a coin that
+has since been sold — there is no holding left to match against, which is why a wallet paid
+68,817 EMBER can still show "cannot attribute" for it.
 
 ### Dollar values
 
@@ -240,6 +260,9 @@ cannot complete one.
 - The scan engine is validated end to end against three real wallets on a live endpoint.
 - The token view is validated end to end against a real Ember launch on a live endpoint.
 - Artwork resolution is validated against four real mints.
+- The signature join against Ember's per-wallet ledger is validated on two real wallets: 81 of
+  84 matched with 0 of Ember's unseen on one, and 7 of 7 with no discrepancy on the other. Its
+  summed payout-time USD reproduces Ember's own reported total exactly.
 - Conviction is validated against Ember's live endpoints for its real state (no positions open,
   paper mode) and against stubbed responses for the populated arena and position layouts, at
   both widths, with zero console errors and zero horizontal overflow.
@@ -257,16 +280,18 @@ cannot complete one.
   client as `ERR_STRING_TOO_LONG` before any of our code runs. That is reported as a plain
   explanation rather than a crash; scanning such a wallet would need a paginated indexer.
 
-- **Per-coin attribution is inferred, never proven.** Ember's `/api/solana/payouts` has no
-  recipient field and exposes roughly the last hour with no pagination — `limit` caps at 500
-  records; `offset`, `page` and `days` are ignored — so payouts cannot be matched to coins from
-  their data. The pairing inversion described above recovers most of it, but it is inference,
-  and it goes blind on any coin the wallet no longer holds. Proving it outright would need a
-  continuous indexer snapshotting Ember's endpoint, which could only capture forward from the
-  moment it started.
-- **Dollar values are today's, and there is no PnL.** Earnings are valued at current prices, not
-  at the price when each payout landed, and nothing here computes profit and loss — that needs
-  cost basis for every buy and sell plus historical pricing.
+- **Ember's per-wallet ledger is incomplete, so labels are partial.** It omitted 3 of the 84
+  payouts our scan found on one test wallet, all inside its own published window. Anything it
+  does not list is counted but unlabelled, and the module breakdown covers only what it does
+  list. The count of unlabelled payouts is shown rather than hidden.
+- **Per-coin attribution is proven only where Ember labels it.** For unlabelled payouts the app
+  falls back to the pairing inversion described above, which is inference and goes blind on any
+  coin the wallet no longer holds.
+- **There is still no PnL.** Payout-time value now comes from Ember for labelled payouts, so a
+  receipt can show what it was worth when paid against what it is worth today. That is not
+  profit and loss — it says nothing about what the wallet paid to buy in, which needs cost basis
+  for every buy and sell. Unlabelled payouts have no payout-time price at all, so the
+  then-versus-now comparison is scoped to the labelled set and says so on screen.
 - **Meteora's DBC index is undocumented.** `dbc.datapi.meteora.ag` is live and indexes 1.6M
   pools, but it is absent from Meteora's published API reference, so every field from it is
   treated as optional and the token view still works without it.
@@ -287,7 +312,9 @@ src/lib/tokens.ts      ticker/name/uri resolution (Metaplex + Token-2022 metadat
 src/lib/images.ts      off-chain artwork, gateway racing, data-URI inlining
 src/lib/png.ts         SVG -> PNG export, no dependencies
 src/lib/ember.ts       same-origin proxy path for Ember's API (it sends no CORS headers)
+src/lib/ledger.ts      Ember's per-wallet labels, joined onto the scan by signature
 src/lib/conviction.ts  Conviction contract: markets, arena, per-coin position
-src/components/        receipt card (SVG), payout table, token panel, arena, Conviction panel
+src/components/        receipt card (SVG), payout table, module breakdown, token panel,
+                       arena, Conviction panel
 scripts/smoke.mjs      browser test of both views at two widths
 ```
