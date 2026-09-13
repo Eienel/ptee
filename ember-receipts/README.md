@@ -53,12 +53,40 @@ An RPC endpoint is required — this reads full transaction histories and public
 cannot complete a scan. `VITE_RPC_URL` is compiled into the client bundle and is therefore
 **public**: restrict the key to your domain in your provider's dashboard, or proxy it.
 
+## Deploying to Vercel (from a phone)
+
+The app lives in a subdirectory, so the one setting that matters is the root directory.
+
+1. vercel.com → **Add New → Project** → import `Eienel/ptee`
+2. **Root Directory → `ember-receipts`** (this is the step people miss)
+3. Framework preset: Vite. Build and output are already set by `vercel.json`.
+4. **Environment Variables → `VITE_RPC_URL`** = your RPC endpoint
+5. Deploy
+
+`VITE_RPC_URL` is compiled into the client bundle and is readable by anyone who opens the
+site. Restrict the key to your deployed domain in your provider's dashboard before sharing
+the link.
+
 ## Status
 
 - The scan engine is validated end to end against three real wallets on a live endpoint.
-- The browser path could not be exercised in the development sandbox (its proxy drops the
-  headless browser's TLS tunnels), so the card above was rendered from a real scan in Node
-  and rasterised locally. **Run it locally before trusting the in-browser flow.**
+- The layout, card and mobile breakpoints are covered by `npm run smoke`, which drives the
+  real UI at 1100px and 390px against a stubbed RPC and fails on any console error or
+  horizontal overflow.
+- The browser's **live** RPC path could not be exercised in the development sandbox (its
+  proxy drops the headless browser's TLS tunnels). The scan engine itself is validated
+  against a live endpoint from Node, and the cards shown were rendered from real scans.
+  First deploy is the real test of the in-browser fetch path.
+
+## Known limits
+
+- **Per-coin attribution is not available.** A receipt shows what you earned and in which
+  token, but not which launched coin generated each payout. That mapping only exists in
+  Ember's `/api/solana/payouts`, which has no recipient field and exposes roughly the last
+  50 minutes with no pagination — so historical attribution would need a continuous indexer
+  snapshotting that endpoint.
+- **No USD values and no PnL.** Both need a historical price source; payout amounts here are
+  in each token's own units.
 
 ## Layout
 

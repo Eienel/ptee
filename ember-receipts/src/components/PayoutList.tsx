@@ -36,10 +36,10 @@ export function PayoutList({ receipt, symbols }: { receipt: Receipt; symbols: Ma
         <tbody>
           {receipt.payouts.slice(0, shown).map((p) => (
             <tr key={`${p.signature}-${p.mint}`}>
-              <td>{p.at ? formatDate(p.at) : '—'}</td>
-              <td className="num gain">{formatAmount(p.amount, 6)}</td>
-              <td>{symbols.get(p.mint) ?? '—'}</td>
-              <td>
+              <td data-label="Date">{p.at ? formatDate(p.at) : '—'}</td>
+              <td className="num gain" data-label="Amount">{formatAmount(p.amount, 6)}</td>
+              <td data-label="Token">{symbols.get(p.mint) ?? '—'}</td>
+              <td data-label="Proof">
                 <a href={SOLSCAN_TX(p.signature)} target="_blank" rel="noreferrer">
                   {p.signature.slice(0, 8)}…
                 </a>
