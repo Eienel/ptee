@@ -6,7 +6,7 @@ Ember publishes platform-wide totals on `/meteora` and a public payouts API — 
 aggregate. There is no recipient field anywhere in their data, so nobody can see what a
 *single wallet* earned. This fills that gap.
 
-**Unofficial. Not affiliated with Embercurve.** Built by ANL.
+**Unofficial. Not affiliated with Embercurve.** Built by [@eienel_eth](https://x.com/eienel_eth).
 
 ## How it decides what counts
 

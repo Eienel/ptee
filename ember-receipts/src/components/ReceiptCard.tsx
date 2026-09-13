@@ -136,9 +136,21 @@ export const ReceiptCard = forwardRef<SVGSVGElement, Props>(function ReceiptCard
       <text x="68" y={H - 46} fill="#6e6e73" fontSize="20" fontFamily={MONO}>
         verified on-chain · keeper {shortAddress(EMBER_KEEPER.toBase58(), 4)}
       </text>
-      <text x={W - 68} y={H - 46} fill="#ff8a3d" fontSize="20" textAnchor="end" fontWeight="590" fontFamily={SANS}>
-        built by ANL
-      </text>
+      {/* built by — X mark drawn as a path so the PNG export needs no font or image */}
+      <g transform={`translate(${W - 68}, ${H - 52})`}>
+        <text x="0" y="6" fill="#f5f5f7" fontSize="20" textAnchor="end" fontWeight="600" fontFamily={SANS}>
+          @eienel_eth
+        </text>
+        <text x={-166} y="6" fill="#6e6e73" fontSize="20" textAnchor="end" fontFamily={SANS}>
+          built by
+        </text>
+        <g transform="translate(-156, -8) scale(0.0155)">
+          <path
+            fill="#f5f5f7"
+            d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.163 519.284ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.828Z"
+          />
+        </g>
+      </g>
     </svg>
   );
 });
